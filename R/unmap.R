@@ -60,21 +60,21 @@ unmap <-
             miss = match(groups, u, nomatch = 0) == 0
         }
         
-        cgroups = as.character(groups)
         if (!is.null(noise))
         {
             noiz = match(noise, groups, nomatch = 0)
             if (any(noiz == 0))
                 stop("noise incompatible with classification")
-            
+
             groups = c(groups[groups != noise], groups[groups == noise])
             noise = as.numeric(factor(as.character(noise), levels = unique(groups)))
         }
-        
+
+        cgroups = as.character(groups)
         groups = as.numeric(factor(cgroups, levels = unique(cgroups)))
         classification = as.numeric(factor(as.character(classification), levels = unique(cgroups)))
         k = length(groups) - length(noise)
-        nam = levels(groups)
+        nam = unique(cgroups)
         
         if (!is.null(noise))
         {
@@ -83,7 +83,7 @@ unmap <-
             nam[k] = "noise"
         }
         
-        z = matrix(0, n, k, dimnames = c(names(classification), nam))
+        z = matrix(0, n, k, dimnames = list(names(classification), nam))
         for (j in 1:k) z[classification == groups[j], j] = 1
         attr(z, "levels") = levels
         z
