@@ -40,7 +40,31 @@ test_that("ipca runs with custom w.init matrix", {
   expect_s3_class(ipca.res, "ipca")
 })
 
-# Test 6: Test for missing values in 'X'
+# Test 6: Test 'fun' parameter with exp function
+test_that("ipca runs with exp function in deflation mode", {
+  data(liver.toxicity)
+  ipca.res <- ipca(liver.toxicity$gene, ncomp = 3, mode = "deflation", fun = "exp", max.iter = 20)
+  expect_s3_class(ipca.res, "ipca")
+  expect_equal(ncol(ipca.res$x), 3)
+})
+
+# Test 7: Test 'mode' parameter with parallel algorithm
+test_that("ipca runs in parallel mode with logcosh", {
+  data(liver.toxicity)
+  ipca.res <- ipca(liver.toxicity$gene, ncomp = 3, mode = "parallel", fun = "logcosh", max.iter = 20)
+  expect_s3_class(ipca.res, "ipca")
+  expect_equal(ncol(ipca.res$x), 3)
+})
+
+# Test 8: Test parallel algorithm with exp function
+test_that("ipca runs in parallel mode with exp", {
+  data(liver.toxicity)
+  ipca.res <- ipca(liver.toxicity$gene, ncomp = 3, mode = "parallel", fun = "exp", max.iter = 20)
+  expect_s3_class(ipca.res, "ipca")
+  expect_equal(ncol(ipca.res$x), 3)
+})
+
+# Test 9: Test for missing values in 'X'
 test_that("ipca throws error if missing values in X", {
   data(liver.toxicity)
   liver.toxicity$gene[1, 1] <- NA  # Inject missing value
