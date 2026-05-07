@@ -48,10 +48,10 @@ jobs:
             bioc="latest"
             r="$r_release"
           else
-            bioc="3.23"
-            r="$r_release"
-            ##bioc="devel" ## comment this out for now as bioc version 3.23 requires r version 4.6, but r-hub doesn't have it yet
-            ##r="$r_devel" ## comment this out for now as R version 4.6 doesn't exist so fails on build
+            # bioc="3.23"
+            # r="$r_release"
+            bioc="devel" ## non-release branches track Bioc devel; uncomment the release lines above as a fallback if devel becomes unstable
+            r="$r_devel"
           fi
           echo "r=$r" >> $GITHUB_OUTPUT
           echo "bioc=$bioc" >> $GITHUB_OUTPUT
