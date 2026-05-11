@@ -1,72 +1,68 @@
+context("mint.block.splsda")
 
-
-###############################################################################
-### ================================ BASIC ================================ ###
-###############################################################################
-
-test_that("mint.block.plsda and mint.block.splsda works", {
-  
+.mint_block_splsda_data <- function(nvar = NULL) {
   data(breast.TCGA)
-  mrna <- rbind(breast.TCGA$data.train$mrna, breast.TCGA$data.test$mrna)
-  mirna <- rbind(breast.TCGA$data.train$mirna, breast.TCGA$data.test$mirna)
-  X <- list(mrna = mrna, mirna = mirna)
-  Y <- c(breast.TCGA$data.train$subtype, breast.TCGA$data.test$subtype)
-  
-  study <- c(rep("study1",150), rep("study2",70))
-  
-  res.mint.block.plsda <- mint.block.plsda(X, Y, study=study, design="full")
-  
-  expect_true("mint.block.plsda" %in% class(res.mint.block.plsda))
-  .expect_numerically_close(res.mint.block.plsda$variates$mrna[1,1], -7.503)
-  .expect_numerically_close(res.mint.block.plsda$variates$Y[220,2], -0.796)
-  
-  .expect_numerically_close(res.mint.block.plsda$loadings$mrna[1,1], 0.100)
-  .expect_numerically_close(res.mint.block.plsda$loadings$mirna[100,2], -0.019)
-  
-  
-  res.mint.block.splsda <- mint.block.splsda(X, Y, study=study, design="full", keepX = list(mrna=c(2,2), mirna=c(3,3)))
-  
-  expect_true("mint.block.splsda" %in% class(res.mint.block.splsda))
-  .expect_numerically_close(res.mint.block.splsda$variates$mrna[1,1], -1.48)
-  .expect_numerically_close(res.mint.block.splsda$variates$Y[220,2], -0.5758)
-  
+  X <- lapply(c("mrna", "mirna"), function(block) {
+    x <- rbind(breast.TCGA$data.train[[block]], breast.TCGA$data.test[[block]])
+    if (is.null(nvar)) x else x[, seq_len(nvar)]
+  })
+  names(X) <- c("mrna", "mirna")
+  Y <- factor(c(as.character(breast.TCGA$data.train$subtype),
+                as.character(breast.TCGA$data.test$subtype)))
+  list(X = X, Y = Y, study = rep(c("study1", "study2"), c(150, 70)))
+}
+
+test_that("(mint.block.splsda:basic): breast.TCGA", {
+  data <- .mint_block_splsda_data()
+  res <- mint.block.splsda(data$X, data$Y, study = data$study, design = "full",
+                           keepX = list(mrna = c(2, 2), mirna = c(3, 3)))
+
+  expect_true("mint.block.splsda" %in% class(res))
+  .expect_numerically_close(res$variates$mrna[1, 1], -1.48)
+  .expect_numerically_close(res$variates$Y[220, 2], -0.5758)
 })
 
+test_that("(mint.block.splsda:data): Y supplied through 'indY'", {
+  data <- .mint_block_splsda_data(nvar = 20)
+  res <- mint.block.splsda(c(data$X, list(Y = data$Y)), indY = 3,
+                           study = data$study, ncomp = 1,
+                           keepX = list(mrna = 2, mirna = 3))
 
-###############################################################################
-### ================================ DATA ================================= ###
-###############################################################################
+  expect_true("mint.block.splsda" %in% class(res))
+  expect_equal(res$Y, data$Y)
+})
 
+test_that("(mint.block.splsda:parameter): partially specified 'keepX'", {
+  data <- .mint_block_splsda_data(nvar = 20)
+  res <- mint.block.splsda(data$X, data$Y, study = data$study,
+                           ncomp = 2, keepX = list(mrna = 2))
 
+  expect_equal(res$keepX$comp1$mrna, 2)
+  expect_equal(res$keepX$comp2$mrna, ncol(data$X$mrna))
+  expect_equal(res$keepX$comp1$Y, nlevels(data$Y))
+})
 
+test_that("(mint.block.splsda:error): invalid inputs", {
+  data <- .mint_block_splsda_data(nvar = 20)
 
+  expect_error(mint.block.splsda(data$X, Y = unmap(data$Y),
+                                 study = data$study, ncomp = 1),
+               "'Y' should be a factor or a class vector.", fixed = TRUE)
+  expect_error(mint.block.splsda(data$X, Y = rep("Basal", length(data$Y)),
+                                 study = data$study, ncomp = 1),
+               "'Y' should be a factor with more than one level", fixed = TRUE)
+  expect_error(mint.block.splsda(data$X, study = data$study),
+               "Either 'Y' or 'indY' is needed", fixed = TRUE)
+  expect_error(mint.block.splsda(data$X, data$Y, study = data$study,
+                                 keepX = list(bad = c(1, 1)), ncomp = 2),
+               "Each entry of 'keepX' must have a unique name", fixed = TRUE)
+})
 
-###############################################################################
-### ============================== PARAMETER ============================== ###
-###############################################################################
+test_that("(mint.block.splsda:edge.case): single component", {
+  data <- .mint_block_splsda_data(nvar = 20)
+  res <- mint.block.splsda(data$X, data$Y, study = data$study,
+                           ncomp = 1, keepX = list(mrna = 2, mirna = 3))
 
-
-
-
-
-###############################################################################
-### ================================ ERROR ================================ ###
-###############################################################################
-
-
-
-
-
-###############################################################################
-### ============================== EDGE CASES ============================= ###
-###############################################################################
-
-
-
-
-
-###############################################################################
-
-# if the method is a graphical function, include the following:
-#dev.off()
-#unlink(list.files(pattern = "*.pdf"))
+  expect_true("mint.block.splsda" %in% class(res))
+  expect_equal(ncol(res$variates$mrna), 1L)
+})

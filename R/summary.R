@@ -176,7 +176,7 @@ summary.mixo_pls <-
         #-- valeurs sortantes --#
         result$what = what
         result$digits = digits
-        if(is(object, "pls")) {
+        if(is(object, "mixo_pls")) {
             result$method = 'pls'
         } 
         else {
@@ -333,7 +333,7 @@ summary.pca <-
     function (object, ...)
     {
         chkDots(...)
-        vars <- object$prop_expl_var
+        vars <- object$prop_expl_var$X
         importance <- rbind(`Standard deviation` = object$sdev, `Proportion of Variance` = round(vars,
                                                                                                  5), `Cumulative Proportion` = round(cumsum(vars), 5))
         k <- ncol(object$rotation)

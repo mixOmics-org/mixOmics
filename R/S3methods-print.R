@@ -475,14 +475,14 @@ print.rgcca <- function(x, ...)
     cat("\nCall:\n", deparse(x$call, width.cutoff = 500), "\n\n")
     
     # components
-    for(k in 1:length(x$blocks)){
+    for(k in 1:length(x$X)){
         cat(" rGCCA with", x$ncomp[k], "components on block", k, "named", x$names$blocks[k], "\n")
     }
     cat("\n")
     
     # dimension
-    for(k in 1 : length(x$blocks)){
-        cat(" Dimension of block", k, 'is ', dim(x$blocks[[k]]), "\n")
+    for(k in 1 : length(x$X)){
+        cat(" Dimension of block", k, 'is ', dim(x$X[[k]]), "\n")
     }
     cat("\n")
     cat(" Main numerical outputs: \n", "-------------------- \n")
@@ -612,11 +612,12 @@ print.summary <-
         print.gap = 4
         what = x$what
         digits = x$digits
+        method = x$method
         
         #--------------------- output pls/spls ---------------------#
-        if(inherits(x, c("pls", "spls"))){
+        if(isTRUE(method %in% c("pls", "spls"))){
             
-            if (is(x, "pls"))
+            if (identical(method, "pls"))
             {
                 cat(" PLS mode:", x$mode)
                 cat("\n Number of variates considered:", x$ncomp, "\n")
@@ -661,7 +662,7 @@ print.summary <-
         }  #end if pls
         
         # ---------------------- output rcc ------------------------#
-        if(is(x, "rcc"))
+        if(identical(method, "rcc"))
         {
             print.gap = 4
             if (any(what == "all"))
@@ -955,5 +956,3 @@ print.predict = function(x, ...)
     }
     
 }
-
-

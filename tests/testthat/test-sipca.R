@@ -53,3 +53,27 @@ test_that("sipca runs with custom w.init matrix", {
   sipca.res <- sipca(liver.toxicity$gene, ncomp = 3, mode = "deflation", w.init = w.init)
   expect_s3_class(sipca.res, "sipca")
 })
+
+# Test 8: Test 'fun' parameter with exp function
+test_that("sipca runs with exp function in deflation mode", {
+  data(liver.toxicity)
+  sipca.res <- sipca(liver.toxicity$gene, ncomp = 3, mode = "deflation", fun = "exp")
+  expect_s3_class(sipca.res, "sipca")
+  expect_equal(ncol(sipca.res$x), 3)
+})
+
+# Test 9: Test 'mode' parameter with parallel algorithm
+test_that("sipca runs in parallel mode with logcosh", {
+  data(liver.toxicity)
+  sipca.res <- sipca(liver.toxicity$gene, ncomp = 3, mode = "parallel", fun = "logcosh")
+  expect_s3_class(sipca.res, "sipca")
+  expect_equal(ncol(sipca.res$x), 3)
+})
+
+# Test 10: Test parallel algorithm with exp function
+test_that("sipca runs in parallel mode with exp", {
+  data(liver.toxicity)
+  sipca.res <- sipca(liver.toxicity$gene, ncomp = 3, mode = "parallel", fun = "exp")
+  expect_s3_class(sipca.res, "sipca")
+  expect_equal(ncol(sipca.res$x), 3)
+})
