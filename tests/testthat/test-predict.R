@@ -73,6 +73,50 @@ test_that("predict.block.splsda", code = {
 })
 
 
+test_that("(predict:basic): WeightedPredict for block models", code = {
+    data(breast.TCGA)
+    X  <- list(mirna = breast.TCGA$data.train$mirna, mrna = breast.TCGA$data.train$mrna)
+    Xt <- list(mirna = breast.TCGA$data.test$mirna,  mrna = breast.TCGA$data.test$mrna)
+    Y  <- breast.TCGA$data.train$subtype
+    Ymat <- unmap(Y); rownames(Ymat) <- rownames(X$mirna)   # Y as a block for the regression models
+    Xr <- c(X, list(Y = Ymat))
+    kX <- list(mirna = c(10, 10), mrna = c(10, 10))
+    
+    suppressMessages({
+      models <- list(
+        block.pls    = block.pls(Xr, indY = 3, ncomp = 2, design = "full"),
+        block.spls   = block.spls(Xr, indY = 3, ncomp = 2, design = "full", keepX = kX),
+        block.plsda  = block.plsda(X, Y, ncomp = 2, design = "full"),
+        block.splsda = block.splsda(X, Y, ncomp = 2, design = "full", keepX = kX)
+      )
+    })
+    
+    # each block predicts a distinct value;
+    # WeightedPredict returns block's prediction with the highest weight
+    for (m in models) {
+        pred <- predict(m, newdata = Xt)
+        top.block <- which.max(rowMeans(m$weights))
+        expect_equal(as.vector(pred$WeightedPredict),
+                     as.vector(pred$predict[[top.block]]))
+    }
+})
+
+
+test_that("(predict:edge.case): tied block weights", code = {
+    data(breast.TCGA)
+    X  <- list(mirna = breast.TCGA$data.train$mirna, mrna = breast.TCGA$data.train$mrna)
+    Xt <- list(mirna = breast.TCGA$data.test$mirna,  mrna = breast.TCGA$data.test$mrna)
+    Y  <- breast.TCGA$data.train$subtype
+    suppressMessages(m <- block.splsda(X, Y, ncomp = 2, design = "full"))
+
+    # equal weights make all blocks tie at every (sample, class);
+    # WeightedPredict must then be all NA
+    m$weights[] <- 0.5
+    wp <- predict(m, newdata = Xt)$WeightedPredict
+    expect_true(all(is.na(wp)))
+})
+
+
 test_that("predict.mint.splsda works", code = {
     ## example with mint.splsda
     data(stemcells)
