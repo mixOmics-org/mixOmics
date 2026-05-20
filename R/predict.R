@@ -678,17 +678,43 @@ predict.mixo_pls <-
                 })), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
                 
                 out$WeightedPredict = array(unlist(lapply(temp.all, function(x){
-                    apply(x, c(1,2), function(z){
-                        temp = aggregate(rowMeans(object$weights),list(z),sum)
-                        ind = which(temp[,2]== max (temp[,2]))# if two max, then NA
-                        if(length(ind) == 1)
-                        {
-                            res = temp[ind, 1]
-                        } else {
-                            res = NA
-                        }
-                        res
-                    })})), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
+                    block.weights = rowMeans(object$weights)
+                    dim.x = dim(x); n.cells = dim.x[1] * dim.x[2]; n.blocks = dim.x[3]
+                    x.mat = matrix(x, n.cells, n.blocks)
+                    valid = !is.na(x.mat)
+                    if (any(rowSums(valid) == 0L)) stop("invalid 'type' (list) of argument")
+
+                    x.char = matrix(as.character(x.mat), n.cells, n.blocks)
+                    group.weight = matrix(0, n.cells, n.blocks)
+                    for (j in seq_len(n.blocks))
+                    {
+                        same.group = x.char == x.char[, j] & valid & valid[, j]
+                        group.weight[same.group] = group.weight[same.group] + block.weights[j]
+                    }
+                    group.weight[!valid] = -Inf
+                    max.weight = apply(group.weight, 1, max)
+
+                    max.class = rep(NA_character_, n.cells); max.idx = rep(NA_integer_, n.cells)
+                    tied = rep(FALSE, n.cells)
+                    for (j in seq_len(n.blocks))
+                    {
+                        is.max = group.weight[, j] == max.weight & valid[, j]
+                        is.max[is.na(is.max)] = FALSE
+                        tied[is.max & !is.na(max.class) & max.class != x.char[, j]] = TRUE
+                        update = is.max & is.na(max.class)
+                        max.class[update] = x.char[update, j]
+                        max.idx[update] = j
+                    }
+
+                    unique.max = !tied & !is.na(max.class)
+                    if (any(unique.max)) {
+                        out.vec = x.mat[cbind(seq_len(n.cells), ifelse(is.na(max.idx), 1L, max.idx))]
+                        out.vec[!unique.max] = NA
+                    } else {
+                        out.vec = rep(NA, n.cells)
+                    }
+                    matrix(out.vec, dim.x[1], dim.x[2])
+                })), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
             }
             
             
