@@ -17,6 +17,11 @@ opts_chunk$set( echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 
 ## What's New
 
+#### May 2026
+
+* bug fix implemented for [#377](https://github.com/mixOmicsTeam/mixOmics/issues/377) fixed vector `xlim` handling in the `graphics` branch of `plotLoadings()` contribution plots
+* enhancement request [#381](https://github.com/mixOmicsTeam/mixOmics/issues/381) expanded test coverage for model utilities and internal helper paths, with small fixes made for issues exposed by the new tests
+
 #### April 2026
 
 * bug fix implemented for [#374](https://github.com/mixOmicsTeam/mixOmics/issues/374) replaced deprecated `aes_string()` with `aes(.data[[...]])` in plotting functions
