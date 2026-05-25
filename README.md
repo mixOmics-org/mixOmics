@@ -229,6 +229,15 @@ Thank you!
 
 #### April 2026
 
+\*\* Version 6.36.0 \*\*
+
+[Bioconductor release version
+6.36.0](https://www.bioconductor.org/packages/release/bioc/html/mixOmics.html)
+released 29th April 2026 mixOmics can now be downloaded using
+[Bioconductor version
+3.23](https://bioconductor.org/news/bioc_3_23_release/) and is
+compatible with R 4.6.0
+
 - bug fix implemented for
   [\#374](https://github.com/mixOmicsTeam/mixOmics/issues/374) replaced
   deprecated `aes_string()` with `aes(.data[[...]])` in plotting
@@ -246,7 +255,7 @@ Thank you!
 released 17th April 2025 mixOmics can now be downloaded using
 [Bioconductor version
 3.21](https://bioconductor.org/news/bioc_3_21_release/) and is
-compatable with R 4.5.0
+compatible with R 4.5.0
 
 - feature request
   [\#345](https://github.com/mixOmicsTeam/mixOmics/issues/345) updated
