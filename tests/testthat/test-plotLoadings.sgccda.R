@@ -57,6 +57,21 @@ test_that("Test contrib parameter functionality", {
   expect_true(all(sapply(result, function(x) "color" %in% colnames(x))))  # Check for color column
 })
 
+test_that("plotLoadings supports vector xlim with sgccda contrib", {
+  skip_on_cran()
+  skip_on_ci()
+
+  png(tempfile(), width = 1200, height = 1000, res = 150)
+  old_par <- par(no.readonly = TRUE)
+  on.exit({
+    par(old_par)
+    dev.off()
+  })
+  result <- plotLoadings(diablo.obj, contrib = "max", xlim = c(-0.5, 0.5))
+  expect_equal(length(result), 2)
+  expect_true(all(sapply(result, function(x) "color" %in% colnames(x))))
+})
+
 # Error: plotLoadings encountered margin errors. Ensure feature names are not too long and the "Plots" pane is enlarged.
 # # Unit test 4: Test method parameter
 # test_that("Test method parameter functionality", {
@@ -160,6 +175,3 @@ test_that("plotLoadings works for sgccda ggplot2", {
                         legend.title = "Test Legend"))
   ))
 })
-
-
-

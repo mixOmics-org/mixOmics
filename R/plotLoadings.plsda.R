@@ -157,8 +157,6 @@ plotLoadings.mixo_plsda <-
                         par(mar = c(4, max(7, max(sapply(colnames.X, nchar),na.rm = TRUE)/3), 4, 2))
                     }
                     
-                    xlim <- xlim[1,]
-
                     .plotLoadings_barplot(height = df$importance, col = df$color, names.arg = colnames.X, 
                     cex.name = size.name, border = border, xlim = xlim[i, ], 
                     xlab = X.label, ylab = Y.label, cex.lab = size.labs, cex.axis = size.axis)

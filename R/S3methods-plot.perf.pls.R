@@ -110,7 +110,7 @@ plot.perf.pls.mthd <-
             # min.y <- ifelse(repeated, min(df$lower), min(df$mean))
             # max.y <- ifelse(repeated, max(df$upper), max(df$mean))
             # y.breaks <- sort(c(round(seq(min.y, max.y, length.out=5), 2), LimQ2))
-            p <- p + geom_hline(yintercept = LimQ2, col = LimQ2.col, size  = 1.3) #+
+            p <- p + geom_hline(yintercept = LimQ2, col = LimQ2.col, linewidth  = 1.3) #+
             # geom_text(x = max(df$comp), y = 0.0975, label = 'Q2 = 0.0975', hjust=1, vjust=-0.5)
             # scale_y_continuous(breaks = y.breaks)
         }

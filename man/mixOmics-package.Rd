@@ -3,7 +3,7 @@
 \docType{package}
 \name{mixOmics-package}
 \alias{mixOmics-package}
-\title{'Omics Data Integration Project}
+\title{Omics Data Integration Project}
 \description{
 Multivariate methods are well suited to large omics data sets where the
 number of variables (e.g. genes, proteins, metabolites) is much larger than
@@ -23,7 +23,7 @@ identify the key variables that are highly correlated, and/or explain the
 biological outcome of interest. The data that can be analysed with mixOmics
 may come from high throughput sequencing technologies, such as omics data
 (transcriptomics, metabolomics, proteomics, metagenomics etc) but also beyond
-the realm of omics (e.g. spectral imaging). 
+the realm of omics (e.g. spectral imaging).
 
 The methods implemented in
 mixOmics can also handle missing values without having to delete entire rows

@@ -683,14 +683,7 @@ We can analyse these two data sets (genes and clinical measurements) using sPLS1
 
 ## Load the data {#04:load-data}
 
-```{r 04-load-data2, echo = FALSE}
-devtools::install_github("mixOmicsTeam/mixOmics")
-data(liver.toxicity)
-X <- liver.toxicity$gene
-Y <- liver.toxicity$clinic
-```
-
-```{r 04-load-data, eval = FALSE}
+```{r 04-load-data, message=FALSE, warning=FALSE}
 library(mixOmics)
 data(liver.toxicity)
 X <- liver.toxicity$gene

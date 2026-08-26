@@ -723,7 +723,7 @@ plotVar <-
             #-- circle correlation
             for (i in c("Main circle", "Inner circle")){
                 p = p + geom_path(data = subset(circle, Circle == i),
-                                  aes_string(x = "x", y = "y"), color = "Black")
+                                  aes(x = .data[["x"]], y = .data[["y"]]), color = "Black")
             }
             
             print(p)

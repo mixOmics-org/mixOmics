@@ -87,7 +87,7 @@ plot.tune.spls <-
         ggplot_pls2 <- function(df, col.low.sd, col.high.sd, title = NULL) {
             
             p <- ggplot(df, aes(factor(keepX), factor(keepY))) + 
-                geom_point(aes_string(size = 'mean', col = 'sd'), shape = pch) + 
+                geom_point(aes(size = .data[["mean"]], col = .data[["sd"]]), shape = pch) +
                 scale_color_gradient(low = col.low.sd, 
                                      high = col.high.sd, 
                                      na.value = color.mixo(1))
@@ -141,7 +141,7 @@ plot.tune.spls <-
                 df$upper <- df$mean + df$sd
             }
             ## keepX or keepY must be removed before running this
-            p <- ggplot(df, aes_string(x = keepA, y = 'mean',  col = 'comp')) + 
+            p <- ggplot(df, aes(x = .data[[keepA]], y = .data[["mean"]], col = .data[["comp"]])) +
                 geom_point(shape = pch, size = cex) +
                 geom_line(show.legend = FALSE)
             if (sd)
@@ -153,7 +153,7 @@ plot.tune.spls <-
             ## optimal
             if (any(!is.na(df$optimum.keepA))) ## to make it possible to plot the unused measure too
                 p <- p + geom_point(data = df[df$optimum.keepA,], 
-                                    aes_string(x = keepA, y = 'mean'), 
+                                    aes(x = .data[[keepA]], y = .data[["mean"]]),
                                     size = cex*1.2,
                                     shape = 0,
                                     col = 'green',
@@ -346,7 +346,7 @@ plot.tune.spca <-
             col <- color.mixo(seq_len(ncomp))
         }
         names(col) <- seq_len(ncomp)
-        p <- ggplot(cors, aes_string('keepX', 'cor.mean', col = 'comp')) +
+        p <- ggplot(cors, aes(.data[["keepX"]], .data[["cor.mean"]], col = .data[["comp"]])) +
             theme_minimal() +
             geom_line() +
             geom_point() +
@@ -359,7 +359,7 @@ plot.tune.spca <-
         
         if (nrepeat > 2) {
             p <- p +  geom_point(data=cors[!is.na(cors$opt.keepX),], 
-                                 aes_string('keepX', 'cor.mean', col = 'comp'), 
+                                 aes(.data[["keepX"]], .data[["cor.mean"]], col = .data[["comp"]]),
                                  size=6, shape = 18, show.legend = FALSE)
         }
         
@@ -367,7 +367,7 @@ plot.tune.spca <-
         ## ----- error bars
         if (isTRUE(sd))
         {
-            p <- p + geom_errorbar(aes_string(ymin = 'corQ1', ymax = 'corQ3'), 
+            p <- p + geom_errorbar(aes(ymin = .data[["corQ1"]], ymax = .data[["corQ3"]]),
                                    # position = position_dodge(0.02),
                                    width = 0.04,
                                    ...)

@@ -106,11 +106,11 @@ NULL
         ## vline and hline
         if (vline)
         {
-            gg_biplot <- gg_biplot + geom_vline(xintercept = 0, size = 0.3, col = 'grey75')
+            gg_biplot <- gg_biplot + geom_vline(xintercept = 0, linewidth = 0.3, col = 'grey75')
         }
         if (hline)
         {
-            gg_biplot <- gg_biplot +  geom_hline(yintercept = 0, size = 0.3, col = 'grey75')
+            gg_biplot <- gg_biplot +  geom_hline(yintercept = 0, linewidth = 0.3, col = 'grey75')
         }
         
         

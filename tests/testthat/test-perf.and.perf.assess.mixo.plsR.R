@@ -146,3 +146,16 @@ test_that("perf gives error for invariant mode", code = {
   expect_error(perf.assess(spls.obj), "BiocParallel errors.*mode 'invariant'", fixed = FALSE)
 
   })
+
+## ------------------------------------------------------------------------ ##
+## Regression guard: ggplot2 size -> linewidth
+
+test_that("(plot.perf.pls:edge.case): no ggplot2 size-aesthetic deprecation warning (Q2 criterion)", {
+  data("liver.toxicity")
+  X <- liver.toxicity$gene[1:100]
+  Y <- liver.toxicity$clinic
+  pls.mod  <- pls(X, Y, ncomp = 2)
+  perf.obj <- perf(pls.mod, validation = "Mfold", folds = 2, nrepeat = 1,
+                   progressBar = FALSE)
+  expect_no_warning(plot(perf.obj, criterion = "Q2.total"))
+})

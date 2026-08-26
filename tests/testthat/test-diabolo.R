@@ -79,3 +79,28 @@ test_that("block.splsda works", {
   expect_equal(nutrimouse.sgccda$variates$lipid[1, 1], 2.73351593820324)
   expect_equal(nutrimouse.sgccda$variates$Y[1, 1], 0.639567998302767)
 })
+
+test_that("Check.entry.wrapper.mint.block handles zero-variance predictors", {
+  samples = paste0("s", seq_len(8))
+  X = list(gene = cbind(g1 = seq_len(8), zero = 1, g2 = 8:1),
+           lipid = cbind(l1 = 2:9, l2 = 9:2))
+  Y = cbind(class1 = rep(c(1, 0), 4), class2 = rep(c(0, 1), 4))
+  rownames(X$gene) = rownames(X$lipid) = rownames(Y) = samples
+
+  nzv.check = Check.entry.wrapper.mint.block(
+    X = X, Y = Y, ncomp = 1, keepX = list(gene = 3, lipid = 2),
+    DA = TRUE, init = "svd.single", scheme = "horst", scale = TRUE,
+    near.zero.var = TRUE, mode = "regression", tol = 1e-06, max.iter = 10
+  )
+  expect_equal(ncol(nzv.check$A$gene), 2)
+  expect_equal(nzv.check$keepA$gene, 2)
+
+  expect_error(
+    Check.entry.wrapper.mint.block(
+      X = X, Y = Y, ncomp = 1, DA = TRUE, init = "svd.single",
+      scheme = "horst", scale = TRUE, near.zero.var = FALSE,
+      mode = "regression", tol = 1e-06, max.iter = 10
+    ),
+    "zero variance in block 'gene'", fixed = TRUE
+  )
+})

@@ -651,7 +651,7 @@ mixo_gg.theme <- function(cex, x.angle = 90, background.fill = 'grey97', subtitl
     theme(panel.border = element_blank(),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          axis.line = element_line(size = 0.5, linetype = "solid",
+          axis.line = element_line(linewidth = 0.5, linetype = "solid",
                                    colour = "black"),
           panel.background = element_rect(fill = background.fill),
           

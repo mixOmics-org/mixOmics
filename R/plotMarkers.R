@@ -113,7 +113,7 @@ plotMarkers <-
                         ifelse(isTRUE(global), "median ", ""),
                         ifelse(isTRUE(object$scale), " (standardised)", "")
                         )
-        p <- ggplot(df, aes_string('group', 'value', fill='group'))
+        p <- ggplot(df, aes(.data[["group"]], .data[["value"]], fill = .data[["group"]]))
         
         if (violin)
         {

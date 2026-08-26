@@ -476,7 +476,7 @@ layout design.
 The \code{block} argument behavior varies depending on the object type. 
 For \code{mixo_pls}, \code{mixo_spls}, \code{rcc}, \code{rgcca}, \code{sgcca},
 \code{block} can be any number of blocks from \code{object$names$blocks}.
-For code{mint.pls}, \code{mint.spls}: when \code{study="all.partial"}, 
+For \code{mint.pls}, \code{mint.spls}: when \code{study="all.partial"},
 can only be one block from \code{object$names$blocks}.
 }
 \examples{

@@ -17,11 +17,25 @@ opts_chunk$set( echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 
 ## What's New
 
+#### May 2026
+
+* bug fix implemented for [#377](https://github.com/mixOmicsTeam/mixOmics/issues/377) fixed vector `xlim` handling in the `graphics` branch of `plotLoadings()` contribution plots
+* enhancement request [#381](https://github.com/mixOmicsTeam/mixOmics/issues/381) expanded test coverage for model utilities and internal helper paths, with small fixes made for issues exposed by the new tests
+
+#### April 2026
+** Version 6.36.0 **
+
+[Bioconductor release version 6.36.0](https://www.bioconductor.org/packages/release/bioc/html/mixOmics.html) released 29th April 2026
+mixOmics can now be downloaded using [Bioconductor version 3.23](https://bioconductor.org/news/bioc_3_23_release/) and is compatible with R 4.6.0
+
+* bug fix implemented for [#374](https://github.com/mixOmicsTeam/mixOmics/issues/374) replaced deprecated `aes_string()` with `aes(.data[[...]])` in plotting functions
+* bug fix implemented for [#379](https://github.com/mixOmicsTeam/mixOmics/issues/379) replaced deprecated `size` aesthetic with `linewidth` in ggplot2 line geoms
+
 #### April 2025
 ** Version 6.32.0 **
 
 [Bioconductor release version 6.32.0](https://www.bioconductor.org/packages/release/bioc/html/mixOmics.html) released 17th April 2025
-mixOmics can now be downloaded using [Bioconductor version 3.21](https://bioconductor.org/news/bioc_3_21_release/) and is compatable with R 4.5.0
+mixOmics can now be downloaded using [Bioconductor version 3.21](https://bioconductor.org/news/bioc_3_21_release/) and is compatible with R 4.5.0
 
 * feature request [#345](https://github.com/mixOmicsTeam/mixOmics/issues/345) updated functionality for `plotLoadings()` so can plot in ggplot2 style and customise aesthetics
 * bug fix implemented for [#357](https://github.com/mixOmicsTeam/mixOmics/issues/357) `plotIndiv()` not handing `pch` ordering correctly
