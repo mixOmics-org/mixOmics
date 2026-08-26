@@ -32,8 +32,8 @@
 #' @param X A named list of data sets (called 'blocks') measured on the same samples.
 #' Data in the list should be arranged in samples x variables, with samples
 #' order matching in all data sets.
-#' @param Y Matrix or vector response for a multivariate regression framework.
-#' Data should be continuous variables (see \code{?mint.block.splsda} for
+#' @param Y Matrix response for a multivariate regression framework. Data
+#' should be continuous variables (see \code{?mint.block.splsda} for
 #' supervised classification and factor response).
 #' @param indY To be supplied if Y is missing, indicates the position of the
 #' matrix / vector response in the list \code{X}
@@ -41,8 +41,9 @@
 #' "block.pls"}, a list that contains the following components:
 #' 
 #' \item{X}{the centered and standardized original predictor and response matrices.}
-# \item{Y}{the centered and standardized original response vector or matrix.}
 #' \item{indY}{the position of the outcome Y in the output list X.}
+#' \item{design}{the design matrix indicating the relationships modelled
+#' between the blocks.}
 #' \item{ncomp}{the number of components included in the model for each block.}
 #' \item{mode}{the algorithm used to fit the model.} \item{mat.c}{matrix of
 #' coefficients from the regression of X / residual matrices X on the
@@ -55,6 +56,8 @@
 #' subsequent S3 methods} \item{max.iter}{the maximum number of iterations,
 #' used for subsequent S3 methods} \item{iter}{Number of iterations of the
 #' algorithm for each component}
+#' \item{weights}{Correlation between the variate of each block and the
+#' variate of the outcome. Used to weight predictions.}
 #' Note that the argument 'scheme' has now been hardcoded to 'horst' and 'init' to 'svd.single'. 
 #' @author Florian Rohart, Benoit Gautier, Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
@@ -87,13 +90,13 @@
 #' 
 #' # For the purpose of this example, we create a continuous response by
 #' # taking the first mrna variable, and removing it from the data
-#' Y = mrna[,1]
+#' Y = mrna[,1,drop=FALSE]
 #' mrna = mrna[,-1]
-#' 
+#'
 #' data = list(mrna = mrna, mirna = mirna)
-#' 
+#'
 #' # we can now apply the function
-#' res = mint.block.plsda(data, Y, study=study, ncomp=2)
+#' res = mint.block.pls(data, Y, study=study, ncomp=2)
 #' 
 #' res
 #' @export
@@ -136,7 +139,6 @@ mint.block.pls <- function(X,
     out=list(
         call = match.call(),
         X = result$A,
-        # Y = result$A[[result$indY]],
         indY = result$indY,
         ncomp = result$ncomp,
         design = result$design,
@@ -159,6 +161,3 @@ mint.block.pls <- function(X,
     return(invisible(out))
     
 }
-
-
-
