@@ -34,15 +34,15 @@ pkg_license_badge <- sprintf("https://img.shields.io/badge/license-%s-lightgrey.
 ```
 
 `r badge_bioc_download_rank('mixOmics')`
-`r badge_github_actions(re = "mixOmicsteam/mixOmics", action = "R-CMD-check.yml")`
-`r badge_last_commit("mixOmicsTeam/mixOmics", branch='master')`
+`r badge_github_actions(re = "mixOmics-org/mixOmics", action = "R-CMD-check.yml")`
+`r badge_last_commit("mixOmics-org/mixOmics", branch='master')`
 `r badge_codecov("mixOmicsTeam/mixOmics", branch='master')`
 [![license](`r pkg_license_badge`)](https://choosealicense.com/)
 [![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
-![](http://mixomics.org/wp-content/uploads/2019/07/MixOmics-Logo-1.png)
+![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
 
-This repository contains the `R` package which is [hosted on Bioconductor](http://bioconductor.org/packages/release/bioc/html/mixOmics.html) and our development `GitHub` versions. Go to www.mixomics.org for information on how to use mixOmics. 
+This repository contains the `R` package which is [hosted on Bioconductor](http://bioconductor.org/packages/release/bioc/html/mixOmics.html) and our development `GitHub` versions. Go to https://mixomics.org for information on how to use mixOmics. 
 
 ## Installation
 
@@ -73,7 +73,7 @@ Bioconductor versions are updated twice a year, between these updates you can do
 install.packages("devtools")
 
 ## install latest github version of mixOmics
-devtools::install_github("mixOmicsTeam/mixOmics")
+devtools::install_github("mixOmics-org/mixOmics")
 ```
 
 ### From Docker container
@@ -155,7 +155,7 @@ docker stop f14b0bc28326
 
 ## Contribution
 
-We welcome community contributions concordant with [our code of conduct](https://github.com/mixOmicsTeam/mixOmics/blob/master/CODE_OF_CONDUCT.md). We strongly recommend adhering to [Bioconductor's coding guide](https://bioconductor.org/developers/how-to/coding-style/) for software consistency if you wish to contribute to `mixOmics` R codes.
+We welcome community contributions concordant with [our code of conduct](https://github.com/mixOmics-org/mixOmics/blob/master/CODE_OF_CONDUCT.md). We strongly recommend adhering to [Bioconductor's coding guide](https://bioconductor.org/developers/how-to/coding-style/) for software consistency if you wish to contribute to `mixOmics` R codes.
 
 ### Bug reports and pull requests
 
