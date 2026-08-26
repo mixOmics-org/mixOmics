@@ -69,7 +69,7 @@ jobs:
   R-CMD-check:
     needs: [gatekeeper, versions]
     ## run scheduled jobs only on main repo - do not run a duplicate job for merges etc. Do not run if commit messages include any of 'worksave' or 'skip-ci'
-    if: (github.event_name == 'schedule' && github.repository == 'mixOmicsTeam/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
+    if: (github.event_name == 'schedule' && github.repository == 'mixOmics-org/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
     runs-on: ${{ matrix.config.os }}
     container: ${{ matrix.config.image }}
 
@@ -91,10 +91,10 @@ jobs:
 
     steps:
       - name: Check out repo ⬇️
-        uses: actions/checkout@v2
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Set up R ▶️
-        uses: r-lib/actions/setup-r@v2
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
         if: matrix.config.image == null
         with:
           r-version: ${{ matrix.config.r }}
@@ -128,7 +128,7 @@ jobs:
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-bioc-${{ matrix.config.bioc }}-
 
       - name: Install system and package dependencies using github action 🔧
-        uses: r-lib/actions/setup-r-dependencies@v2
+        uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
         with:
           extra-repositories: 'https://cloud.r-project.org'
 
@@ -180,7 +180,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Check --as-cran ✅ ✅ 
-        if: (github.event_name == 'schedule' && github.repository == 'mixOmicsTeam/mixOmics') || (github.event_name == 'workflow_dispatch' && github.repository == 'mixOmicsTeam/mixOmics')
+        if: (github.event_name == 'schedule' && github.repository == 'mixOmics-org/mixOmics') || (github.event_name == 'workflow_dispatch' && github.repository == 'mixOmics-org/mixOmics')
         env:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
@@ -190,7 +190,7 @@ jobs:
 
       - name: Upload check results ⬆️
         if: failure()
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
@@ -202,7 +202,7 @@ jobs:
 
       - name: Push to DockerHub 📦
         if: runner.os == 'Linux' && needs.versions.outputs.dockerise == 'true' && !contains(github.event.head_commit.message, 'skip-docker')
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@3e7a4f6646880c6f63758d73ac32392d323eaf8f # v1.1.2, the same commit the old @v1 tag pointed to
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
