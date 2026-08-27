@@ -36,7 +36,7 @@ pkg_license_badge <- sprintf("https://img.shields.io/badge/license-%s-lightgrey.
 `r badge_bioc_download_rank('mixOmics')`
 `r badge_github_actions(re = "mixOmics-org/mixOmics", action = "R-CMD-check.yml")`
 `r badge_last_commit("mixOmics-org/mixOmics", branch='master')`
-`r badge_codecov("mixOmicsTeam/mixOmics", branch='master')`
+`r badge_codecov("mixOmics-org/mixOmics", branch='master')`
 [![license](`r pkg_license_badge`)](https://choosealicense.com/)
 [![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 

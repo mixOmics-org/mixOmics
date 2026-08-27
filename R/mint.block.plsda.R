@@ -62,8 +62,13 @@
 #' \code{"mint.plsda", "block.plsda"}, a list that contains the following
 #' components:
 #' 
-#' \item{X}{the centered and standardized original predictor matrix.}
-#' \item{Y}{the centered and standardized original response vector or matrix.}
+#' \item{X}{the centered and standardized original predictor matrices.}
+#' \item{Y}{the original factor indicating the discrete outcome of each
+#' sample.}
+#' \item{ind.mat}{the centered and standardized indicator matrix corresponding
+#' to \code{Y}.}
+#' \item{indY}{the position of the outcome Y in \code{variates} and
+#' \code{loadings}.}
 #' \item{ncomp}{the number of components included in the model for each block.}
 #' \item{mode}{the algorithm used to fit the model.} \item{mat.c}{matrix of
 #' coefficients from the regression of X / residual matrices X on the
@@ -76,6 +81,8 @@
 #' subsequent S3 methods} \item{max.iter}{the maximum number of iterations,
 #' used for subsequent S3 methods} \item{iter}{Number of iterations of the
 #' algorithm for each component}
+#' \item{weights}{Correlation between the variate of each block and the
+#' variate of the outcome. Used to weight predictions.}
 #' Note that the argument 'scheme' has now been hardcoded to 'horst' and 'init' to 'svd.single'. 
 #' @author Florian Rohart, Benoit Gautier, Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
@@ -225,7 +232,7 @@ mint.block.plsda <- function(X,
         nzv = result$nzv,
         scale = result$scale)
     
-    class(out) = c("mint.block.plsda","mint.block.pls","block.pls","sgccda","sgcca","DA")
+    class(out) = c("mint.block.plsda","mint.block.pls","block.plsda","block.pls","sgccda","sgcca","DA")
     return(invisible(out))
     
 }

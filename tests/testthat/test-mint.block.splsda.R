@@ -37,9 +37,49 @@ test_that("(mint.block.splsda:parameter): partially specified 'keepX'", {
   res <- mint.block.splsda(data$X, data$Y, study = data$study,
                            ncomp = 2, keepX = list(mrna = 2))
 
-  expect_equal(res$keepX$comp1$mrna, 2)
-  expect_equal(res$keepX$comp2$mrna, ncol(data$X$mrna))
-  expect_equal(res$keepX$comp1$Y, nlevels(data$Y))
+  # unspecified components and blocks default to keeping all variables,
+  # keepY defaults to the number of outcome levels
+  expect_equal(as.numeric(res$keepX$mrna), c(2, ncol(data$X$mrna)))
+  expect_equal(as.numeric(res$keepX$mirna), rep(ncol(data$X$mirna), 2))
+  expect_equal(as.numeric(res$keepY), rep(nlevels(data$Y), 2))
+})
+
+test_that("(mint.block.splsda:output): keepX/keepY, DA structure and weights", {
+  data <- .mint_block_splsda_data()
+  res <- mint.block.splsda(data$X, data$Y, study = data$study, ncomp = 2,
+                           keepX = list(mrna = c(10, 10), mirna = c(20, 20)))
+
+  expect_true(all(c("mint.block.splsda", "mint.block.spls", "block.splsda", "block.spls")
+                  %in% class(res)))
+
+  # keepX returned as supplied, keepY defaults to the number of outcome levels
+  expect_equal(res$keepX, list(mrna = c(10, 10), mirna = c(20, 20)))
+  expect_equal(as.numeric(res$keepY), c(3, 3))
+  expect_equal(unname(colSums(res$loadings$mrna != 0)), c(10, 10))
+  expect_equal(unname(colSums(res$loadings$mirna != 0)), c(20, 20))
+
+  # X excludes the outcome block; Y is the original factor
+  expect_equal(names(res$X), c("mrna", "mirna"))
+  expect_true(is.factor(res$Y))
+  expect_equal(dim(res$ind.mat), c(220, 3))
+  expect_equal(res$indY, 3)
+  expect_equal(rownames(res$weights), c("mrna", "mirna"))
+
+  # selectVar excludes the outcome block
+  sv <- selectVar(res, comp = 1)
+  expect_equal(names(sv), c("mrna", "mirna", "comp"))
+})
+
+test_that("(mint.block.splsda:predict): predict with weighted outputs", {
+  data <- .mint_block_splsda_data()
+  res <- mint.block.splsda(data$X, data$Y, study = data$study, ncomp = 2,
+                           keepX = list(mrna = c(10, 10), mirna = c(20, 20)))
+  pred <- predict(res, newdata = data$X, study.test = data$study)
+
+  expect_true(all(c("predict", "class", "MajorityVote", "WeightedVote",
+                    "AveragedPredict", "WeightedPredict") %in% names(pred)))
+  acc <- mean(pred$class$max.dist[["mrna"]][, 2] == as.character(data$Y))
+  expect_gt(acc, 0.7)
 })
 
 test_that("(mint.block.splsda:error): invalid inputs", {
