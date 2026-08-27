@@ -44,6 +44,31 @@ test_that("(mint.block.pls:parameter): block-only 'design'", {
   expect_equal(res$ncomp["Y"], c(Y = 1))
 })
 
+test_that("(mint.block.pls:output): block structure, design and weights returned", {
+  data <- .mint_block_pls_data()
+  res <- mint.block.pls(data$X, data$Y, study = data$study, ncomp = 2)
+
+  # X contains all blocks including the outcome, located by indY
+  expect_equal(names(res$X), c("mrna", "mirna", "Y"))
+  expect_equal(res$indY, 3)
+
+  # design and weights are returned
+  expect_equal(dim(res$design), c(3, 3))
+  expect_equal(rownames(res$design), c("mrna", "mirna", "Y"))
+  expect_equal(rownames(res$weights), c("mrna", "mirna"))
+  .expect_numerically_close(res$weights[1, 1], 0.5989)
+})
+
+test_that("(mint.block.pls:predict): predict works on the fitted model", {
+  data <- .mint_block_pls_data()
+  res <- mint.block.pls(data$X, data$Y, study = data$study, ncomp = 2)
+  pred <- predict(res, newdata = data$X, study.test = data$study)
+
+  expect_true(all(c("predict", "variates", "B.hat") %in% names(pred)))
+  expect_equal(unname(dim(pred$predict$mrna)), c(220, 1, 2))
+  .expect_numerically_close(pred$predict$mrna[1, 1, 2], 2.7174)
+})
+
 test_that("(mint.block.pls:error): invalid model inputs", {
   data <- .mint_block_pls_data(nvar = 20)
 

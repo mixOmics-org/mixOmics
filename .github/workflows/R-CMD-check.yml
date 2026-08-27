@@ -11,21 +11,44 @@ on:
 
 name: R-CMD-check.yml
 
+# rapid re-pushes to the same branch cancel the stale run; scheduled and
+# manually dispatched runs are never cancelled
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+
 jobs:
   ## pre-job to determine if a job has been run for the same SHA (e.g. on a different branch)
   gatekeeper:
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    permissions:
+      actions: read
     steps:
       - id: skip_check
-        uses: fkirc/skip-duplicate-actions@master
-        with:
-          github_token: ${{ github.token }}
+        name: Skip if this commit already has a successful run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        # only pull_request runs may be skipped (push/schedule/dispatch always
+        # run), and only when a completed successful run of this workflow
+        # already covered the same commit (e.g. the push run of the PR branch);
+        # on API failure we fall open and run the workflow
+        run: |
+          should_skip=false
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/R-CMD-check.yml/runs?head_sha=${PR_HEAD_SHA}&status=success" \
+                --jq '.total_count' 2>/dev/null || echo 0)
+            if [[ "${n}" =~ ^[0-9]+$ ]] && [[ "${n}" -gt 0 ]]; then
+              should_skip=true
+            fi
+          fi
+          echo "should_skip=${should_skip}" >> "${GITHUB_OUTPUT}"
 
   versions:
     needs: gatekeeper
-    if: (github.event_name == 'schedule' && github.repository == 'mixOmicsTeam/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
+    if: (github.event_name == 'schedule' && github.repository == 'mixOmics-org/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
     runs-on: ubuntu-latest
     outputs:
       r: ${{ steps.setup.outputs.r }}
@@ -33,8 +56,12 @@ jobs:
       dockerise: ${{ steps.setup.outputs.dockerise }}
       docker_tag: ${{ steps.setup.outputs.docker_tag }}
     steps:
-      - uses: rlespinasse/github-slug-action@v3.x
-      - uses: r-lib/actions/setup-r@v2
+      - name: Create slug/short variables
+        # lowercase and '/' -> '-'; '_' is kept as-is: the release_/master
+        # checks below rely on both properties
+        run: |
+          echo "GITHUB_REF_SLUG=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')" >> "${GITHUB_ENV}"
+      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
       - name: Get R/Bioc versions
         id: setup
         run: |
@@ -69,7 +96,7 @@ jobs:
   R-CMD-check:
     needs: [gatekeeper, versions]
     ## run scheduled jobs only on main repo - do not run a duplicate job for merges etc. Do not run if commit messages include any of 'worksave' or 'skip-ci'
-    if: (github.event_name == 'schedule' && github.repository == 'mixOmicsTeam/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
+    if: (github.event_name == 'schedule' && github.repository == 'mixOmics-org/mixOmics') || (github.event_name != 'schedule' && (needs.gatekeeper.outputs.should_skip == 'false') && !contains(github.event.head_commit.message, 'worksave') && !contains(github.event.head_commit.message, 'skip-ci'))
     runs-on: ${{ matrix.config.os }}
     container: ${{ matrix.config.image }}
 
@@ -91,16 +118,13 @@ jobs:
 
     steps:
       - name: Check out repo ⬇️
-        uses: actions/checkout@v2
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Set up R ▶️
-        uses: r-lib/actions/setup-r@v2
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
         if: matrix.config.image == null
         with:
           r-version: ${{ matrix.config.r }}
-
-      - name: Create slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
 
       - name: Install remotes 🔭
         run: |
@@ -121,14 +145,14 @@ jobs:
 
       - name: Cache R packages 💾
         if: runner.os != 'Windows' && matrix.config.image == null
-        uses: actions/cache@v3
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-bioc-${{ matrix.config.bioc }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-bioc-${{ matrix.config.bioc }}-
 
       - name: Install system and package dependencies using github action 🔧
-        uses: r-lib/actions/setup-r-dependencies@v2
+        uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
         with:
           extra-repositories: 'https://cloud.r-project.org'
 
@@ -180,7 +204,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Check --as-cran ✅ ✅ 
-        if: (github.event_name == 'schedule' && github.repository == 'mixOmicsTeam/mixOmics') || (github.event_name == 'workflow_dispatch' && github.repository == 'mixOmicsTeam/mixOmics')
+        if: (github.event_name == 'schedule' && github.repository == 'mixOmics-org/mixOmics') || (github.event_name == 'workflow_dispatch' && github.repository == 'mixOmics-org/mixOmics')
         env:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
@@ -190,7 +214,7 @@ jobs:
 
       - name: Upload check results ⬆️
         if: failure()
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
@@ -202,7 +226,7 @@ jobs:
 
       - name: Push to DockerHub 📦
         if: runner.os == 'Linux' && needs.versions.outputs.dockerise == 'true' && !contains(github.event.head_commit.message, 'skip-docker')
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@3e7a4f6646880c6f63758d73ac32392d323eaf8f # v1.1.2, the same commit the old @v1 tag pointed to
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}

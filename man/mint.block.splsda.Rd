@@ -71,10 +71,17 @@ computations. Default value is FALSE.}
 \code{"mint.splsda", "block.splsda"}, a list that contains the following
 components:
 
-\item{X}{the centered and standardized original predictor matrix.}
-\item{Y}{the centered and standardized original response vector or matrix.}
+\item{X}{the centered and standardized original predictor matrices.}
+\item{Y}{the original factor indicating the discrete outcome of each
+sample.}
+\item{ind.mat}{the centered and standardized indicator matrix corresponding
+to \code{Y}.}
+\item{indY}{the position of the outcome Y in \code{variates} and
+\code{loadings}.}
 \item{ncomp}{the number of components included in the model for each block.}
-\item{mode}{the algorithm used to fit the model.} \item{mat.c}{matrix of
+\item{mode}{the algorithm used to fit the model.} \item{keepX}{Number of
+variables used to build each component of each block} \item{keepY}{Number of
+variables used to build each component of Y} \item{mat.c}{matrix of
 coefficients from the regression of X / residual matrices X on the
 X-variates, to be used internally by \code{predict}.} \item{variates}{list
 containing the \eqn{X} and \eqn{Y} variates.} \item{loadings}{list
@@ -85,6 +92,8 @@ containing the names to be used for individuals and variables.}
 subsequent S3 methods} \item{max.iter}{the maximum number of iterations,
 used for subsequent S3 methods} \item{iter}{Number of iterations of the
 algorithm for each component}
+\item{weights}{Correlation between the variate of each block and the
+variate of the outcome. Used to weight predictions.}
 Note that the argument 'scheme' has now been hardcoded to 'horst' and 'init' to 'svd.single'.
 }
 \description{

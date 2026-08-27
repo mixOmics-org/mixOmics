@@ -221,7 +221,7 @@ predict.mixo_pls <-
             multilevel = NULL
         }
         
-        mint.object = c("mint.pls", "mint.spls", "mint.plsda", "mint.splsda")
+        mint.object = c("mint.block.spls", "mint.block.pls", "mint.pls", "mint.spls", "mint.plsda", "mint.splsda")
         block.object = c("block.pls", "block.spls", "block.plsda", "block.splsda")
         ### if the object is a block, the input newdata is different, we check newdata, make sure it's a list and check newdata/X
         if(!inherits(object, block.object)) # not a block (pls/spls/plsda/splsda/mint...)
@@ -510,6 +510,7 @@ predict.mixo_pls <-
                 
                 means.Y=matrix(0,nrow=nrow(concat.newdata[[1]]),ncol=q)
                 sigma.Y=matrix(1,nrow=nrow(concat.newdata[[1]]),ncol=q)
+                # NOTE: Could use same values as for non mint here to use training data to estimate values for new studies
                 
                 #loop on the blocks to define means.Y and sigma.Y for mint analysis
                 for(m in 1:M)
