@@ -64,6 +64,24 @@ test_that("(mint.block.plsda:parameter): both 'Y' and 'indY' supplied", {
   expect_equal(res$Y, data$Y)
 })
 
+test_that("(mint.block.plsda:output): DA structure and weights, predict works", {
+  data <- .mint_block_plsda_data()
+  res <- mint.block.plsda(data$X, data$Y, study = data$study, ncomp = 2)
+
+  expect_true(all(c("mint.block.plsda", "mint.block.pls", "block.plsda", "block.pls")
+                  %in% class(res)))
+
+  # X excludes the outcome block; Y is the original factor
+  expect_equal(names(res$X), c("mrna", "mirna"))
+  expect_true(is.factor(res$Y))
+  expect_equal(dim(res$ind.mat), c(220, 3))
+  expect_equal(res$indY, 3)
+  expect_equal(rownames(res$weights), c("mrna", "mirna"))
+
+  pred <- predict(res, newdata = data$X, study.test = data$study)
+  expect_true(all(c("predict", "class", "MajorityVote", "WeightedVote") %in% names(pred)))
+})
+
 test_that("(mint.block.plsda:error): invalid inputs", {
   data <- .mint_block_plsda_data(nvar = 20)
   Y.with.na <- data$Y

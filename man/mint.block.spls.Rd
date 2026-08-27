@@ -26,8 +26,8 @@ mint.block.spls(
 Data in the list should be arranged in samples x variables, with samples
 order matching in all data sets.}
 
-\item{Y}{Matrix or vector response for a multivariate regression framework.
-Data should be continuous variables (see \code{?mint.block.splsda} for
+\item{Y}{Matrix response for a multivariate regression framework. Data
+should be continuous variables (see \code{?mint.block.splsda} for
 supervised classification and factor response).}
 
 \item{indY}{To be supplied if Y is missing, indicates the position of the
@@ -79,10 +79,14 @@ computations. Default value is FALSE.}
 \code{mint.block.spls} returns an object of class \code{"mint.spls",
 "block.spls"}, a list that contains the following components:
 
-\item{X}{the centered and standardized original predictor matrix.}
-\item{Y}{the centered and standardized original response vector or matrix.}
+\item{X}{the centered and standardized original predictor and response matrices.}
+\item{indY}{the position of the outcome Y in the output list X.}
+\item{design}{the design matrix indicating the relationships modelled
+between the blocks.}
 \item{ncomp}{the number of components included in the model for each block.}
-\item{mode}{the algorithm used to fit the model.} \item{mat.c}{matrix of
+\item{mode}{the algorithm used to fit the model.} \item{keepX}{Number of
+variables used to build each component of each block} \item{keepY}{Number of
+variables used to build each component of Y} \item{mat.c}{matrix of
 coefficients from the regression of X / residual matrices X on the
 X-variates, to be used internally by \code{predict}.} \item{variates}{list
 containing the \eqn{X} and \eqn{Y} variates.} \item{loadings}{list
@@ -93,6 +97,8 @@ containing the names to be used for individuals and variables.}
 subsequent S3 methods} \item{max.iter}{the maximum number of iterations,
 used for subsequent S3 methods} \item{iter}{Number of iterations of the
 algorithm for each component}
+\item{weights}{Correlation between the variate of each block and the
+variate of the outcome. Used to weight predictions.}
 Note that the argument 'scheme' has now been hardcoded to 'horst' and 'init' to 'svd.single'.
 }
 \description{
@@ -134,13 +140,13 @@ mirna = rbind(breast.TCGA$data.train$mirna, breast.TCGA$data.test$mirna)
 
 # For the purpose of this example, we create a continuous response by
 # taking the first mrna variable, and removing it from the data
-Y = mrna[,1]
+Y = mrna[,1,drop=FALSE]
 mrna = mrna[,-1]
 
 data = list(mrna = mrna, mirna = mirna)
 
 # we can now apply the function
-res = mint.block.splsda(data, Y, study=study, ncomp=2,
+res = mint.block.spls(data, Y, study=study, ncomp=2,
 keepX = list(mrna=c(10,10), mirna=c(20,20)))
 
 res
