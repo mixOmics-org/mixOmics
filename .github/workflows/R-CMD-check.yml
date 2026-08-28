@@ -86,7 +86,7 @@ jobs:
           ## Docker
           # Only Dockerise for 'master' or 'RELEASE_*' branches
           dockerise='false'
-          [[ github.event_name != 'schedule' && ($BRANCH_NAME == "master" || $BRANCH_NAME =~ "release_") ]] && dockerise='true'
+          [[ "${GITHUB_EVENT_NAME}" != 'schedule' && ($BRANCH_NAME == "master" || $BRANCH_NAME =~ "release_") ]] && dockerise='true'
           echo "dockerise=$dockerise" >> $GITHUB_OUTPUT
           # Docker tag is 'github' for master and the branch name for release branches
           docker_tag="github"
