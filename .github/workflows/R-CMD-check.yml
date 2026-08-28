@@ -11,6 +11,11 @@ on:
 
 name: R-CMD-check.yml
 
+# least privilege for GITHUB_TOKEN; the gatekeeper job overrides this with
+# 'actions: read' (job-level permissions replace, not merge)
+permissions:
+  contents: read
+
 # rapid re-pushes to the same branch cancel the stale run; scheduled and
 # manually dispatched runs are never cancelled
 concurrency:
