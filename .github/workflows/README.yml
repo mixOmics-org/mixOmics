@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Check out repo ⬇️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: Set up R ▶️
         uses: r-lib/actions/setup-r@master
