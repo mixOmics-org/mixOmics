@@ -42,3 +42,28 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Eva Hamrud \email{mixomicsdeveloper@gmail.com} [contributor]
+
+Authors:
+\itemize{
+  \item Kim-Anh Le Cao \email{kimanh.lecao@unimelb.edu.au}
+  \item Florian Rohart
+  \item Ignacio Gonzalez
+  \item Sebastien Dejean
+}
+
+Other contributors:
+\itemize{
+  \item Al J Abadi \email{al.jal.abadi@gmail.com} [contributor]
+  \item Max Bladen \email{mbladen19@gmail.com} [contributor]
+  \item Benoit Gautier [contributor]
+  \item Francois Bartolo [contributor]
+  \item Pierre Monget [contributor]
+  \item Jeff Coquery [contributor]
+  \item FangZou Yao [contributor]
+  \item Benoit Liquet [contributor]
+  \item Tuomas Borman (\href{https://orcid.org/0000-0002-8563-8884}{ORCID}) [contributor]
+}
+
+}
