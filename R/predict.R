@@ -679,17 +679,8 @@ predict.mixo_pls <-
                 })), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
                 
                 out$WeightedPredict = array(unlist(lapply(temp.all, function(x){
-                    apply(x, c(1,2), function(z){
-                        temp = aggregate(rowMeans(object$weights),list(z),sum)
-                        ind = which(temp[,2]== max (temp[,2]))# if two max, then NA
-                        if(length(ind) == 1)
-                        {
-                            res = temp[ind, 1]
-                        } else {
-                            res = NA
-                        }
-                        res
-                    })})), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
+                    x[, , which.max(rowMeans(object$weights))]
+                })), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
             }
             
             
