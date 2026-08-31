@@ -226,7 +226,7 @@ jobs:
 
       - name: Push to DockerHub 📦
         if: runner.os == 'Linux' && needs.versions.outputs.dockerise == 'true' && !contains(github.event.head_commit.message, 'skip-docker')
-        uses: docker/build-push-action@3e7a4f6646880c6f63758d73ac32392d323eaf8f # v1.1.2, the same commit the old @v1 tag pointed to
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v1.1.2, the same commit the old @v1 tag pointed to
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
