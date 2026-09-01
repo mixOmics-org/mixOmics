@@ -4,3 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      actions-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      actions-major:
+        patterns: ["*"]
+        update-types: ["major"]
