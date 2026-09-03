@@ -46,7 +46,8 @@ an object from one of the following models: \code{mix_pls}, \code{plsda},
 \code{sgccda}.}
 
 \item{comp}{atomic or vector of positive integers. The components to
-adequately account for the data association. Defaults to \code{comp = 1}.}
+adequately account for the data association. Defaults to \code{comp = 1:ncomp},
+i.e. all components are used.}
 
 \item{blocks}{a vector indicating the block variables to display.}
 

@@ -91,7 +91,8 @@
 #' \code{mixo_spls}, \code{splsda}, \code{rcc}, \code{sgcca}, \code{rgcca}, 
 #' \code{sgccda}.
 #' @param comp atomic or vector of positive integers. The components to
-#' adequately account for the data association. Defaults to \code{comp = 1}.
+#' adequately account for the data association. Defaults to \code{comp = 1:ncomp},
+#' i.e. all components are used.
 #' @param cutoff numeric value between \code{0} and \code{1}. The tuning
 #' threshold for the relevant associations network (see Details).
 #' @param row.names,col.names character vector containing the names of \eqn{X}-

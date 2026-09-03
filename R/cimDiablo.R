@@ -22,9 +22,10 @@
 #' @param color.Y a character vector of colors to be used for the levels of the
 #' outcome
 #' @param color.blocks a character vector of colors to be used for the blocks
-#' @param comp positive integer. The similarity matrix is computed based on the
-#' variables selected on those specified components. See example. Defaults to
-#' \code{comp = 1}.
+#' @param comp positive integer or vector of positive integers. The similarity
+#' matrix is computed based on the variables selected on those specified
+#' components. See example. Defaults to \code{comp = 1:ncomp}, i.e. all
+#' components are used.
 #' @param margins numeric vector of length two containing the margins (see
 #' \code{\link{par}(mar)}) for column and row names respectively.
 #' @param legend.position position of the legend, one of "bottomright",
