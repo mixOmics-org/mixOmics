@@ -11,6 +11,11 @@ on:
 
 name: R-CMD-check.yml
 
+# least privilege for GITHUB_TOKEN; the gatekeeper job overrides this with
+# 'actions: read' (job-level permissions replace, not merge)
+permissions:
+  contents: read
+
 # rapid re-pushes to the same branch cancel the stale run; scheduled and
 # manually dispatched runs are never cancelled
 concurrency:
@@ -86,7 +91,7 @@ jobs:
           ## Docker
           # Only Dockerise for 'master' or 'RELEASE_*' branches
           dockerise='false'
-          [[ github.event_name != 'schedule' && ($BRANCH_NAME == "master" || $BRANCH_NAME =~ "release_") ]] && dockerise='true'
+          [[ "${GITHUB_EVENT_NAME}" != 'schedule' && ($BRANCH_NAME == "master" || $BRANCH_NAME =~ "release_") ]] && dockerise='true'
           echo "dockerise=$dockerise" >> $GITHUB_OUTPUT
           # Docker tag is 'github' for master and the branch name for release branches
           docker_tag="github"
@@ -224,12 +229,28 @@ jobs:
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
-      - name: Push to DockerHub 📦
-        if: runner.os == 'Linux' && needs.versions.outputs.dockerise == 'true' && !contains(github.event.head_commit.message, 'skip-docker')
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v1.1.2, the same commit the old @v1 tag pointed to
+  ## runs on a plain runner (not in the check matrix) because build-push-action
+  ## v2+ needs the docker CLI, which the Bioconductor container lacks
+  docker:
+    name: Push to DockerHub 📦
+    needs: [versions, R-CMD-check]
+    if: github.repository == 'mixOmics-org/mixOmics' && needs.versions.outputs.dockerise == 'true' && !contains(github.event.head_commit.message, 'skip-docker')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo ⬇️
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Log in to DockerHub 🔑
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: mixomicsteam/mixomics
-          tags: ${{ needs.versions.outputs.docker_tag }}
-          build_args: BIOC_VERSION=${{ needs.versions.outputs.bioc }} 
+
+      - name: Build and push 📦
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          push: true
+          tags: mixomicsteam/mixomics:${{ needs.versions.outputs.docker_tag }}
+          build-args: |
+            BIOC_VERSION=${{ needs.versions.outputs.bioc }}
