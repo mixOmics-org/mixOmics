@@ -194,3 +194,31 @@ test_that("(predict:error): catches when colnames(newdata) differs from colnames
 #     
 #     expect_true(all(homogenity))
 # })
+
+test_that("predict.block.(s)pls(da) works", code = {
+    data("nutrimouse")
+    X <- list(gene1 = nutrimouse$gene, gene2 = nutrimouse$gene + 0.5, lipid = nutrimouse$lipid)
+    indY <- 3
+    labels <- nutrimouse$diet
+    nutri.pls <- block.pls(X, indY = indY, ncomp = 2, design = "full", scale = TRUE)
+    nutri.spls <- block.spls(X, indY = indY, ncomp = 2, design = "full", scale = TRUE, keepX = list(gene1 = c(5, 5), gene2 = c(5, 5)))
+    nutri.plsda <- block.plsda(X, Y = labels, ncomp = 2, design = "full", scale = TRUE)
+    nutri.splsda <- block.splsda(X, Y = labels, ncomp = 2, design = "full", scale = TRUE, keepX = list(gene1 = c(5, 5), gene2 = c(5, 5), lipid = c(5, 5)))
+    
+    newdata <- lapply(X, function (data) {
+        indiv1 <- colMeans(data) + 0.3
+        indiv2 <- colMeans(data) - 0.3
+        ret <- rbind(indiv1, indiv2)
+        colnames(ret) <- colnames(data)
+        ret
+    })
+    
+    pred <- list(pls = predict(nutri.pls, newdata[-indY])$WeightedPredict,
+                 spls = predict(nutri.spls, newdata[-indY])$WeightedPredict,
+                 plsda = predict(nutri.plsda, newdata)$WeightedPredict,
+                 splsda = predict(nutri.splsda, newdata)$WeightedPredict)
+    # saveRDS(pred, file = "inst/testdata/predict.block.pls.rda")
+    pred_ref <- readRDS(system.file("testdata", "predict.block.pls.rda", package = 'mixOmics'))
+    expect_equal(pred, pred_ref)
+})
+
