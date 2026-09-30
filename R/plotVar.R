@@ -22,6 +22,16 @@
 #' For \code{spls} and \code{splsda} objects, only the \eqn{X} and \eqn{Y}
 #' variables selected on dimensions \code{comp} are represented.
 #' 
+#' When the plotted components are not orthogonal, variables can fall outside
+#' the unit circle and their squared distance to the origin is no longer the
+#' share of their variance that the components explain. \code{plotVar}
+#' therefore orthogonalises the components symmetrically before computing the
+#' correlations; with missing values, on the observed samples of each variable.
+#' When the components are already orthogonal the coordinates are unchanged;
+#' otherwise \code{plotVar} issues a message and appends "(orthogonalised)" to
+#' the default axis labels to indicate that the coordinates are the
+#' correlations with the orthogonalised components.
+#' 
 #' The arguments \code{col}, \code{pch}, \code{cex} and \code{font} can be
 #' either vectors of length two or a list with two vector components of length
 #' \eqn{p} and \eqn{q} respectively, where \eqn{p} is the number of
