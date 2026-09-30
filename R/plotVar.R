@@ -1084,3 +1084,76 @@ plotVar <-
             return(df)
         
     }
+
+
+#' Correlations between variables and components on orthogonal axes
+#'
+#' The correlation circle reads correctly only when the plotted components are
+#' orthogonal. This fails when a block is deflated with the components of
+#' another block rather than its own, when the components are orthogonal under
+#' a regularised covariance rather than the sample covariance, and when a block
+#' has missing values: the components computed from incomplete data are not
+#' exactly orthogonal.
+#'
+#' The components are orthogonalised symmetrically: with the components centred
+#' and scaled to unit length and G their correlation matrix, the new axes are
+#' the components times G^(-1/2). This is the orthonormal basis of their span
+#' closest to them; the result is the same in any order, and with two
+#' components both rotate by the same angle. When the components are already
+#' orthogonal, G is the identity and the correlations are unchanged. With
+#' missing values the orthogonalisation is done on the observed samples of each
+#' variable.
+#'
+#' @param data numeric matrix of the variables, samples in rows.
+#' @param variates numeric matrix of the components, samples in rows, without
+#'   missing values.
+#' @return matrix of correlations, variables in rows and components in
+#'   columns, with attributes \code{missing} (does \code{data} have missing
+#'   values), \code{cor.components} (largest absolute correlation between two
+#'   of the components) and \code{orthogonalised} (did the orthogonalisation
+#'   change the correlations noticeably).
+#' @noRd
+.cor_orthogonalised <- function(data, variates)
+{
+    data = as.matrix(data)
+    variates = as.matrix(variates)
+    
+    # components times G^(-1/2), G their correlation matrix
+    orthogonalise = function(V)
+    {
+        V = scale(V, center = TRUE, scale = FALSE)
+        V = sweep(V, 2, sqrt(colSums(V^2)), "/")
+        G = eigen(crossprod(V), symmetric = TRUE)
+        # collinear on these samples: the eigenvalues of a correlation matrix are O(1),
+        # except for those that are zero up to rounding (~1e-16)
+        if (min(G$values) < 1e-10)
+            return(V * NA)
+        res = V %*% G$vectors %*% diag(1 / sqrt(G$values), ncol(V)) %*% t(G$vectors)
+        colnames(res) = colnames(V)
+        res
+    }
+    
+    if (anyNA(data))
+    {
+        res = lapply(seq_len(ncol(data)), function(j)
+        {
+            observed = !is.na(data[, j])
+            # centred vectors of m samples span at most m-1 dimensions, so k
+            # components can be linearly independent only if k<=m-1
+            if (sum(observed) < ncol(variates) + 1)
+                return(rep(NA_real_, ncol(variates)))
+            cor(data[observed, j], orthogonalise(variates[observed, , drop = FALSE]))
+        })
+        res = matrix(unlist(res), ncol = ncol(variates), byrow = TRUE,
+                     dimnames = list(colnames(data), colnames(variates)))
+    } else {
+        res = cor(data, orthogonalise(variates))
+    }
+    
+    cor.components = cor(variates)
+    attr(res, "missing") = anyNA(data)
+    attr(res, "cor.components") = max(abs(cor.components[lower.tri(cor.components)]))
+    # above |cor| = 0.01 the components count as non-orthogonal (visible)
+    attr(res, "orthogonalised") = anyNA(data) || attr(res, "cor.components") >= 0.01
+    res
+}
