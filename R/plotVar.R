@@ -308,6 +308,7 @@ plotVar <-
         }
         
         #-- Start: Retrieve variates from object
+        # correlations with the components orthogonalised, see .cor_orthogonalised
         cord.X = sample.X = ind.var.sel = list()
         if(style=="3d")
         {
@@ -315,65 +316,50 @@ plotVar <-
             {
                 if (any(class.object == "rcc"))
                 {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)] + object$variates$Y[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, object$variates$X[, c(comp1, comp2, comp3)] + object$variates$Y[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps] + object$variates$Y[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, object$variates$X[, comps] + object$variates$Y[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in% "mixo_plsda")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  "mixo_pls")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2, comp3)]} else {object$variates$X[, c(comp1, comp2, comp3)]}, use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  c("mixo_splsda", "mixo_mlsplsda"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(unique(c(comp1, comp2, comp3, comp.select)), function(x){selectVar(object, comp = x)$name})))], # variables selected at least once on unique(comp1, comp2, comp3 and comp.select
-                                      object$variates$X[, c(comp1, comp2, comp3, comp.select)], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    if (!is.null(comp.select))
-                    {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     
                 } else if (any(class.object %in%  c("mixo_spls", "mixo_mlspls"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$X$name})))],
-                                      object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$Y$name})))],
-                                      if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2, comp3)]} else {object$variates$X[, c(comp1, comp2, comp3)]}, use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    ind.var.sel[[2]] = sample.X[[2]] = seq_len(length(colnames(object$Y)))
-                    if (!is.null(comp.select)) {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$X$name}))), ,drop = FALSE]
-                        cord.X[[2]] = cord.X[[2]][row.names(cord.X[[2]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$Y$name}))), , drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
+                                                      if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
+                    sample.X[[2]] = seq_len(length(colnames(object$Y)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     ind.var.sel[[2]] = which(colnames(object$Y) %in% rownames(cord.X[[2]]))
                 } else {
-                    cord.X = lapply(blocks, function(x){cor(object$blocks[[x]], object$variates[[x]][, c(comp1, comp2, comp3)], use = "pairwise")})
+                    cord.X = lapply(blocks, function(x){.cor_orthogonalised(object$blocks[[x]][, colnames(object$blocks[[x]]) %in% unique(unlist(lapply(comp.select, function(y) {selectVar(object, block = x, comp = y)[[1]]$name}))), drop = FALSE],
+                                                                            object$variates[[x]][, comps])})
                     ind.var.sel = sample.X = lapply(object$blocks, function(x){seq_len(ncol(x))})
-                    if (!is.null(comp.select)) {
-                        cord.X = lapply(seq_len(length(cord.X)), function(z){cord.X[[z]][row.names(cord.X[[z]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, block = z, comp = x)[[1]]$name}))), ,drop = FALSE]})
-                    }
                     for (i in seq_len(length(cord.X))){
                         ind.var.sel[[i]] = which(colnames(object$X) %in% rownames(cord.X[[i]]))
                     }
                 }
             } else if (any(class.object %in%  object.pca)) {
                 if (any(class.object %in%  c("sipca", "spca"))){
-                    
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$name})))],
-                                      object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    if (!is.null(comp.select)) {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                 } else {
-                    
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
                 }
             }
@@ -382,56 +368,39 @@ plotVar <-
             {
                 if (any(class.object == "rcc"))
                 {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)] + object$variates$Y[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, object$variates$X[, c(comp1, comp2)] + object$variates$Y[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps] + object$variates$Y[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, object$variates$X[, comps] + object$variates$Y[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object == "mixo_plsda")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object ==  "mixo_pls")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2)]} else {object$variates$X[, c(comp1, comp2)]}, use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  c("mixo_splsda", "mixo_mlsplsda"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
-                                      object$variates$X[, unique(c(comp1, comp2))], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #if (!is.null(comp.select)) {
-                    #   cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    #}
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     
                 } else if (any(class.object %in%  c("mixo_spls", "mixo_mlspls"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
-                                      object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
-                                      if(object$mode ==  "canonical")
-                                      {
-                                          object$variates$Y[, c(comp1, comp2)]
-                                      } else {
-                                          object$variates$X[, c(comp1, comp2)]
-                                      }, use = "pairwise")
-                    #ind.var.sel[[1]] =
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
+                                                      if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #ind.var.sel[[2]] =
                     sample.X[[2]] = seq_len(length(colnames(object$Y)))
-                    #if (!is.null(comp.select)) {
-                    #   cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$X$name}))), ,drop = FALSE]
-                    #   cord.X[[2]] = cord.X[[2]][row.names(cord.X[[2]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$Y$name}))), , drop = FALSE]
-                    #}
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     ind.var.sel[[2]] = which(colnames(object$Y) %in% rownames(cord.X[[2]]))
                     
                 } else { #block object
-                    cord.X = lapply(blocks, function(x){cor(object$blocks[[x]], object$variates[[x]][, c(comp1, comp2)], use = "pairwise")})
+                    cord.X = lapply(blocks, function(x){.cor_orthogonalised(object$blocks[[x]][, colnames(object$blocks[[x]]) %in% unique(unlist(lapply(comp.select, function(y) {selectVar(object, block = x, comp = y)[[1]]$name}))), drop = FALSE],
+                                                                            object$variates[[x]][, comps])})
                     ind.var.sel = sample.X = lapply(object$blocks, function(x){seq_len(ncol(x))})
-                    if (!is.null(comp.select))
-                    {
-                        cord.X = lapply(seq_len(length(cord.X)), function(z){cord.X[[z]][row.names(cord.X[[z]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, block = blocks[z], comp = x)[[1]]$name}))), ,drop = FALSE]})
-                    }
                     for (i in seq_len(length(cord.X)))
                     {
                         ind.var.sel[[i]] = which(colnames(object$blocks[[i]]) %in% rownames(cord.X[[i]]))
@@ -439,17 +408,12 @@ plotVar <-
                 }
             } else if (any(class.object %in%  object.pca)) {
                 if (any(class.object %in%  c("sipca", "spca"))){
-                    
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
-                                      object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    #ind.var.sel[[1]] =
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
                     sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #if (!is.null(comp.select)) {
-                    #    cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    #}
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                 } else {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
                 }
             }}
