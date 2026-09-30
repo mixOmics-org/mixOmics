@@ -283,6 +283,9 @@ plotVar <-
         comp2 = round(comp[2])
         if (style=="3d")
             comp3 = round(comp[3])
+        comps = round(comp)
+        if (anyDuplicated(comps))
+            stop("'comp' must contain distinct components.", call. = FALSE)
         
         #-- comp.select
         if (!is.null(comp.select))
