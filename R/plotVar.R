@@ -427,6 +427,23 @@ plotVar <-
                 warning("We detected negative correlation between the variates of some blocks, which means that some clusters of variables observed on the correlation circle plot are not necessarily positively correlated.")
         }
         
+        #-- say so when the orthogonalisation changed the coordinates
+        for (k in seq_len(length(cord.X)))
+        {
+            if (!attr(cord.X[[k]], "orthogonalised"))
+                next
+            if (attr(cord.X[[k]], "missing"))
+            {
+                message("Block '", blocks[k], "' has missing values: each variable is correlated with the components on the samples where it is observed, ",
+                        "and the components are orthogonalised on those samples so that the correlation circle reads correctly.")
+            } else {
+                message("Components ", paste(head(sort(comps), -1), collapse = ", "), " and ", tail(sort(comps), 1), " of block '", blocks[k],
+                        "' are correlated (|cor| = ", signif(attr(cord.X[[k]], "cor.components"), 2), "): they were orthogonalised symmetrically ",
+                        "before computing the correlations so that the correlation circle reads correctly. ",
+                        "The coordinates are the correlations with the orthogonalised components.")
+            }
+        }
+        
         if (any(sapply(cord.X, nrow) == 0))
             stop("No variable selected on at least one block")
         
