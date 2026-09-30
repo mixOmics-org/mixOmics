@@ -455,9 +455,15 @@ plotVar <-
         #-- End: Retrieve variates from object
         
         #-- Names of labels X and Y
-        if (is.null(X.label)) X.label = paste("Component ", comp1)
-        if (is.null(Y.label)) Y.label = paste("Component ", comp2)
-        if (is.null(Z.label) && style=="3d") Z.label = paste("Component ", comp3)
+        component.label = function(k)
+        {
+            if (!any(sapply(cord.X, attr, "orthogonalised")))
+                return(paste("Component ", k))
+            paste0("Component ", k, " (orthogonalised)")
+        }
+        if (is.null(X.label)) X.label = component.label(comp1)
+        if (is.null(Y.label)) Y.label = component.label(comp2)
+        if (is.null(Z.label) && style=="3d") Z.label = component.label(comp3)
         
         if (!is.character(X.label))
             stop("'X.label' must be a character.", call. = FALSE)
