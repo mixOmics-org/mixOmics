@@ -26,7 +26,7 @@
 #' the unit circle and their squared distance to the origin is no longer the
 #' share of their variance that the components explain. \code{plotVar}
 #' therefore orthogonalises the components symmetrically before computing the
-#' correlations; with missing values, on the observed samples of each variable.
+#' correlations.
 #' When the components are already orthogonal the coordinates are unchanged;
 #' otherwise \code{plotVar} issues a message and appends "(orthogonalised)" to
 #' the default axis labels to indicate that the coordinates are the
@@ -430,18 +430,8 @@ plotVar <-
         #-- say so when the orthogonalisation changed the coordinates
         for (k in seq_len(length(cord.X)))
         {
-            if (!attr(cord.X[[k]], "orthogonalised"))
-                next
-            if (attr(cord.X[[k]], "missing"))
-            {
-                message("Block '", blocks[k], "' has missing values: each variable is correlated with the components on the samples where it is observed, ",
-                        "and the components are orthogonalised on those samples so that the correlation circle reads correctly.")
-            } else {
-                message("Components ", paste(head(sort(comps), -1), collapse = ", "), " and ", tail(sort(comps), 1), " of block '", blocks[k],
-                        "' are correlated (|cor| = ", signif(attr(cord.X[[k]], "cor.components"), 2), "): they were orthogonalised symmetrically ",
-                        "before computing the correlations so that the correlation circle reads correctly. ",
-                        "The coordinates are the correlations with the orthogonalised components.")
-            }
+            if (attr(cord.X[[k]], "orthogonalised"))
+                message("The components of block '", blocks[k], "' are correlated and have been orthogonalised.")
         }
         
         if (any(sapply(cord.X, nrow) == 0))
@@ -1100,17 +1090,13 @@ plotVar <-
 #' the components times G^(-1/2). This is the orthonormal basis of their span
 #' closest to them; the result is the same in any order, and with two
 #' components both rotate by the same angle. When the components are already
-#' orthogonal, G is the identity and the correlations are unchanged. With
-#' missing values the orthogonalisation is done on the observed samples of each
-#' variable.
+#' orthogonal, G is the identity and the correlations are unchanged.
 #'
 #' @param data numeric matrix of the variables, samples in rows.
 #' @param variates numeric matrix of the components, samples in rows, without
 #'   missing values.
 #' @return matrix of correlations, variables in rows and components in
-#'   columns, with attributes \code{missing} (does \code{data} have missing
-#'   values), \code{cor.components} (largest absolute correlation between two
-#'   of the components) and \code{orthogonalised} (did the orthogonalisation
+#'   columns, with attribute \code{orthogonalised} (did the orthogonalisation
 #'   change the correlations noticeably).
 #' @noRd
 .cor_orthogonalised <- function(data, variates)
@@ -1133,27 +1119,10 @@ plotVar <-
         res
     }
     
-    if (anyNA(data))
-    {
-        res = lapply(seq_len(ncol(data)), function(j)
-        {
-            observed = !is.na(data[, j])
-            # centred vectors of m samples span at most m-1 dimensions, so k
-            # components can be linearly independent only if k<=m-1
-            if (sum(observed) < ncol(variates) + 1)
-                return(rep(NA_real_, ncol(variates)))
-            cor(data[observed, j], orthogonalise(variates[observed, , drop = FALSE]))
-        })
-        res = matrix(unlist(res), ncol = ncol(variates), byrow = TRUE,
-                     dimnames = list(colnames(data), colnames(variates)))
-    } else {
-        res = cor(data, orthogonalise(variates))
-    }
-    
+    res = cor(data, orthogonalise(variates), use = "pairwise")
+
     cor.components = cor(variates)
-    attr(res, "missing") = anyNA(data)
-    attr(res, "cor.components") = max(abs(cor.components[lower.tri(cor.components)]))
     # above |cor| = 0.01 the components count as non-orthogonal (visible)
-    attr(res, "orthogonalised") = anyNA(data) || attr(res, "cor.components") >= 0.01
+    attr(res, "orthogonalised") = max(abs(cor.components[lower.tri(cor.components)])) >= 0.01
     res
 }
