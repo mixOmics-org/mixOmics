@@ -97,19 +97,17 @@ test_that("plotVar orthogonalises correlated components so the variables stay in
   expect_equal(labs$y, "Component 3 (orthogonalised)")
 })
 
-test_that("plotVar with missing values correlates each variable on its observed samples", {
+test_that("plotVar with missing values orthogonalises the components on all samples", {
   data(nutrimouse)
   set.seed(1)
   X <- as.matrix(nutrimouse$lipid)
   X[sample(length(X), 0.3 * length(X))] <- NA
   res <- suppressMessages(pca(X, ncomp = 2))
-  # pairwise correlations with the components as they are can leave the circle
-  plain <- cor(res$X, res$variates$X, use = "pairwise")
-  expect_true(any(rowSums(plain^2) > 1))
-  expect_message(df <- plotVar(res, plot = FALSE), "missing values")
-  expect_true(all(df$x^2 + df$y^2 <= 1))
-  # the squared radius of each variable is the variance explained by the two
-  # components on the samples where that variable is observed
-  r2 <- apply(res$X, 2, function(x) summary(lm(x ~ res$variates$X[, 1:2]))$r.squared)
-  expect_equal(df$x^2 + df$y^2, unname(r2), tolerance = 1e-10)
+  # the components computed from incomplete data are correlated
+  expect_message(df <- plotVar(res, plot = FALSE), "correlated")
+  # each variable is correlated, on the samples where it is observed, with the
+  # orthonormal basis closest to the components (U V' from their SVD)
+  s <- svd(scale(res$variates$X))
+  expected <- cor(res$X, s$u %*% t(s$v), use = "pairwise")
+  expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
 })
