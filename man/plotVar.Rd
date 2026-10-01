@@ -146,7 +146,7 @@ When the plotted components are not orthogonal, variables can fall outside
 the unit circle and their squared distance to the origin is no longer the
 share of their variance that the components explain. \code{plotVar}
 therefore orthogonalises the components symmetrically before computing the
-correlations; with missing values, on the observed samples of each variable.
+correlations.
 When the components are already orthogonal the coordinates are unchanged;
 otherwise \code{plotVar} issues a message and appends "(orthogonalised)" to
 the default axis labels to indicate that the coordinates are the
