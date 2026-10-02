@@ -2,9 +2,19 @@
 % Please edit documentation in R/mixOmics.R
 \name{mixOmics}
 \alias{mixOmics}
+\alias{mixOmics,MultiAssayExperiment-method}
+\alias{mixOmics,SummarizedExperiment-method}
+\alias{mixOmics,matrix-method}
+\alias{mixOmics,list-method}
 \title{PLS-derived methods: one function to rule them all!}
 \usage{
-mixOmics(
+mixOmics(X, ...)
+
+\S4method{mixOmics}{MultiAssayExperiment}(X, experiments, assay.type, col.var, MINT = FALSE, ...)
+
+\S4method{mixOmics}{SummarizedExperiment}(X, assay.type, col.var, ...)
+
+\S4method{mixOmics}{matrix}(
   X,
   Y,
   indY,
@@ -20,20 +30,56 @@ mixOmics(
   max.iter = 100,
   near.zero.var = FALSE
 )
+
+\S4method{mixOmics}{list}(
+  X,
+  Y,
+  indY,
+  study,
+  ncomp,
+  keepX,
+  keepY,
+  design,
+  tau = NULL,
+  mode = c("regression", "canonical", "invariant", "classic"),
+  scale,
+  tol = 1e-06,
+  max.iter = 100,
+  near.zero.var = FALSE,
+  ...
+)
 }
 \arguments{
-\item{X}{Input data. Either a matrix or a list of data sets (called
-'blocks') matching on the same samples. Data should be arranged in samples x
+\item{X}{Input data. A matrix. a list of data sets (called
+'blocks') matching on the same samples, SummarizedExperiment or
+MultiAssayExperiment object. Data should be arranged in samples x
 variables, with samples order matching in all data sets.}
+
+\item{...}{Additional arguments.}
+
+\item{experiments}{A character or integer vector specifying experiments from
+\code{X} when it is MultiAssayExperiment.}
+
+\item{assay.type}{A character vector specifying assays from \code{X} when it
+is SummarizedExperiment or MultiAssayExperiment.}
+
+\item{col.var}{Character vector specifying column variables from
+\code{colData(X)} when \code{X} is SummarizedExperiment or
+MultiAssayExperiment. The values are passed as \code{Y}.}
+
+\item{MINT}{A single boolean value to specify whether to apply DIABLO or
+MINT, when \code{X} is MultiAssayExperiment.}
 
 \item{Y}{Outcome. Either a numeric matrix of responses or a factor or a
 class vector for the discrete outcome.}
 
 \item{indY}{To supply if Y is missing, indicates the position of the outcome
-in the list X}
+in the list X. Disabled when \code{X} is SummarizedExperiment or
+MultiAssayExperiment.}
 
 \item{study}{grouping factor indicating which samples are from the same
-study}
+study. Disabled when \code{X} is SummarizedExperiment or
+MultiAssayExperiment.}
 
 \item{ncomp}{If \code{X} is a data matrix, \code{ncomp} is a single value.
 If \code{X} is a list of data sets, \code{ncomp} is a numeric vector of
@@ -103,6 +149,14 @@ analysis) and whether you input a \code{study} parameter (MINT analysis) or
 a \code{keepX} parameter (sparse analysis).
 
 More details about the PLS modes in \code{?pls}.
+
+\code{X} can also be SummarizedExperiment or MultiAssayExperiment object
+which are the main data containers in Bioconductor.
+SummarizedExperiment is designed for single omic data while
+MultiAssayExperiment streamlines the handling of multi-table data. When
+SummarizedExperiment object is provided single-table PLS methods are
+applied. Either MINT or DIABLO is applied, when MultiAssayExperiment is
+fed as an input.
 }
 \examples{
 ## -- directed towards PLS framework because X is a matrix and the study argument is missing
@@ -168,6 +222,152 @@ study = stemcells$study)
 # directed towards mint.sPLS-DA because Y is a factor and there is a keepX
 out = mixOmics(X = stemcells$gene, Y = stemcells$celltype, ncomp = 2,
 study = stemcells$study, keepX = c(10, 5, 15))
+
+## -- Use SummarizedExperiment as an input
+# ----------------------------------------------------
+
+data(liver.toxicity)
+X = liver.toxicity[["gene"]]
+Y = liver.toxicity[["clinic"]]
+Y.factor = as.factor(liver.toxicity[["treatment"]][, 4])
+
+# Create SummarizedExperiment object
+library(SummarizedExperiment)
+assay <- t(X)
+coldata <- DataFrame(Y)
+coldata[["outcome"]] <- Y.factor
+se <- SummarizedExperiment(
+    assays = SimpleList(abundance = assay),
+    colData = coldata
+)
+
+# directed towards PLS
+columns <- colnames(colData(se))
+columns <- columns[ !columns \%in\% c("outcome") ]
+out = mixOmics(se, assay.type = "abundance", col.var = columns, ncomp = 2)
+
+# directed towards sPLS because of keepX and/or keepY
+out = mixOmics(
+    se, assay.type = "abundance", col.var = columns,
+    ncomp = 2, keepX = c(50, 50), keepY = c(10, 10))
+
+# directed towards PLS-DA because Y is a factor
+out = mixOmics(se, assay.type = "abundance", col.var = "outcome", ncomp = 2)
+
+# directed towards sPLS-DA because Y is a factor and there is a keepX
+out = mixOmics(
+    se, assay.type = "abundance", col.var = "outcome",
+    ncomp = 2, keepX = c(20, 20))
+
+## -- Use MultiAssayExperiment as an input
+# ----------------------------------------------------
+
+# Create MultiAssayExperiment
+data(nutrimouse)
+Y = unmap(nutrimouse[["diet"]])
+se1 <- SummarizedExperiment(
+    assays = SimpleList(abundance = t(nutrimouse[["gene"]])))
+se2 <- SummarizedExperiment(
+    assays = SimpleList(abundance = t(nutrimouse[["lipid"]])))
+coldata <- DataFrame(Y)
+colnames(coldata) <- levels(Y)
+coldata[["diet"]] <- nutrimouse[["diet"]]
+rownames(coldata) <- colnames(se1)
+mae <- MultiAssayExperiment(
+    experiments = ExperimentList(gene = se1, lipid = se2),
+    colData = coldata
+)
+
+## -- directed towards block.pls framework because X is a MultiAssayExperiment
+# ----------------------------------------------------
+
+# directed towards block PLS
+columns <- colnames(colData(mae))
+columns <- columns[ !columns \%in\% c("diet") ]
+out = mixOmics(
+    mae, experiments = c("gene", "lipid"),
+    assay.type = c("abundance", "abundance"),
+    col.var = columns, ncomp = 3)
+
+# directed towards block sPLS because of keepX and/or keepY
+out = mixOmics(
+    mae, experiments = c("gene", "lipid"),
+    assay.type = c("abundance", "abundance"),
+    col.var = columns, ncomp = 3,
+    keepX = list(gene = c(10,10), lipid = c(15,15))
+)
+
+# directed towards block PLS-DA because Y is a factor
+out <- mixOmics(
+    mae, experiments = c("gene", "lipid"),
+    assay.type = c("abundance", "abundance"),
+    col.var = "diet", ncomp = 3)
+
+# directed towards block sPLS-DA because Y is a factor and there is a keepX
+out <- mixOmics(
+    mae, experiments = c("gene", "lipid"),
+    assay.type = c("abundance", "abundance"),
+    col.var = "diet", ncomp = 3,
+    keepX = list(gene = c(10,10), lipid = c(15,15))
+)
+
+# Create MultiAssayExperiment
+data(nutrimouse)
+assay <- t(stemcells[["gene"]])
+coldata <- DataFrame(unmap(stemcells[["celltype"]]))
+colnames(coldata) <- levels(unmap(stemcells[["celltype"]]))
+rownames(coldata) <- colnames(assay)
+se <- SummarizedExperiment(
+    assays = SimpleList(abundance = assay),
+    colData = coldata
+)
+se[["celltype"]] <- stemcells[["celltype"]]
+# Split into MultiAssayExperiment
+if( !require("mia") ){
+    BiocManager::install("mia")
+}
+se_list <- splitOn(se, by = "columns", f = stemcells[["study"]])
+names(se_list) <- paste0("study_", names(se_list))
+mae <- MultiAssayExperiment(experiments = se_list)
+
+## -- directed towards mint.pls framework because of the specified MINT argument
+# ----------------------------------------------------
+
+# Get columns from the first experiment/study
+columns <- colnames(colData(mae[[1]]))
+columns <- columns[ !columns \%in\% c("celltype") ]
+
+# directed towards PLS (note that we are using SummarizedExperiment)
+out = mixOmics(se, assay.type = "abundance", col.var = columns, ncomp = 2)
+
+# directed towards mint.PLS
+out = mixOmics(
+    mae, experiments = c("study_1", "study_3"),
+    assay.type = c("abundance", "abundance"),
+    col.var = columns, ncomp = 2, MINT = TRUE)
+
+# directed towards mint.sPLS because of keepX and/or keepY
+out = mixOmics(
+    mae, experiments = c("study_1", "study_3"),
+    assay.type = c("abundance", "abundance"),
+    col.var = columns, ncomp = 3, MINT = TRUE,
+    keepX = c(10, 5, 15)
+)
+
+# directed towards mint.PLS-DA because we specify class
+out = mixOmics(
+    mae, experiments = c("study_1", "study_3"),
+    assay.type = c("abundance", "abundance"),
+    col.var = "celltype", ncomp = 2, MINT = TRUE
+)
+
+# directed towards mint.sPLS-DA because Y is a factor and there is a keepX
+out = mixOmics(
+    mae, experiments = c("study_1", "study_3"),
+    assay.type = c("abundance", "abundance"),
+    col.var = "celltype", ncomp = 3, MINT = TRUE, keepX = c(10, 5, 15)
+)
+
 }
 }
 \references{
