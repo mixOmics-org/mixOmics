@@ -148,6 +148,38 @@ test_that("perf gives error for invariant mode", code = {
   })
 
 ## ------------------------------------------------------------------------ ##
+## Check perf and perf.assess on spls with folds supplied as a list
+
+test_that("perf() and perf.assess() accept folds supplied as a list on spls", code = {
+
+  # set up data
+  data("liver.toxicity")
+  X <- liver.toxicity$gene[1:500]
+  Y <- liver.toxicity$clinic
+  spls.obj <- spls(X, Y, ncomp = 2, keepX = c(10, 10))
+  n <- nrow(X)
+  my.folds <- split(seq_len(n), rep(1:4, length.out = n))
+
+  # the folds are fixed, so the seed leaves the result unchanged
+  out.1 <- perf(spls.obj, validation = "Mfold", folds = my.folds, nrepeat = 1,
+                BPPARAM = SerialParam(), seed = 1)
+  out.2 <- perf(spls.obj, validation = "Mfold", folds = my.folds, nrepeat = 1,
+                BPPARAM = SerialParam(), seed = 2)
+  expect_equal(out.1$measures, out.2$measures)
+
+  out.3 <- perf.assess(spls.obj, validation = "Mfold", folds = my.folds, nrepeat = 1,
+                       BPPARAM = SerialParam())
+  expect_equal(names(out.3), c("call", "measures", "features"))
+
+  # a sample in two folds
+  dup <- my.folds; dup[[1]][1] <- dup[[2]][1]
+  expect_error(perf(spls.obj, validation = "Mfold", folds = dup, BPPARAM = SerialParam()),
+               "Repeated samples in folds", fixed = TRUE)
+  expect_error(perf.assess(spls.obj, validation = "Mfold", folds = dup, BPPARAM = SerialParam()),
+               "Repeated samples in folds", fixed = TRUE)
+  })
+
+## ------------------------------------------------------------------------ ##
 ## Regression guard: ggplot2 size -> linewidth
 
 test_that("(plot.perf.pls:edge.case): no ggplot2 size-aesthetic deprecation warning (Q2 criterion)", {
