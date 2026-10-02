@@ -12,6 +12,7 @@ rcc(
   method = c("ridge", "shrinkage"),
   lambda1 = 0,
   lambda2 = 0,
+  scale = TRUE,
   verbose.call = FALSE
 )
 }
@@ -33,14 +34,27 @@ below and reference.}
 the \emph{X} and \emph{Y} data. Defaults to \code{lambda1=lambda2=0}. Only
 used if \code{method="ridge"}}
 
+\item{scale}{logical. If \code{TRUE}, standardise both \code{X} and
+\code{Y} to unit variance before fitting with \code{method = "ridge"}.
+Defaults to \code{TRUE}. This argument is ignored for
+\code{method = "shrinkage"}, which retains its own covariance estimation.}
+
 \item{verbose.call}{Logical (Default=FALSE), if set to TRUE then the \code{$call}
 component of the returned object will contain the variable values for all 
 parameters. Note that this may cause large memory usage.}
 }
 \value{
 \code{rcc} returns a object of class \code{"rcc"}, a list that
-contains the following components: \item{X}{the original \eqn{X} data.}
-\item{Y}{the original \eqn{Y} data.} \item{cor}{a vector containing the
+contains the following components: \item{X}{the \eqn{X} data, centred and
+scaled when \code{method = "ridge"} and \code{scale = TRUE}; otherwise
+the original data.}
+\item{Y}{the \eqn{Y} data, transformed in the same way as \code{X}.}
+\item{center}{list of training column means for \code{X} and \code{Y}.}
+\item{scale}{list of training standard deviations for \code{X} and
+\code{Y}, or \code{FALSE} for each matrix if unit-variance scaling was not
+applied. Use these with \code{center} to transform new samples before
+multiplying by \code{loadings}.}
+\item{cor}{a vector containing the
 canonical correlations.} \item{lambda}{a vector containing the
 regularization parameters whether those were input if ridge method or
 directly estimated with the shrinkage method.} \item{loadings}{list
@@ -78,6 +92,21 @@ I} and Cov\eqn{(Y)+ \lambda_2 I}.
 
 When \code{lambda1=0} and \code{lambda2=0}, \code{rcc} performs a classical
 CCA, if possible (i.e. when \eqn{n > p+q}.
+
+Unlike classical CCA, ridge regularisation is not invariant to rescaling
+individual variables. The ridge parameters are on the variance scale of
+the input data. With \code{scale = TRUE}, both matrices are centred and
+scaled to unit variance before the covariance matrices are calculated.
+This makes the penalties comparable across variables with different units.
+The default grid in \code{\link{tune.rcc}} assumes variables of roughly
+unit variance. Ridge fits are standardised by default with
+\code{scale = TRUE}. Set \code{scale = FALSE} to retain historical unscaled
+ridge fits. Constant columns and columns with fewer than two non-missing
+values must be removed before using \code{scale = TRUE}.
+
+The \code{scale} argument precedes \code{verbose.call}. Calls that previously
+passed \code{verbose.call} as the seventh positional argument must now name
+that argument explicitly.
 
 The shrinkage estimates \code{method = "shrinkage"} can be used to bypass
 \code{\link{tune.rcc}} to choose the shrinkage parameters - which can be

@@ -17,6 +17,16 @@ opts_chunk$set( echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 
 ## What's New
 
+#### September 2026
+
+* bug fix implemented for [#399](https://github.com/mixOmics-org/mixOmics/issues/399) `rcc()` and `tune.rcc()` gain a `scale` argument (default `TRUE`). Ridge rCCA is not invariant to variable scaling, so `X` and `Y` are now standardised before regularisation, and `tune.rcc()` scales held-out samples with the training-fold statistics. Default ridge results change; use `scale = FALSE` to reproduce previous results
+* bug fix implemented for [#398](https://github.com/mixOmics-org/mixOmics/issues/398) `network()` and `cimDiablo()` documentation now states the actual default of `comp` (all components)
+* GitHub repository moved to the `mixOmics-org` organisation; README links and badges updated ([PR #401](https://github.com/mixOmics-org/mixOmics/pull/401))
+
+#### August 2026
+
+* bug fix implemented in [PR #386](https://github.com/mixOmics-org/mixOmics/pull/386) `mint.block.(s)pls()` and `mint.block.(s)plsda()` now return correctly structured objects (`indY`, `design`, `weights`, `keepX`/`keepY`), so `predict()` works on them; `keepX`/`keepY` also fixed in `block.spls()`
+
 #### May 2026
 
 * bug fix implemented for [#377](https://github.com/mixOmicsTeam/mixOmics/issues/377) fixed vector `xlim` handling in the `graphics` branch of `plotLoadings()` contribution plots

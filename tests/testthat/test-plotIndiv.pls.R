@@ -1,6 +1,23 @@
 context("plotIndiv.pls")
 
-## rcc model
+# Check every sample and displayed component, independently of model scale
+# and arbitrary component signs.
+.expect_plotIndiv_coordinates <- function(plot, expected, display.names = TRUE) {
+  coordinates <- c("x", "y", "z")[seq_len(ncol(expected))]
+  expect_equal(unname(as.matrix(plot$df[, coordinates, drop = FALSE])),
+               unname(expected))
+  if (display.names) {
+    expect_equal(as.character(plot$df$names), rownames(expected))
+  } else {
+    expect_null(plot$df$names)
+  }
+  if (inherits(plot$graph, "ggplot")) {
+    expect_equal(unname(as.matrix(plot$graph$data[, coordinates, drop = FALSE])),
+                 unname(expected))
+  }
+}
+
+## rcc model using the default standardisation
 data(nutrimouse)
 X <- nutrimouse$lipid
 Y <- nutrimouse$gene
@@ -33,17 +50,46 @@ test_that("plotIndiv works for rcc", {
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$graph$data$x[1], 0.87088852)
+  .expect_plotIndiv_coordinates(pl.res,
+                               rbind(rcc.res$variates$X[, 1:2],
+                                     rcc.res$variates$Y[, 1:2]))
+  expect_equal(as.character(pl.res$df$Block),
+               rep(c("Block: X", "Block: Y"), each = nrow(rcc.res$X)))
   
   pl.res <- plotIndiv(rcc.res, rep.space= 'XY-variate', group = nutrimouse$genotype,
                       legend = TRUE)
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$graph$data$x[1], 0.8270997)
+  .expect_plotIndiv_coordinates(pl.res,
+                               (rcc.res$variates$X[, 1:2] +
+                                  rcc.res$variates$Y[, 1:2]) / 2)
+  expect_equal(as.character(pl.res$df$group), as.character(nutrimouse$genotype))
   # check groups
   expect_true(!is.null(pl.res$df$group))
   expect_equal(length(unique(pl.res$df$group)), length(unique(nutrimouse$genotype)))
+})
+
+test_that("plotIndiv maps selected rcc components in each representation space", {
+  comp <- c(3, 1)
+  X <- rcc.res$variates$X[, comp]
+  Y <- rcc.res$variates$Y[, comp]
+  expected <- list("X-variate" = X, "Y-variate" = Y,
+                   "XY-variate" = (X + Y) / 2, "multi" = rbind(X, Y))
+  for (space in names(expected)) {
+    pl.res <- plotIndiv(rcc.res, comp = comp, rep.space = space)
+    .expect_plotIndiv_coordinates(pl.res, expected[[space]])
+  }
+})
+
+test_that("plotIndiv also represents an explicitly unscaled rcc model", {
+  data(nutrimouse)
+  fit <- rcc(nutrimouse$lipid, nutrimouse$gene, ncomp = 3,
+              lambda1 = 0.064, lambda2 = 0.008, scale = FALSE)
+  pl.res <- plotIndiv(fit, comp = c(2, 3), rep.space = "XY-variate")
+  .expect_plotIndiv_coordinates(pl.res,
+                               (fit$variates$X[, c(2, 3)] +
+                                  fit$variates$Y[, c(2, 3)]) / 2)
 })
 
 test_that("plotIndiv works for (s)pls", {
@@ -162,14 +208,19 @@ test_that("plotIndiv works for rcc (lattice style)", {
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.87088852)
+  .expect_plotIndiv_coordinates(pl.res,
+                               rbind(nutri.res$variates$X[, 1:2],
+                                     nutri.res$variates$Y[, 1:2]))
   
   pl.res <- plotIndiv(nutri.res, rep.space= 'XY-variate', group = nutrimouse$genotype,
                       legend = TRUE, style = "lattice")
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.8270997)
+  .expect_plotIndiv_coordinates(pl.res,
+                               (nutri.res$variates$X[, 1:2] +
+                                  nutri.res$variates$Y[, 1:2]) / 2)
+  expect_equal(as.character(pl.res$df$group), as.character(nutrimouse$genotype))
   # check groups
   expect_true(!is.null(pl.res$df$group))
   expect_equal(length(unique(pl.res$df$group)), length(unique(nutrimouse$genotype)))
@@ -238,14 +289,19 @@ test_that("plotIndiv works for rcc (graphics style)", {
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.87088852)
+  .expect_plotIndiv_coordinates(pl.res,
+                               rbind(nutri.res$variates$X[, 1:2],
+                                     nutri.res$variates$Y[, 1:2]))
   
   pl.res <- plotIndiv(nutri.res, rep.space= 'XY-variate', group = nutrimouse$genotype,
-                      legend = TRUE, style = "lattice")
+                      legend = TRUE, style = "graphics")
   # check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.8270997)
+  .expect_plotIndiv_coordinates(pl.res,
+                               (nutri.res$variates$X[, 1:2] +
+                                  nutri.res$variates$Y[, 1:2]) / 2)
+  expect_equal(as.character(pl.res$df$group), as.character(nutrimouse$genotype))
   # check groups
   expect_true(!is.null(pl.res$df$group))
   expect_equal(length(unique(pl.res$df$group)), length(unique(nutrimouse$genotype)))
@@ -320,7 +376,10 @@ test_that("plotIndiv works for rcc (3d style)", {
   # Check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # Check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.87088852)
+  .expect_plotIndiv_coordinates(pl.res,
+                               rbind(nutri.res$variates$X[, 1:3],
+                                     nutri.res$variates$Y[, 1:3]),
+                               display.names = FALSE)
   
   clear3d()
   pl.res <- suppressWarnings(suppressMessages(plotIndiv(nutri.res, rep.space = 'XY-variate', group = nutrimouse$genotype,
@@ -329,7 +388,11 @@ test_that("plotIndiv works for rcc (3d style)", {
   # Check correct output structure
   expect_equal(names(pl.res), c("df", "df.ellipse", "graph"))
   # Check coordinates
-  .expect_numerically_close(pl.res$df[1,1], 0.8270997)
+  .expect_plotIndiv_coordinates(pl.res,
+                               (nutri.res$variates$X[, 1:3] +
+                                  nutri.res$variates$Y[, 1:3]) / 2,
+                               display.names = FALSE)
+  expect_equal(as.character(pl.res$df$group), as.character(nutrimouse$genotype))
   # Check groups
   expect_true(!is.null(pl.res$df$group))
   expect_equal(length(unique(pl.res$df$group)), length(unique(nutrimouse$genotype)))

@@ -74,5 +74,5 @@ biocViews: ImmunoOncology,
            MultipleComparison, 
            Classification, 
            Regression
-RoxygenNote: 7.3.3
 Encoding: UTF-8
+Config/roxygen2/version: 8.1.0
