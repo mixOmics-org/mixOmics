@@ -15,9 +15,11 @@
 #' Parameters. If \code{validation = "Mfold"}, M-fold cross-validation is
 #' performed. \code{folds} specifies the number of folds to generate. The folds
 #' also can be supplied as a list of vectors containing the indexes defining
-#' each fold as produced by \code{split}. When using \code{validation =
-#' "Mfold"}, make sure that you repeat the process several times (as the
-#' results will be highly dependent on the random splits and the sample size).
+#' each fold as produced by \code{split}; the folds are then fixed and
+#' \code{nrepeat} is set to 1 for DIABLO objects. When using \code{validation =
+#' "Mfold"} with a number of folds, make sure that you repeat the process
+#' several times (as the results will be highly dependent on the random splits
+#' and the sample size).
 #' 
 #' If \code{validation = "loo"}, leave-one-out cross-validation is performed
 #' (in that case, there is no need to repeat the process).
@@ -94,7 +96,11 @@
 #' @param validation character.  What kind of (internal) validation to use,
 #' matching one of \code{"Mfold"} or \code{"loo"} (see below). Default is
 #' \code{"Mfold"}.
-#' @param folds the folds in the Mfold cross-validation. See Details.
+#' @param folds either a positive integer giving the number of folds in the
+#' Mfold cross-validation, or a list of integer vectors where each element
+#' gives the row indices of the samples in one test fold. A list is accepted
+#' for \code{pls}, \code{spls} and DIABLO (\code{block.plsda},
+#' \code{block.splsda}) objects. See Details.
 #' @param nrepeat Number of times the Cross-Validation process is repeated.
 #' This is an important argument to ensure the estimation of the performance to
 #' be as accurate as possible.
@@ -427,17 +433,8 @@ perf.mixo_spls  <- perf.mixo_pls
     {
         if (is.list(folds))
         {
-            
-            if (length(folds) < 2 || length(folds) > n)
-                stop("Invalid number of folds.", call. = FALSE)
-            
-            if (length(unlist(folds)) != n)
-                stop("Invalid folds. The total number of samples in folds must be equal to ",
-                     n, ".", call. = FALSE)
-            
-            if (length(unique(unlist(folds))) != n)
-                stop("Invalid folds. Repeated samples in folds.", call. = FALSE)
-            
+            # folds supplied as a list: validated by the shared helper
+            folds = .check_folds(folds, n = n)
             M = length(folds)
         } else {
             if (is.null(folds) || !is.finite(folds) || folds < 2 || folds > n)
