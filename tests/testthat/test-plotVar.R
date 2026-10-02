@@ -46,3 +46,133 @@ test_that("plotVar works in block.(s)PLS1 cases", {
   
   expect_equal(as.character(unique(plotVar.result$Block)), c("miRNA", "mRNA"))
 })
+test_that("plotVar leaves the coordinates unchanged when the components are orthogonal", {
+  data(nutrimouse)
+  pls.res <- pls(nutrimouse$gene, nutrimouse$lipid, ncomp = 3)
+  expect_no_message(df <- plotVar(pls.res, comp = c(2, 3), plot = FALSE))
+  expected <- rbind(cor(pls.res$X, pls.res$variates$X[, 2:3]),
+                    cor(pls.res$Y, pls.res$variates$X[, 2:3]))
+  expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
+  expect_equal(df$names, rownames(expected))
+})
+
+test_that("plotVar leaves the coordinates of (s)plsda and canonical (s)pls unchanged", {
+  data(nutrimouse)
+  X <- nutrimouse$gene
+  Y <- nutrimouse$lipid
+
+  plsda.res <- plsda(X, nutrimouse$genotype)
+  expect_no_message(df <- plotVar(plsda.res, plot = FALSE))
+  expect_equal(cbind(df$x, df$y), unname(cor(plsda.res$X, plsda.res$variates$X)),
+               tolerance = 1e-12)
+
+  splsda.res <- splsda(X, nutrimouse$genotype, keepX = c(10, 10))
+  expect_no_message(df <- plotVar(splsda.res, plot = FALSE))
+  expect_equal(cbind(df$x, df$y),
+               unname(cor(splsda.res$X[, df$names], splsda.res$variates$X)),
+               tolerance = 1e-12)
+
+  # in canonical mode the Y variables are correlated with the Y components
+  pls.res <- pls(X, Y, mode = "canonical")
+  expect_no_message(df <- plotVar(pls.res, plot = FALSE))
+  expected <- rbind(cor(pls.res$X, pls.res$variates$X),
+                    cor(pls.res$Y, pls.res$variates$Y))
+  expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
+
+  spls.res <- spls(X, Y, mode = "canonical", keepX = c(10, 10), keepY = c(5, 5))
+  expect_no_message(df <- plotVar(spls.res, plot = FALSE))
+  y <- df$Block == "Y"
+  expect_equal(cbind(df$x, df$y)[y, ],
+               unname(cor(spls.res$Y[, df$names[y]], spls.res$variates$Y)),
+               tolerance = 1e-12)
+})
+
+test_that("plotVar rejects the same component twice", {
+  data(nutrimouse)
+  pls.res <- pls(nutrimouse$gene, nutrimouse$lipid, ncomp = 2)
+  expect_error(plotVar(pls.res, comp = c(1, 1), plot = FALSE), "distinct")
+})
+
+test_that("plotVar orthogonalises correlated components so the variables stay inside the circle", {
+  data(liver.toxicity)
+  X <- as.matrix(liver.toxicity$gene)
+  Y <- as.matrix(liver.toxicity$clinic)
+  res <- suppressMessages(block.pls(list(gene = X), Y, ncomp = 3))
+  u <- res$variates$Y[, 2:3]
+  # the Y block is deflated with the gene components, so its own components are correlated
+  expect_gt(abs(cor(u)[1, 2]), 0.3)
+  expect_message(df <- plotVar(res, comp = c(2, 3), blocks = "Y", plot = FALSE), "correlated")
+  # inside the circle, with the squared radius equal to the variance of each variable
+  # explained by the two components
+  radius2 <- df$x^2 + df$y^2
+  expect_true(all(radius2 <= 1))
+  r2 <- apply(res$X$Y, 2, function(y) summary(lm(y ~ u))$r.squared)
+  expect_equal(radius2, unname(r2), tolerance = 1e-10)
+  # reversing comp only swaps the coordinates
+  swapped <- suppressMessages(plotVar(res, comp = c(3, 2), blocks = "Y", plot = FALSE))
+  expect_equal(swapped$x, df$y)
+  expect_equal(swapped$y, df$x)
+  # symmetric: both components are rotated by the same angle, half of the angle
+  # by which they miss being perpendicular
+  axes <- .cor_orthogonalised(u, u)
+  expect_equal(axes[1, 1], axes[2, 2])
+  expect_equal(axes[1, 2], axes[2, 1])
+  expect_equal(acos(axes[1, 1]), abs(acos(cor(u)[1, 2]) - pi / 2) / 2)
+  # the axis label says so
+  pdf(NULL)
+  on.exit(dev.off())
+  suppressMessages(plotVar(res, comp = c(2, 3), blocks = "Y"))
+  p <- ggplot2::last_plot()
+  labs <- if ("get_labs" %in% getNamespaceExports("ggplot2")) ggplot2::get_labs(p) else p$labels
+  expect_equal(labs$x, "Component 2 (orthogonalised)")
+  expect_equal(labs$y, "Component 3 (orthogonalised)")
+})
+
+test_that("plotVar with missing values orthogonalises the components on all samples", {
+  data(nutrimouse)
+  set.seed(1)
+  X <- as.matrix(nutrimouse$lipid)
+  X[sample(length(X), 0.3 * length(X))] <- NA
+  res <- suppressMessages(pca(X, ncomp = 2))
+  # the components computed from incomplete data are correlated
+  expect_message(df <- plotVar(res, plot = FALSE), "correlated")
+  # each variable is correlated, on the samples where it is observed, with the
+  # orthonormal basis closest to the components (U V' from their SVD)
+  s <- svd(scale(res$variates$X))
+  expected <- cor(res$X, s$u %*% t(s$v), use = "pairwise")
+  expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
+})
+
+test_that("plotVar orthogonalises the rcc components, the sums of the X and Y variates", {
+  data(nutrimouse)
+  res <- rcc(nutrimouse$lipid, nutrimouse$gene, ncomp = 3, lambda1 = 0.064, lambda2 = 0.008)
+  df <- plotVar(res, plot = FALSE)
+  # squared radius equal to the variance of each variable explained by the two components
+  u <- res$variates$X[, 1:2] + res$variates$Y[, 1:2]
+  r2 <- apply(cbind(res$X, res$Y), 2, function(y) summary(lm(y ~ u))$r.squared)
+  expect_equal(df$x^2 + df$y^2, unname(r2), tolerance = 1e-10)
+})
+
+test_that("plotVar orthogonalises three correlated components in the 3d style", {
+  data(liver.toxicity)
+  X <- as.matrix(liver.toxicity$gene)
+  Y <- as.matrix(liver.toxicity$clinic)
+  res <- suppressMessages(block.pls(list(gene = X), Y, ncomp = 3))
+  old <- options(rgl.useNULL = TRUE)
+  on.exit({
+    rgl::close3d()
+    options(old)
+  })
+  expect_message(df <- plotVar(res, comp = 1:3, blocks = "Y", style = "3d"), "correlated")
+  # squared radius equal to the variance of each variable explained by the three components
+  u <- res$variates$Y
+  r2 <- apply(res$X$Y, 2, function(y) summary(lm(y ~ u))$r.squared)
+  expect_equal(df$x^2 + df$y^2 + df$z^2, unname(r2), tolerance = 1e-10)
+})
+
+test_that(".cor_orthogonalised returns NA correlations for collinear components", {
+  data(nutrimouse)
+  X <- as.matrix(nutrimouse$lipid)
+  res <- .cor_orthogonalised(X, cbind(X[, 1], 2 * X[, 1]))
+  expect_true(all(is.na(res)))
+})

@@ -22,6 +22,16 @@
 #' For \code{spls} and \code{splsda} objects, only the \eqn{X} and \eqn{Y}
 #' variables selected on dimensions \code{comp} are represented.
 #' 
+#' When the plotted components are not orthogonal, variables can fall outside
+#' the unit circle and their squared distance to the origin is no longer the
+#' share of their variance that the components explain. \code{plotVar}
+#' therefore orthogonalises the components symmetrically before computing the
+#' correlations.
+#' When the components are already orthogonal the coordinates are unchanged;
+#' otherwise \code{plotVar} issues a message and appends "(orthogonalised)" to
+#' the default axis labels to indicate that the coordinates are the
+#' correlations with the orthogonalised components.
+#' 
 #' The arguments \code{col}, \code{pch}, \code{cex} and \code{font} can be
 #' either vectors of length two or a list with two vector components of length
 #' \eqn{p} and \eqn{q} respectively, where \eqn{p} is the number of
@@ -273,6 +283,9 @@ plotVar <-
         comp2 = round(comp[2])
         if (style=="3d")
             comp3 = round(comp[3])
+        comps = round(comp)
+        if (anyDuplicated(comps))
+            stop("'comp' must contain distinct components.", call. = FALSE)
         
         #-- comp.select
         if (!is.null(comp.select))
@@ -295,6 +308,7 @@ plotVar <-
         }
         
         #-- Start: Retrieve variates from object
+        # correlations with the components orthogonalised, see .cor_orthogonalised
         cord.X = sample.X = ind.var.sel = list()
         if(style=="3d")
         {
@@ -302,65 +316,50 @@ plotVar <-
             {
                 if (any(class.object == "rcc"))
                 {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)] + object$variates$Y[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, object$variates$X[, c(comp1, comp2, comp3)] + object$variates$Y[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps] + object$variates$Y[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, object$variates$X[, comps] + object$variates$Y[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in% "mixo_plsda")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  "mixo_pls")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2, comp3)]} else {object$variates$X[, c(comp1, comp2, comp3)]}, use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  c("mixo_splsda", "mixo_mlsplsda"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(unique(c(comp1, comp2, comp3, comp.select)), function(x){selectVar(object, comp = x)$name})))], # variables selected at least once on unique(comp1, comp2, comp3 and comp.select
-                                      object$variates$X[, c(comp1, comp2, comp3, comp.select)], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    if (!is.null(comp.select))
-                    {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     
                 } else if (any(class.object %in%  c("mixo_spls", "mixo_mlspls"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$X$name})))],
-                                      object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$Y$name})))],
-                                      if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2, comp3)]} else {object$variates$X[, c(comp1, comp2, comp3)]}, use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    ind.var.sel[[2]] = sample.X[[2]] = seq_len(length(colnames(object$Y)))
-                    if (!is.null(comp.select)) {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$X$name}))), ,drop = FALSE]
-                        cord.X[[2]] = cord.X[[2]][row.names(cord.X[[2]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$Y$name}))), , drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
+                                                      if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
+                    sample.X[[2]] = seq_len(length(colnames(object$Y)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     ind.var.sel[[2]] = which(colnames(object$Y) %in% rownames(cord.X[[2]]))
                 } else {
-                    cord.X = lapply(blocks, function(x){cor(object$blocks[[x]], object$variates[[x]][, c(comp1, comp2, comp3)], use = "pairwise")})
+                    cord.X = lapply(blocks, function(x){.cor_orthogonalised(object$blocks[[x]][, colnames(object$blocks[[x]]) %in% unique(unlist(lapply(comp.select, function(y) {selectVar(object, block = x, comp = y)[[1]]$name}))), drop = FALSE],
+                                                                            object$variates[[x]][, comps])})
                     ind.var.sel = sample.X = lapply(object$blocks, function(x){seq_len(ncol(x))})
-                    if (!is.null(comp.select)) {
-                        cord.X = lapply(seq_len(length(cord.X)), function(z){cord.X[[z]][row.names(cord.X[[z]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, block = z, comp = x)[[1]]$name}))), ,drop = FALSE]})
-                    }
                     for (i in seq_len(length(cord.X))){
                         ind.var.sel[[i]] = which(colnames(object$X) %in% rownames(cord.X[[i]]))
                     }
                 }
             } else if (any(class.object %in%  object.pca)) {
                 if (any(class.object %in%  c("sipca", "spca"))){
-                    
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(c(comp1, comp2, comp3), function(x){selectVar(object, comp = x)$name})))],
-                                      object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    if (!is.null(comp.select)) {
-                        cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    }
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                 } else {
-                    
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2, comp3)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
                 }
             }
@@ -369,56 +368,39 @@ plotVar <-
             {
                 if (any(class.object == "rcc"))
                 {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)] + object$variates$Y[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, object$variates$X[, c(comp1, comp2)] + object$variates$Y[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps] + object$variates$Y[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, object$variates$X[, comps] + object$variates$Y[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object == "mixo_plsda")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object ==  "mixo_pls")) {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, c(comp1, comp2)]} else {object$variates$X[, c(comp1, comp2)]}, use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y, if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X = lapply(cord.X, function(x){seq_len(nrow(x))})
                     
                 } else if (any(class.object %in%  c("mixo_splsda", "mixo_mlsplsda"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
-                                      object$variates$X[, unique(c(comp1, comp2))], use = "pairwise")
-                    ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #if (!is.null(comp.select)) {
-                    #   cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    #}
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    sample.X[[1]] = seq_len(length(colnames(object$X)))
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     
                 } else if (any(class.object %in%  c("mixo_spls", "mixo_mlspls"))) {
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
-                                      object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    cord.X[[2]] = cor(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
-                                      if(object$mode ==  "canonical")
-                                      {
-                                          object$variates$Y[, c(comp1, comp2)]
-                                      } else {
-                                          object$variates$X[, c(comp1, comp2)]
-                                      }, use = "pairwise")
-                    #ind.var.sel[[1]] =
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$X$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
+                    cord.X[[2]] = .cor_orthogonalised(object$Y[, colnames(object$Y) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$Y$name}))), drop = FALSE],
+                                                      if(object$mode ==  "canonical"){object$variates$Y[, comps]} else {object$variates$X[, comps]})
                     sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #ind.var.sel[[2]] =
                     sample.X[[2]] = seq_len(length(colnames(object$Y)))
-                    #if (!is.null(comp.select)) {
-                    #   cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$X$name}))), ,drop = FALSE]
-                    #   cord.X[[2]] = cord.X[[2]][row.names(cord.X[[2]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$Y$name}))), , drop = FALSE]
-                    #}
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                     ind.var.sel[[2]] = which(colnames(object$Y) %in% rownames(cord.X[[2]]))
                     
                 } else { #block object
-                    cord.X = lapply(blocks, function(x){cor(object$blocks[[x]], object$variates[[x]][, c(comp1, comp2)], use = "pairwise")})
+                    cord.X = lapply(blocks, function(x){.cor_orthogonalised(object$blocks[[x]][, colnames(object$blocks[[x]]) %in% unique(unlist(lapply(comp.select, function(y) {selectVar(object, block = x, comp = y)[[1]]$name}))), drop = FALSE],
+                                                                            object$variates[[x]][, comps])})
                     ind.var.sel = sample.X = lapply(object$blocks, function(x){seq_len(ncol(x))})
-                    if (!is.null(comp.select))
-                    {
-                        cord.X = lapply(seq_len(length(cord.X)), function(z){cord.X[[z]][row.names(cord.X[[z]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, block = blocks[z], comp = x)[[1]]$name}))), ,drop = FALSE]})
-                    }
                     for (i in seq_len(length(cord.X)))
                     {
                         ind.var.sel[[i]] = which(colnames(object$blocks[[i]]) %in% rownames(cord.X[[i]]))
@@ -426,17 +408,12 @@ plotVar <-
                 }
             } else if (any(class.object %in%  object.pca)) {
                 if (any(class.object %in%  c("sipca", "spca"))){
-                    
-                    cord.X[[1]] = cor(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
-                                      object$variates$X[, c(comp1, comp2)], use = "pairwise")
-                    #ind.var.sel[[1]] =
+                    cord.X[[1]] = .cor_orthogonalised(object$X[, colnames(object$X) %in% unique(unlist(lapply(comp.select, function(x){selectVar(object, comp = x)$name}))), drop = FALSE],
+                                                      object$variates$X[, comps])
                     sample.X[[1]] = seq_len(length(colnames(object$X)))
-                    #if (!is.null(comp.select)) {
-                    #    cord.X[[1]] = cord.X[[1]][row.names(cord.X[[1]]) %in% unique(unlist(lapply(comp.select, function(x) {selectVar(object, comp = x)$name}))), ,drop = FALSE]
-                    #}
                     ind.var.sel[[1]] = which(colnames(object$X) %in% rownames(cord.X[[1]]))
                 } else {
-                    cord.X[[1]] = cor(object$X, object$variates$X[, c(comp1, comp2)], use = "pairwise")
+                    cord.X[[1]] = .cor_orthogonalised(object$X, object$variates$X[, comps])
                     ind.var.sel[[1]] = sample.X[[1]] = seq_len(length(colnames(object$X)))
                 }
             }}
@@ -450,6 +427,13 @@ plotVar <-
                 warning("We detected negative correlation between the variates of some blocks, which means that some clusters of variables observed on the correlation circle plot are not necessarily positively correlated.")
         }
         
+        #-- say so when the orthogonalisation changed the coordinates
+        for (k in seq_len(length(cord.X)))
+        {
+            if (attr(cord.X[[k]], "orthogonalised"))
+                message("The components of block '", blocks[k], "' are correlated and have been orthogonalised.")
+        }
+        
         if (any(sapply(cord.X, nrow) == 0))
             stop("No variable selected on at least one block")
         
@@ -461,9 +445,15 @@ plotVar <-
         #-- End: Retrieve variates from object
         
         #-- Names of labels X and Y
-        if (is.null(X.label)) X.label = paste("Component ", comp1)
-        if (is.null(Y.label)) Y.label = paste("Component ", comp2)
-        if (is.null(Z.label) && style=="3d") Z.label = paste("Component ", comp3)
+        component.label = function(k)
+        {
+            if (!any(sapply(cord.X, attr, "orthogonalised")))
+                return(paste("Component ", k))
+            paste0("Component ", k, " (orthogonalised)")
+        }
+        if (is.null(X.label)) X.label = component.label(comp1)
+        if (is.null(Y.label)) Y.label = component.label(comp2)
+        if (is.null(Z.label) && style=="3d") Z.label = component.label(comp3)
         
         if (!is.character(X.label))
             stop("'X.label' must be a character.", call. = FALSE)
@@ -1084,3 +1074,55 @@ plotVar <-
             return(df)
         
     }
+
+
+#' Correlations between variables and components on orthogonal axes
+#'
+#' The correlation circle reads correctly only when the plotted components are
+#' orthogonal. This fails when a block is deflated with the components of
+#' another block rather than its own, when the components are orthogonal under
+#' a regularised covariance rather than the sample covariance, and when a block
+#' has missing values: the components computed from incomplete data are not
+#' exactly orthogonal.
+#'
+#' The components are orthogonalised symmetrically: with the components centred
+#' and scaled to unit length and G their correlation matrix, the new axes are
+#' the components times G^(-1/2). This is the orthonormal basis of their span
+#' closest to them; the result is the same in any order, and with two
+#' components both rotate by the same angle. When the components are already
+#' orthogonal, G is the identity and the correlations are unchanged.
+#'
+#' @param data numeric matrix of the variables, samples in rows.
+#' @param variates numeric matrix of the components, samples in rows, without
+#'   missing values.
+#' @return matrix of correlations, variables in rows and components in
+#'   columns, with attribute \code{orthogonalised} (did the orthogonalisation
+#'   change the correlations noticeably).
+#' @noRd
+.cor_orthogonalised <- function(data, variates)
+{
+    data = as.matrix(data)
+    variates = as.matrix(variates)
+    
+    # components times G^(-1/2), G their correlation matrix
+    orthogonalise = function(V)
+    {
+        V = scale(V, center = TRUE, scale = FALSE)
+        V = sweep(V, 2, sqrt(colSums(V^2)), "/")
+        G = eigen(crossprod(V), symmetric = TRUE)
+        # collinear on these samples: the eigenvalues of a correlation matrix are O(1),
+        # except for those that are zero up to rounding (~1e-16)
+        if (min(G$values) < 1e-10)
+            return(V * NA)
+        res = V %*% G$vectors %*% diag(1 / sqrt(G$values), ncol(V)) %*% t(G$vectors)
+        colnames(res) = colnames(V)
+        res
+    }
+    
+    res = cor(data, orthogonalise(variates), use = "pairwise")
+
+    cor.components = cor(variates)
+    # above |cor| = 0.01 the components count as non-orthogonal (visible)
+    attr(res, "orthogonalised") = max(abs(cor.components[lower.tri(cor.components)])) >= 0.01
+    res
+}
