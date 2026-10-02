@@ -196,17 +196,8 @@ perf.assess.mixo_spls  <- perf.assess.mixo_pls
     {
         if (is.list(folds))
         {
-            
-            if (length(folds) < 2 || length(folds) > n)
-                stop("Invalid number of folds.", call. = FALSE)
-            
-            if (length(unlist(folds)) != n)
-                stop("Invalid folds. The total number of samples in folds must be equal to ",
-                     n, ".", call. = FALSE)
-            
-            if (length(unique(unlist(folds))) != n)
-                stop("Invalid folds. Repeated samples in folds.", call. = FALSE)
-            
+            # folds supplied as a list: validated by the shared helper
+            folds = .check_folds(folds, n = n)
             M = length(folds)
         } else {
             if (is.null(folds) || !is.finite(folds) || folds < 2 || folds > n)
