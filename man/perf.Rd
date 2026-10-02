@@ -124,7 +124,11 @@ retrieve some key parameters stored in that object.}
 matching one of \code{"Mfold"} or \code{"loo"} (see below). Default is
 \code{"Mfold"}.}
 
-\item{folds}{the folds in the Mfold cross-validation. See Details.}
+\item{folds}{either a positive integer giving the number of folds in the
+Mfold cross-validation, or a list of integer vectors where each element
+gives the row indices of the samples in one test fold. A list is accepted
+for \code{pls}, \code{spls} and DIABLO (\code{block.plsda},
+\code{block.splsda}) objects. See Details.}
 
 \item{progressBar}{by default set to \code{FALSE} to output the progress bar
 of the computation.}
@@ -272,9 +276,11 @@ retrieved from \code{object}.
 Parameters. If \code{validation = "Mfold"}, M-fold cross-validation is
 performed. \code{folds} specifies the number of folds to generate. The folds
 also can be supplied as a list of vectors containing the indexes defining
-each fold as produced by \code{split}. When using \code{validation =
-"Mfold"}, make sure that you repeat the process several times (as the
-results will be highly dependent on the random splits and the sample size).
+each fold as produced by \code{split}; the folds are then fixed and
+\code{nrepeat} is set to 1 for DIABLO objects. When using \code{validation =
+"Mfold"} with a number of folds, make sure that you repeat the process
+several times (as the results will be highly dependent on the random splits
+and the sample size).
 
 If \code{validation = "loo"}, leave-one-out cross-validation is performed
 (in that case, there is no need to repeat the process).
