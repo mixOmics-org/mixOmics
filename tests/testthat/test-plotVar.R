@@ -56,6 +56,37 @@ test_that("plotVar leaves the coordinates unchanged when the components are orth
   expect_equal(df$names, rownames(expected))
 })
 
+test_that("plotVar leaves the coordinates of (s)plsda and canonical (s)pls unchanged", {
+  data(nutrimouse)
+  X <- nutrimouse$gene
+  Y <- nutrimouse$lipid
+
+  plsda.res <- plsda(X, nutrimouse$genotype)
+  expect_no_message(df <- plotVar(plsda.res, plot = FALSE))
+  expect_equal(cbind(df$x, df$y), unname(cor(plsda.res$X, plsda.res$variates$X)),
+               tolerance = 1e-12)
+
+  splsda.res <- splsda(X, nutrimouse$genotype, keepX = c(10, 10))
+  expect_no_message(df <- plotVar(splsda.res, plot = FALSE))
+  expect_equal(cbind(df$x, df$y),
+               unname(cor(splsda.res$X[, df$names], splsda.res$variates$X)),
+               tolerance = 1e-12)
+
+  # in canonical mode the Y variables are correlated with the Y components
+  pls.res <- pls(X, Y, mode = "canonical")
+  expect_no_message(df <- plotVar(pls.res, plot = FALSE))
+  expected <- rbind(cor(pls.res$X, pls.res$variates$X),
+                    cor(pls.res$Y, pls.res$variates$Y))
+  expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
+
+  spls.res <- spls(X, Y, mode = "canonical", keepX = c(10, 10), keepY = c(5, 5))
+  expect_no_message(df <- plotVar(spls.res, plot = FALSE))
+  y <- df$Block == "Y"
+  expect_equal(cbind(df$x, df$y)[y, ],
+               unname(cor(spls.res$Y[, df$names[y]], spls.res$variates$Y)),
+               tolerance = 1e-12)
+})
+
 test_that("plotVar rejects the same component twice", {
   data(nutrimouse)
   pls.res <- pls(nutrimouse$gene, nutrimouse$lipid, ncomp = 2)
@@ -110,4 +141,38 @@ test_that("plotVar with missing values orthogonalises the components on all samp
   s <- svd(scale(res$variates$X))
   expected <- cor(res$X, s$u %*% t(s$v), use = "pairwise")
   expect_equal(cbind(df$x, df$y), unname(expected), tolerance = 1e-12)
+})
+
+test_that("plotVar orthogonalises the rcc components, the sums of the X and Y variates", {
+  data(nutrimouse)
+  res <- rcc(nutrimouse$lipid, nutrimouse$gene, ncomp = 3, lambda1 = 0.064, lambda2 = 0.008)
+  df <- plotVar(res, plot = FALSE)
+  # squared radius equal to the variance of each variable explained by the two components
+  u <- res$variates$X[, 1:2] + res$variates$Y[, 1:2]
+  r2 <- apply(cbind(res$X, res$Y), 2, function(y) summary(lm(y ~ u))$r.squared)
+  expect_equal(df$x^2 + df$y^2, unname(r2), tolerance = 1e-10)
+})
+
+test_that("plotVar orthogonalises three correlated components in the 3d style", {
+  data(liver.toxicity)
+  X <- as.matrix(liver.toxicity$gene)
+  Y <- as.matrix(liver.toxicity$clinic)
+  res <- suppressMessages(block.pls(list(gene = X), Y, ncomp = 3))
+  old <- options(rgl.useNULL = TRUE)
+  on.exit({
+    rgl::close3d()
+    options(old)
+  })
+  expect_message(df <- plotVar(res, comp = 1:3, blocks = "Y", style = "3d"), "correlated")
+  # squared radius equal to the variance of each variable explained by the three components
+  u <- res$variates$Y
+  r2 <- apply(res$X$Y, 2, function(y) summary(lm(y ~ u))$r.squared)
+  expect_equal(df$x^2 + df$y^2 + df$z^2, unname(r2), tolerance = 1e-10)
+})
+
+test_that(".cor_orthogonalised returns NA correlations for collinear components", {
+  data(nutrimouse)
+  X <- as.matrix(nutrimouse$lipid)
+  res <- .cor_orthogonalised(X, cbind(X[, 1], 2 * X[, 1]))
+  expect_true(all(is.na(res)))
 })
