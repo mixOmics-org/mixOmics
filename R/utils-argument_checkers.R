@@ -64,6 +64,80 @@
     list(validation = validation, nrepeat = as.integer(nrepeat), folds = as.integer(folds))
 }
 
+## ------------------------------ .check_folds ----------------------------- ##
+#' Check folds supplied as a list
+#'
+#' Validates a list of test-set indices for M-fold cross-validation, as
+#' supplied through the \code{folds} argument. Each element must contain the
+#' row indices (integers between 1 and \code{n}) of the samples in one test
+#' fold. Together the elements must cover every sample exactly once.
+#'
+#' @param folds a list of integer vectors, one per fold
+#' @param n number of samples/rows
+#' @param Y optional factor of class labels. When supplied, an error is raised
+#'   if a class is absent from the training set of any fold: the model fitted
+#'   on that training set would not know the class, and the downstream
+#'   aggregation of the predictions assumes all levels of \code{Y}.
+#'
+#' @return The validated folds as an unnamed list of integer vectors, or a
+#'   condition
+#' @keywords Internal
+#' @noRd
+#' @examples
+#'  dput(.check_folds(split(1:10, rep(1:2, 5)), n = 10))
+#' \dontrun{
+#'  ## repeated sample
+#'  .check_folds(list(1:6, 5:10), n = 10)
+#'  ## missing sample
+#'  .check_folds(list(1:4, 5:9), n = 10)
+#'  ## a list of lists
+#'  .check_folds(list(list(1:5, 6:10), list(1:5, 6:10)), n = 10)
+#' }
+.check_folds <- function(folds, n, Y = NULL)
+{
+    if (!is.list(folds) || any(vapply(folds, is.list, logical(1))))
+        stop("'folds' must be a list of integer vectors, one vector per fold.",
+             call. = FALSE)
+
+    if (length(folds) < 2 || length(folds) > n)
+        stop("Invalid number of folds.", call. = FALSE)
+
+    if (any(lengths(folds) == 0))
+        stop("Invalid folds. Each fold must contain at least one sample.", call. = FALSE)
+
+    ind <- unlist(folds, use.names = FALSE)
+
+    if (!is.numeric(ind) || any(!is.finite(ind)) || any(ind != round(ind)) ||
+        any(ind < 1) || any(ind > n))
+        stop("Invalid folds. Each fold must contain integer indices between 1 and ",
+             n, ".", call. = FALSE)
+
+    if (length(ind) != n)
+        stop("Invalid folds. The total number of samples in folds must be equal to ",
+             n, ".", call. = FALSE)
+
+    if (length(unique(ind)) != n)
+        stop("Invalid folds. Repeated samples in folds.", call. = FALSE)
+
+    folds <- lapply(unname(folds), as.integer)
+
+    if (!is.null(Y))
+    {
+        Y <- as.factor(Y)
+        for (i in seq_along(folds))
+        {
+            absent <- names(which(table(Y[-folds[[i]]]) == 0))
+            if (length(absent) > 0)
+                stop("Invalid folds. Class '", paste(absent, collapse = "', '"),
+                     "' is not represented in the training set of fold ", i,
+                     ": each class must be present in the training set of every fold.",
+                     call. = FALSE)
+        }
+    }
+
+    folds
+}
+
 ## -------------------------- .check_test.keepX --------------------------- ##
 #' Check test.keepX
 #'

@@ -87,6 +87,20 @@ perf.sgccda <-
     
     if (!(validation %in% c("Mfold", "loo")))
       stop("Choose 'validation' among the two following possibilities: 'Mfold' or 'loo'")
+
+    #-- folds supplied as a list --#
+    # The list is validated once here, before the repeats are dispatched to
+    # bplapply, so that errors and warnings reach the user directly.
+    if (is.list(folds) && validation == "Mfold")
+    {
+      folds = .check_folds(folds, n = n, Y = Y)
+      if (nrepeat > 1)
+      {
+        warning("'folds' is supplied as a list, so the cross-validation does not need to be repeated. ",
+                "'nrepeat' is set to '1'.", call. = FALSE)
+        nrepeat = 1
+      }
+    }
     
     #-- tells which variables are selected in the blocks --#
     
@@ -111,7 +125,11 @@ perf.sgccda <-
       #-- define the folds --#
       if (validation ==  "Mfold")
       {
-        if (is.null(folds) || !is.numeric(folds) || folds < 2 || folds > n)
+        if (is.list(folds))
+        {
+          # the list was validated in the calling function: use as is
+          M = length(folds)
+        } else if (is.null(folds) || !is.numeric(folds) || folds < 2 || folds > n)
         {
           stop("Invalid number of folds.")
         } else {
