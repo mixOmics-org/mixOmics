@@ -26,7 +26,9 @@ Imports:
     BiocParallel,
     utils,
     rgl,
-    rlang
+    rlang,
+    SummarizedExperiment,
+    MultiAssayExperiment
 Suggests: 
     BiocStyle,
     knitr,
@@ -43,18 +45,17 @@ Authors@R:
       person("Florian", "Rohart", role = "aut"), 
       person("Ignacio", "Gonzalez", role = "aut"),
       person("Sebastien", "Dejean", role = "aut"), 
-      ## key contributors
       person("Al J", "Abadi", role = "ctb", email = "al.jal.abadi@gmail.com"), 
       person("Max", "Bladen", role = "ctb", email = "mbladen19@gmail.com"), 
       person("Benoit", "Gautier", role = "ctb"), 
       person("Francois", "Bartolo", role = "ctb"), 
-      ## also contributions from
       person("Pierre", "Monget", role = "ctb"),
       person("Jeff", "Coquery", role = "ctb"),
       person("FangZou", "Yao", role = "ctb"),
       person("Benoit", "Liquet", role = "ctb"),
       person("Eva", "Hamrud", role = "ctb"),
-      person("Derek", "Lei", role = c("ctb", "cre"), email = "mixomicsdeveloper@gmail.com"))
+      person("Derek", "Lei", role = c("ctb", "cre"), email = "mixomicsdeveloper@gmail.com"),
+      person("Tuomas", "Borman", role = "ctb", comment = c(ORCID = "0000-0002-8563-8884")))
 Description: Multivariate methods are well suited to large omics data sets where the number of variables (e.g. genes, proteins, metabolites) is much larger than the number of samples (patients, cells, mice). They have the appealing properties of reducing the dimension of the data by using instrumental variables (components), which are defined as combinations of all variables. Those components are then used to produce useful graphical outputs that enable better understanding of the relationships and correlation structures between the different data sets that are integrated. mixOmics offers a wide range of multivariate methods for the exploration and integration of biological datasets with a particular focus on variable selection. The package proposes several sparse multivariate models we have developed to identify the key variables that are highly correlated, and/or explain the biological outcome of interest. The data that can be analysed with mixOmics may come from high throughput sequencing technologies, such as omics data (transcriptomics, metabolomics, proteomics, metagenomics etc) but also beyond the realm of omics (e.g. spectral imaging). The methods implemented in mixOmics can also handle missing values without having to delete entire rows with missing data. A non exhaustive list of methods include variants of generalised Canonical Correlation Analysis, sparse Partial Least Squares and sparse Discriminant Analysis. Recently we implemented integrative methods to combine multiple data sets: N-integration with variants of Generalised Canonical Correlation Analysis and P-integration with variants of multi-group Partial Least Squares.
 License: GPL (>= 2)
 URL: http://www.mixOmics.org

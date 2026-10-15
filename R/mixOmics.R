@@ -30,15 +30,35 @@
 #' 
 #' More details about the PLS modes in \code{?pls}.
 #' 
-#' @param X Input data. Either a matrix or a list of data sets (called
-#' 'blocks') matching on the same samples. Data should be arranged in samples x
+#' \code{X} can also be SummarizedExperiment or MultiAssayExperiment object
+#' which are the main data containers in Bioconductor.
+#' SummarizedExperiment is designed for single omic data while
+#' MultiAssayExperiment streamlines the handling of multi-table data. When
+#' SummarizedExperiment object is provided single-table PLS methods are
+#' applied. Either MINT or DIABLO is applied, when MultiAssayExperiment is
+#' fed as an input.
+#' 
+#' @param X Input data. A matrix. a list of data sets (called
+#' 'blocks') matching on the same samples, SummarizedExperiment or
+#' MultiAssayExperiment object. Data should be arranged in samples x
 #' variables, with samples order matching in all data sets.
+#' @param experiments A character or integer vector specifying experiments from
+#' \code{X} when it is MultiAssayExperiment.
+#' @param assay.type A character vector specifying assays from \code{X} when it
+#' is SummarizedExperiment or MultiAssayExperiment.
+#' @param col.var Character vector specifying column variables from
+#' \code{colData(X)} when \code{X} is SummarizedExperiment or
+#' MultiAssayExperiment. The values are passed as \code{Y}.
 #' @param Y Outcome. Either a numeric matrix of responses or a factor or a
 #' class vector for the discrete outcome.
+#' @param MINT A single boolean value to specify whether to apply DIABLO or
+#' MINT, when \code{X} is MultiAssayExperiment.
 #' @param indY To supply if Y is missing, indicates the position of the outcome
-#' in the list X
+#' in the list X. Disabled when \code{X} is SummarizedExperiment or
+#' MultiAssayExperiment.
 #' @param study grouping factor indicating which samples are from the same
-#' study
+#' study. Disabled when \code{X} is SummarizedExperiment or
+#' MultiAssayExperiment.
 #' @param ncomp If \code{X} is a data matrix, \code{ncomp} is a single value.
 #' If \code{X} is a list of data sets, \code{ncomp} is a numeric vector of
 #' length the number of blocks in \code{X}. The number of components to include
@@ -67,6 +87,7 @@
 #' function (should be set to TRUE in particular for data with many zero
 #' values). Setting this argument to FALSE (when appropriate) will speed up the
 #' computations. Default value is FALSE
+#' @param ... Additional arguments.
 #' @return none
 #' @author Florian Rohart, Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{pls}}, \code{\link{spls}}, \code{\link{plsda}},
@@ -154,9 +175,126 @@
 #' graphical outputs to explore relationships between two omics data sets.
 #' BioData Mining 5:19.
 #' @keywords multivariate hplot dplot
+#' @name mixOmics
 #' @export
 #' @example ./examples/mixOmics-examples.R
-mixOmics <- function(X,
+NULL
+
+#' @rdname mixOmics
+#' @export
+setGeneric("mixOmics", signature = "X", function(X, ...)
+    standardGeneric("mixOmics"))
+
+#' @rdname mixOmics
+#' @export
+setMethod("mixOmics", signature = c(X = "MultiAssayExperiment"), function(
+        X, experiments, assay.type, col.var, MINT = FALSE, ...){
+    # Check MINT
+    if( !(is.logical(MINT) && length(MINT) == 1L) ){
+        stop("'MINT' must be TRUE or FALSE.", call. = FALSE)
+    }
+    # Get arguments from SE
+    args <- internal_arguments_from_MAE(
+        mae = X, experiments = experiments, assay.type = assay.type,
+        col.var = col.var, MINT = MINT, ...)
+    # Run analysis
+    res <- do.call(internal_mixOmics, args)
+    res$call <- NULL
+    return(res)
+    }
+)
+
+#' @rdname mixOmics
+#' @export
+setMethod("mixOmics", signature = c(X = "SummarizedExperiment"), function(
+        X, assay.type, col.var, ...){
+    # Get arguments from SE
+    args <- internal_arguments_from_SE(
+        se = X, assay.type = assay.type, col.var = col.var, ...)
+    # Run analysis
+    res <- do.call(internal_mixOmics, args)
+    res$call <- NULL
+    return(res)
+    }
+)
+
+#' @rdname mixOmics
+#' @export
+setMethod("mixOmics", signature = c(X = "matrix"), function(
+        X,
+        Y,
+        indY,
+        study,
+        ncomp,
+        keepX,
+        keepY,
+        design,
+        tau = NULL,
+        mode = c("regression", "canonical", "invariant", "classic"),
+        scale,
+        tol =  1e-06,
+        max.iter = 100,
+        near.zero.var = FALSE){
+    res <- internal_mixOmics(
+        X,
+        Y,
+        indY,
+        study,
+        ncomp,
+        keepX,
+        keepY,
+        design,
+        tau = NULL,
+        mode = c("regression", "canonical", "invariant", "classic"),
+        scale,
+        tol =  1e-06,
+        max.iter = 100,
+        near.zero.var = FALSE
+    )
+    return(res)
+    }
+)
+
+#' @rdname mixOmics
+#' @export
+setMethod("mixOmics", signature = c(X = "list"), function(
+        X,
+        Y,
+        indY,
+        study,
+        ncomp,
+        keepX,
+        keepY,
+        design,
+        tau = NULL,
+        mode = c("regression", "canonical", "invariant", "classic"),
+        scale,
+        tol =  1e-06,
+        max.iter = 100,
+        near.zero.var = FALSE,
+        ...){
+    res <- internal_mixOmics(
+        X,
+        Y,
+        indY,
+        study,
+        ncomp,
+        keepX,
+        keepY,
+        design,
+        tau = NULL,
+        mode = c("regression", "canonical", "invariant", "classic"),
+        scale,
+        tol =  1e-06,
+        max.iter = 100,
+        near.zero.var = FALSE,
+        ...
+    )
+    return(res)
+    }
+)
+
+internal_mixOmics <- function(X,
                      Y,
                      indY, #only use if Y not provided
                      study, #mint
@@ -169,7 +307,8 @@ mixOmics <- function(X,
                      scale,
                      tol =  1e-06,
                      max.iter = 100,
-                     near.zero.var = FALSE)
+                     near.zero.var = FALSE,
+                     ...)
 
 {
     mode <- match.arg(mode)
@@ -473,4 +612,173 @@ mixOmics <- function(X,
     return(invisible(res))
     
     
+}
+
+# Get arguments from SummarizedExperiment object
+internal_arguments_from_SE <- function(se, assay.type, col.var, ...){
+    if( missing(assay.type) ){
+        stop("Please provide 'assay.type'.", call. = FALSE)
+    }
+    if( missing(col.var) ){
+        stop("Please provide 'col.var'.", call. = FALSE)
+    }
+    # Get arguments for the function passed via ...
+    args <- list(...)
+    # Remove Y, indY, and study from arguments because the input data is fully
+    # described by the SE, and otherwise there could be duplicated parameters.
+    args <- args[ !names(args) %in% c("Y", "indY", "study") ]
+    # Get assay
+    args[["X"]] <- internal_X_from_SE(se = se, assay.type = assay.type)
+    # Get covariates
+    args[["Y"]] <- internal_Y_from_SE(se, col.var)
+    return(args)
+}
+
+# Function to retrieve abundance matrix from SummarizedExperiment object
+#' @importFrom SummarizedExperiment assayNames assay
+internal_X_from_SE <- function(se, assay.type){
+    # Check that assay can be found
+    if( !(is.character(assay.type) && length(assay.type) == 1L &&
+          assay.type %in% assayNames(se)) ){
+        stop("assay.type' must be a single character value from",
+            "'assayNames(se)'.", call. = FALSE)
+    }
+    # Get assay
+    X <- assay(se, assay.type) |> as.matrix() |> t()
+    return(X)
+}
+
+# Retrieve covariates from colData of SummarizedExperiment object
+#' @importFrom SummarizedExperiment colData
+internal_Y_from_SE <- function(se, col.var){
+    # Check that col.var exists
+    if( !( is.character(col.var) && all(col.var %in% colnames(colData(se))) ) ){
+        stop("col.var' must be a character value from ",
+            "'colnames(colData((se))'.", call. = FALSE)
+    }
+    # Get values
+    Y <- colData(se)[ , col.var, drop = FALSE]
+    # If there are more than 2 columns specified, they must be numeric
+    # variables.
+    if( !all(vapply(Y, is.numeric, logical(1L))) && length(col.var) > 1L ){
+        stop("'col.var' specifies multiple character or factor columns.",
+            "It can specify either multiple numeric values or single ",
+            "column specifying outcome.", call. = FALSE)
+    }
+    # If Y specifies class, give it as a vector.
+    # If the values are numeric, it needs to be a matrix.
+    if( ncol(Y) == 1L && !is.numeric(Y[[1]]) ){
+        Y <- Y[, 1]
+    } else{
+        Y <- Y |> as.matrix()
+    }
+    return(Y)
+}
+
+# Get arguments from MultiAssayExperiment object
+#' @importFrom MultiAssayExperiment experiments intersectRows intersectColumns
+#'     getWithColData
+internal_arguments_from_MAE <- function(
+        mae, experiments, assay.type, col.var, MINT, ...){
+    # experiments, assay.type and col.var must be specified
+    if( missing(experiments) || length(experiments) == 0L ){
+        stop("Please provide 'experiments'.", call. = FALSE)
+    }
+    if( missing(assay.type) || !is.character(assay.type) ){
+        stop("Please provide 'assay.type' as a character value.", call. = FALSE)
+    }
+    if( missing(col.var) || !is.character(col.var) ){
+        stop("Please provide 'col.var' as a character value.", call. = FALSE)
+    }
+    # Check that experiments is in correct format
+    is_index <- is.numeric(experiments) && all(experiments%%1==0) &&
+        all(experiments>0&experiments<=length(experiments(mae)))
+    is_name <- is.character(experiments) &&
+        all(experiments %in% names(mae))
+    if( !( is_index || is_name ) ){
+        stop("'experiments' must specify experiments from 'experiments(mae)'.",
+            call. = FALSE)
+    }
+    # Check that the length of assay.type match with the number of experiments.
+    # the values are checked later.
+    if( length(experiments) != length(assay.type) ){
+        stop("The length of 'experiments' must match with the length of ",
+            "'assay.types'.", call. = FALSE)
+    }
+    # Take certain experiments
+    mae <- mae[, , experiments]
+    
+    # If user applies MINT, get shared features. If user applies DIABLO, get
+    # shared samples
+    if( MINT ){
+        mae <- intersectRows(mae)
+        # If there are no rows anymore
+        if( length(unlist(rownames(mae))) == 0L ){
+            stop("The experiments must include shared features.", call. = FALSE)
+        }
+    } else{
+        mae <- intersectColumns(mae)
+        # If there are no samples anymore
+        if( length(unlist(colnames(mae))) == 0L ){
+            stop("The experiments must include shared samples.", call. = FALSE)
+        }
+    }
+    
+    # Get arguments for the function passed via ...
+    args <- list(...)
+    # Remove Y, indY, and study from arguments because the input data is fully
+    # described by the SE, and otherwise there could be duplicated parameters.
+    args <- args[ !names(args) %in% c("Y", "indY", "study") ]
+    
+    
+    # Loop over experiments and get the abundance matrix from all
+    args[["X"]] <- lapply(seq_len(length(experiments)), function(i){
+        internal_X_from_SE(
+            mae[[experiments[[i]]]], assay.type = assay.type[[i]])
+    })
+    
+    # For DIABLO, the samples are shared so we can get the class from single
+    # experiment
+    if( !MINT ){
+        se <- getWithColData(mae, i = 1) |> suppressWarnings()
+        args[["Y"]] <- internal_Y_from_SE(se, col.var)
+    } else{
+        # For MINT, we have to get classes for all the samples
+        # Get variable for each sample
+        Y <- lapply(seq_len(length(experiments)), function(i){
+            se <- getWithColData(mae, i = i) |> suppressWarnings()
+            res <- internal_Y_from_SE(se, col.var)
+            return(res)
+        })
+        # Combine vectors
+        if( all(vapply(Y, function(x) is.character(x)||is.factor(x),
+                logical(1L))) ){
+            Y <- unlist(Y)
+        } else{
+            # All fdimensions must be the same
+            if( !all(diff(vapply(Y, dim, numeric(2L))[2, ]) == 0L) ){
+                stop("'col.var' specifies the different number of columns ",
+                    "from experiments. Please check that 'col.var' specifies ",
+                    "shared columns.", call. = FALSE)
+            }
+            Y <- do.call(rbind, Y)
+        }
+        args[["Y"]] <- Y
+    }
+    
+    # For MINT, we merge X to single matrix
+    if( MINT ){
+        args[["X"]] <- do.call(rbind, args[["X"]])
+        # Check that sample names are unique
+        if( anyDuplicated(rownames(args[["X"]])) ){
+            stop("Please provide unique sample names.", call = FALSE)
+        }
+        # For MINT, provide also study parameter that tells from where which
+        # sample comes from
+        args[["study"]] <- rep(names(mae), lengths(colnames(mae)))
+    } else{
+        # For DIABLO, give name for the X. It is a list of experiments
+        names( args[["X"]] ) <- names(mae)
+    }
+    return(args)
 }
