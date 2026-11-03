@@ -194,101 +194,119 @@ import(ggplot2)
 import(igraph)
 import(lattice)
 import(parallel)
-importFrom(BiocParallel,SerialParam)
-importFrom(BiocParallel,bplapply)
-importFrom(dplyr,arrange)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,rename)
-importFrom(dplyr,row_number)
-importFrom(dplyr,summarise)
-importFrom(dplyr,ungroup)
+importFrom(BiocParallel,
+  SerialParam,
+  bplapply
+)
+importFrom(dplyr,
+  arrange,
+  filter,
+  group_by,
+  mutate,
+  n,
+  rename,
+  row_number,
+  summarise,
+  ungroup
+)
 importFrom(ellipse,ellipse)
 importFrom(ggrepel,geom_text_repel)
-importFrom(grDevices,adjustcolor)
-importFrom(grDevices,as.graphicsAnnot)
-importFrom(grDevices,chull)
-importFrom(grDevices,col2rgb)
-importFrom(grDevices,colorRamp)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,colors)
-importFrom(grDevices,dev.cur)
-importFrom(grDevices,dev.new)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,dev.prev)
-importFrom(grDevices,dev.set)
-importFrom(grDevices,devAskNewPage)
-importFrom(grDevices,graphics.off)
-importFrom(grDevices,gray)
-importFrom(grDevices,gray.colors)
-importFrom(grDevices,heat.colors)
-importFrom(grDevices,jpeg)
-importFrom(grDevices,pdf)
-importFrom(grDevices,rainbow)
-importFrom(grDevices,rgb)
-importFrom(grDevices,tiff)
-importFrom(grDevices,x11)
-importFrom(graphics,Axis)
-importFrom(graphics,abline)
-importFrom(graphics,arrows)
-importFrom(graphics,axis)
-importFrom(graphics,barplot)
-importFrom(graphics,box)
-importFrom(graphics,boxplot)
-importFrom(graphics,image)
-importFrom(graphics,layout)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,locator)
-importFrom(graphics,matplot)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(graphics,plot)
-importFrom(graphics,plot.default)
-importFrom(graphics,points)
-importFrom(graphics,polygon)
-importFrom(graphics,rasterImage)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,strheight)
-importFrom(graphics,strwidth)
-importFrom(graphics,symbols)
-importFrom(graphics,text)
-importFrom(graphics,title)
+importFrom(grDevices,
+  adjustcolor,
+  as.graphicsAnnot,
+  chull,
+  col2rgb,
+  colorRamp,
+  colorRampPalette,
+  colors,
+  dev.cur,
+  dev.new,
+  dev.off,
+  dev.prev,
+  dev.set,
+  devAskNewPage,
+  graphics.off,
+  gray,
+  gray.colors,
+  heat.colors,
+  jpeg,
+  pdf,
+  rainbow,
+  rgb,
+  tiff,
+  x11
+)
+importFrom(graphics,
+  Axis,
+  abline,
+  arrows,
+  axis,
+  barplot,
+  box,
+  boxplot,
+  image,
+  layout,
+  legend,
+  lines,
+  locator,
+  matplot,
+  mtext,
+  par,
+  plot,
+  plot.default,
+  points,
+  polygon,
+  rasterImage,
+  rect,
+  segments,
+  strheight,
+  strwidth,
+  symbols,
+  text,
+  title
+)
 importFrom(gridExtra,grid.arrange)
-importFrom(matrixStats,colSds)
-importFrom(matrixStats,colVars)
-importFrom(methods,hasArg)
-importFrom(methods,is)
+importFrom(matrixStats,
+  colSds,
+  colVars
+)
+importFrom(methods,
+  hasArg,
+  is
+)
 importFrom(rARPACK,svds)
-importFrom(reshape2,dcast)
-importFrom(reshape2,melt)
+importFrom(reshape2,
+  dcast,
+  melt
+)
 importFrom(rlang,.data)
-importFrom(stats,aggregate)
-importFrom(stats,as.dendrogram)
-importFrom(stats,as.dist)
-importFrom(stats,coefficients)
-importFrom(stats,cor)
-importFrom(stats,cov)
-importFrom(stats,dist)
-importFrom(stats,hclust)
-importFrom(stats,lm)
-importFrom(stats,lsfit)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(stats,order.dendrogram)
-importFrom(stats,pnorm)
-importFrom(stats,predict)
-importFrom(stats,quantile)
-importFrom(stats,reorder)
-importFrom(stats,sd)
-importFrom(stats,setNames)
-importFrom(stats,t.test)
-importFrom(stats,var)
+importFrom(stats,
+  aggregate,
+  as.dendrogram,
+  as.dist,
+  coefficients,
+  cor,
+  cov,
+  dist,
+  hclust,
+  lm,
+  lsfit,
+  median,
+  na.omit,
+  order.dendrogram,
+  pnorm,
+  predict,
+  quantile,
+  reorder,
+  sd,
+  setNames,
+  t.test,
+  var
+)
 importFrom(tidyr,gather)
-importFrom(utils,packageDescription)
-importFrom(utils,relist)
-importFrom(utils,setTxtProgressBar)
-importFrom(utils,txtProgressBar)
+importFrom(utils,
+  packageDescription,
+  relist,
+  setTxtProgressBar,
+  txtProgressBar
+)

@@ -1,9 +1,9 @@
-bioconductor.version: 3.15
+bioconductor.version: 3.23
 external.libraries:
 ignored.packages:
 package.dependency.fields: Imports, Depends, LinkingTo
 r.version:
-snapshot.type: implicit
+snapshot.type: explicit
 use.cache: TRUE
 vcs.ignore.cellar: TRUE
 vcs.ignore.library: TRUE

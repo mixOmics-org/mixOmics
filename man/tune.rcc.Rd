@@ -9,6 +9,7 @@ tune.rcc(
   Y,
   grid1 = seq(0.001, 1, length = 5),
   grid2 = seq(0.001, 1, length = 5),
+  scale = TRUE,
   validation = c("loo", "Mfold"),
   folds = 10,
   BPPARAM = SerialParam(),
@@ -26,15 +27,20 @@ on the \eqn{Y} variables. \code{NA}s are allowed.}
 \code{lambda2} at which cross-validation score should be computed. Defaults
 to \code{grid1=grid2=seq(0.001, 1, length=5)}.}
 
+\item{scale}{logical. If \code{TRUE}, standardise both data matrices
+within each training fold and apply the training standard deviations to
+held-out samples. Defaults to \code{TRUE}; samples are always centred
+using the training-fold means.}
+
 \item{validation}{character string. What kind of (internal) cross-validation
 method to use, (partially) matching one of \code{"loo"} (leave-one-out) or
-\code{"Mfolds"} (M-folds). See Details.}
+\code{"Mfold"} (M-folds). See Details.}
 
 \item{folds}{positive integer. Number of folds to use if
 \code{validation="Mfold"}. Defaults to \code{folds=10}.}
 
 \item{BPPARAM}{a BiocParallel parameter object; see \code{BiocParallel::bpparam} 
-for details. Default is \code{MulticoreParam()} for parallel processing.}
+for details. Default is \code{SerialParam()} for serial processing.}
 
 \item{seed}{set a number here if you want the function to give reproducible outputs. 
 Not recommended during exploratory analysis. Note if RNGseed is set in 'BPPARAM', this will be overwritten by 'seed'.}
@@ -53,20 +59,34 @@ two-dimensional grid to determine optimal values for the parameters of
 regularization in \code{rcc}.
 }
 \details{
-If \code{validation="Mfolds"}, M-fold cross-validation is performed by
-calling \code{Mfold}. When \code{folds} is given, the elements of
-\code{folds} should be integer vectors specifying the indices of the
-validation sample and the argument \code{M} is ignored. Otherwise, the folds
-are generated. The number of cross-validation folds is specified with the
-argument \code{M}.
+If \code{validation="Mfold"}, the samples are randomly split into the
+number of folds specified by \code{folds}.
 
 If \code{validation="loo"}, leave-one-out cross-validation is performed by
-calling the \code{loo} function. In this case the arguments \code{folds} and
-\code{M} are ignored.
+leaving out each sample in turn. In this case \code{folds} is ignored.
+
+The \code{scale} argument precedes \code{validation}. Calls that previously
+supplied \code{validation} or later arguments by position should now name
+those arguments explicitly.
+
+Both validation methods centre held-out samples using the training-fold
+means. With \code{scale = TRUE} (the default), standard deviations are also
+estimated on the training fold only and applied to the held-out samples. Supply
+unscaled data to avoid using held-out observations to estimate scaling
+parameters, including when using \code{tune.rcc} inside nested
+cross-validation. Use the same \code{scale} setting when fitting the final
+\code{\link{rcc}} model.
+
+Ridge penalties depend on the variance scale of the input variables,
+unlike classical CCA. The default grids assume variables of roughly unit
+variance. By default, variables are standardised within each training fold.
+If \code{scale = FALSE}, choose grids appropriate for the unscaled data.
 
 The estimation of the missing values can be performed by the reconstitution
 of the data matrix using the \code{nipals} function. Otherwise, missing
-values are handled by casewise deletion in the \code{rcc} function.
+values are handled by pairwise-complete covariance estimates in
+\code{rcc}. Missing held-out values are replaced by zero after applying
+the training-fold transformation, equivalent to training-mean imputation.
 }
 \examples{
 #load data
@@ -74,8 +94,12 @@ data(nutrimouse)
 X <- nutrimouse$lipid
 Y <- nutrimouse$gene
 
-# run tuning
-tune_res <- tune.rcc(X, Y, validation = "Mfold")
+# standardise within each training fold during tuning
+tune_res <- tune.rcc(X, Y, validation = "Mfold", scale = TRUE)
+
+# use the same scaling choice for the final model
+rcc_res <- rcc(X, Y, lambda1 = tune_res$opt.lambda1[1],
+               lambda2 = tune_res$opt.lambda2[1], scale = TRUE)
 
 # plot output
 plot(tune_res)

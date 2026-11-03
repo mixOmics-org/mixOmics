@@ -1,20 +1,51 @@
 context("network")
 
-test_that("network works for rcc", {
-  
-  ## network representation for objects of class 'rcc'
+# rCCA similarities are inner products of variable correlations with the
+# canonical bisectors; the cutoff removes weak similarities.
+.rcc_network_reference <- function(fit, comp, cutoff) {
+  bisectors <- fit$variates$X[, comp, drop = FALSE] +
+    fit$variates$Y[, comp, drop = FALSE]
+  similarities <- cor(fit$X, bisectors, use = "pairwise") %*%
+    t(cor(fit$Y, bisectors, use = "pairwise"))
+  similarities[abs(similarities) < cutoff] <- 0
+  similarities
+}
+
+test_that("network works for the default standardised rcc model", {
   data(nutrimouse)
-  X <- nutrimouse$lipid
-  Y <- nutrimouse$gene
-  nutri.res <- rcc(X, Y, ncomp = 3, lambda1 = 0.064, lambda2 = 0.008)
-  
-  ## create a tmp file
-  tmp.file <- tempfile("network", fileext = ".jpeg")
-  network.rcc.res <- network(nutri.res, comp = 1:3, cutoff = 0.6, save = "jpeg", 
+  nutri.res <- rcc(nutrimouse$lipid, nutrimouse$gene, ncomp = 3,
+                   lambda1 = 0.064, lambda2 = 0.008)
+
+  # network appends the extension to name.save.
+  tmp.file <- tempfile("network")
+  on.exit(unlink(paste0(tmp.file, ".jpeg")))
+  network.rcc.res <- network(nutri.res, comp = 1:3, cutoff = 0.6, save = "jpeg",
                              name.save = tmp.file)
+  expected <- .rcc_network_reference(nutri.res, comp = 1:3, cutoff = 0.6)
   expect_equal(names(network.rcc.res), c("gR", "M", "cutoff"))
-  .expect_numerically_close(sum(network.rcc.res$M), 10.8786, digits = 3)
-  unlink(tmp.file)
+  expect_equal(network.rcc.res$M, expected)
+  expect_equal(network.rcc.res$cutoff, 0.6)
+  expect_s3_class(network.rcc.res$gR, "igraph")
+  expect_equal(igraph::ecount(network.rcc.res$gR), sum(expected != 0))
+  expect_equal(sort(igraph::edge_attr(network.rcc.res$gR, "weight")),
+               sort(expected[expected != 0]))
+  expect_true(file.exists(paste0(tmp.file, ".jpeg")))
+  expect_gt(file.info(paste0(tmp.file, ".jpeg"))$size, 0)
+})
+
+test_that("network also represents an explicitly unscaled rcc model", {
+  data(nutrimouse)
+  nutri.res <- rcc(nutrimouse$lipid, nutrimouse$gene, ncomp = 3,
+                   lambda1 = 0.064, lambda2 = 0.008, scale = FALSE)
+  pdf(NULL)
+  on.exit(dev.off())
+  net <- network(nutri.res, comp = 1:3, cutoff = 0.6, plot.graph = FALSE)
+  expected <- .rcc_network_reference(nutri.res, comp = 1:3, cutoff = 0.6)
+  expect_equal(net$M, expected)
+  expect_equal(net$cutoff, 0.6)
+  expect_equal(igraph::ecount(net$gR), sum(expected != 0))
+  expect_equal(sort(igraph::edge_attr(net$gR, "weight")),
+               sort(expected[expected != 0]))
 })
 
 test_that("network works for spls", {

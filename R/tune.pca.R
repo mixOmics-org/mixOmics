@@ -32,6 +32,10 @@
 #' \code{tune.pca} to choose a final \code{ncomp} for \code{pca}. If
 #' \code{NULL}, function sets \code{ncomp = min(nrow(X), ncol(X))}
 #' @inheritParams tune
+#' @param scale (Default=TRUE) Logical indicating whether the variables should be
+#' scaled to have unit variance before the analysis takes place. Alternatively,
+#' a vector of length equal the number of columns of \code{X} can be supplied.
+#' The value is passed to \code{\link{scale}}.
 #' @param logratio one of ('none','CLR','ILR'). Default to 'none'
 #' @param V Matrix used in the logratio transformation id provided.
 #' @param multilevel Design matrix for multilevel analysis (for repeated

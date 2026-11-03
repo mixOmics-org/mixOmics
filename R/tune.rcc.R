@@ -6,20 +6,34 @@ library(BiocParallel)
 #' two-dimensional grid to determine optimal values for the parameters of
 #' regularization in \code{rcc}.
 #' 
-#' If \code{validation="Mfolds"}, M-fold cross-validation is performed by
-#' calling \code{Mfold}. When \code{folds} is given, the elements of
-#' \code{folds} should be integer vectors specifying the indices of the
-#' validation sample and the argument \code{M} is ignored. Otherwise, the folds
-#' are generated. The number of cross-validation folds is specified with the
-#' argument \code{M}.
-#' 
+#' If \code{validation="Mfold"}, the samples are randomly split into the
+#' number of folds specified by \code{folds}.
+#'
 #' If \code{validation="loo"}, leave-one-out cross-validation is performed by
-#' calling the \code{loo} function. In this case the arguments \code{folds} and
-#' \code{M} are ignored.
-#' 
+#' leaving out each sample in turn. In this case \code{folds} is ignored.
+#'
+#' The \code{scale} argument precedes \code{validation}. Calls that previously
+#' supplied \code{validation} or later arguments by position should now name
+#' those arguments explicitly.
+#'
+#' Both validation methods centre held-out samples using the training-fold
+#' means. With \code{scale = TRUE} (the default), standard deviations are also
+#' estimated on the training fold only and applied to the held-out samples. Supply
+#' unscaled data to avoid using held-out observations to estimate scaling
+#' parameters, including when using \code{tune.rcc} inside nested
+#' cross-validation. Use the same \code{scale} setting when fitting the final
+#' \code{\link{rcc}} model.
+#'
+#' Ridge penalties depend on the variance scale of the input variables,
+#' unlike classical CCA. The default grids assume variables of roughly unit
+#' variance. By default, variables are standardised within each training fold.
+#' If \code{scale = FALSE}, choose grids appropriate for the unscaled data.
+#'
 #' The estimation of the missing values can be performed by the reconstitution
 #' of the data matrix using the \code{nipals} function. Otherwise, missing
-#' values are handled by casewise deletion in the \code{rcc} function.
+#' values are handled by pairwise-complete covariance estimates in
+#' \code{rcc}. Missing held-out values are replaced by zero after applying
+#' the training-fold transformation, equivalent to training-mean imputation.
 #' 
 #' @param X numeric matrix or data frame \eqn{(n \times p)}, the observations
 #' on the \eqn{X} variables. \code{NA}s are allowed.
@@ -28,15 +42,19 @@ library(BiocParallel)
 #' @param grid1,grid2 vector numeric defining the values of \code{lambda1} and
 #' \code{lambda2} at which cross-validation score should be computed. Defaults
 #' to \code{grid1=grid2=seq(0.001, 1, length=5)}.
+#' @param scale logical. If \code{TRUE}, standardise both data matrices
+#' within each training fold and apply the training standard deviations to
+#' held-out samples. Defaults to \code{TRUE}; samples are always centred
+#' using the training-fold means.
 #' @param validation character string. What kind of (internal) cross-validation
 #' method to use, (partially) matching one of \code{"loo"} (leave-one-out) or
-#' \code{"Mfolds"} (M-folds). See Details.
+#' \code{"Mfold"} (M-folds). See Details.
 #' @param folds positive integer. Number of folds to use if
 #' \code{validation="Mfold"}. Defaults to \code{folds=10}.
 #' @param BPPARAM a BiocParallel parameter object; see \code{BiocParallel::bpparam} 
-#' for details. Default is \code{MulticoreParam()} for parallel processing.
+#' for details. Default is \code{SerialParam()} for serial processing.
 #' @param seed set a number here if you want the function to give reproducible outputs. 
-#' Not recommended during exploratory analysis. Note if RNGseed is set in 'BPPARAM', this will be overwritten by 'seed'. 
+#' Not recommended during exploratory analysis. Note if RNGseed is set in 'BPPARAM', this will be overwritten by 'seed'.
 #' @return The returned value is a list with components: \item{opt.lambda1,}{}
 #' \item{opt.lambda2}{value of the parameters of regularization on which the
 #' cross-validation method reached its optimal.} \item{opt.score}{the optimal
@@ -55,12 +73,15 @@ tune.rcc <-
              Y, 
              grid1 = seq(0.001, 1, length = 5), 
              grid2 = seq(0.001, 1, length = 5), 
+             scale = TRUE,
              validation = c("loo", "Mfold"), 
              folds = 10,
              BPPARAM = SerialParam(),
              seed = NULL)
     {
-        
+      if (!is.logical(scale) || length(scale) != 1L || is.na(scale))
+        stop("'scale' must be either TRUE or FALSE.", call. = FALSE)
+
       BPPARAM$RNGseed <- seed
       set.seed(seed)
       
@@ -87,7 +108,7 @@ tune.rcc <-
             folds = split(1:M, 1:M)
             cv.score = bplapply(1:nrow(grid), function(i) {
                 lambda = as.numeric(grid[i, ])  # Ensure lambda is numeric
-                Mfold(X, Y, lambda[1], lambda[2], folds)
+                Mfold(X, Y, lambda[1], lambda[2], folds, scale = scale)
             }, BPPARAM = BPPARAM)
             
         } else {
@@ -102,7 +123,7 @@ tune.rcc <-
             }
             cv.score = bplapply(1:nrow(grid), function(i) {
                 lambda = as.numeric(grid[i, ])  # Ensure lambda is numeric
-                Mfold(X, Y, lambda[1], lambda[2], folds)
+                Mfold(X, Y, lambda[1], lambda[2], folds, scale = scale)
             }, BPPARAM = BPPARAM)
         }
         
@@ -121,7 +142,7 @@ tune.rcc <-
         return(invisible(out))
     }
 
-Mfold = function(X, Y, lambda1, lambda2, folds)
+Mfold = function(X, Y, lambda1, lambda2, folds, scale = TRUE)
 {
     xscore = NULL
     yscore = NULL
@@ -130,11 +151,17 @@ Mfold = function(X, Y, lambda1, lambda2, folds)
     for (m in 1:M)
     {
         omit = folds[[m]]
-        result = rcc(X[-omit, , drop = FALSE], Y[-omit, , drop = FALSE], ncomp = 1, lambda1, lambda2, method = "ridge")
-        X[omit, ][is.na(X[omit, ])] = 0
-        Y[omit, ][is.na(Y[omit, ])] = 0
-        xscore = c(xscore, X[omit, , drop = FALSE] %*% result$loadings$X[, 1])
-        yscore = c(yscore, Y[omit, , drop = FALSE] %*% result$loadings$Y[, 1])
+        result = rcc(X[-omit, , drop = FALSE], Y[-omit, , drop = FALSE],
+                     ncomp = 1, lambda1 = lambda1, lambda2 = lambda2,
+                     method = "ridge", scale = scale)
+        X.test = base::scale(X[omit, , drop = FALSE],
+                             center = result$center$X, scale = result$scale$X)
+        Y.test = base::scale(Y[omit, , drop = FALSE],
+                             center = result$center$Y, scale = result$scale$Y)
+        X.test[is.na(X.test)] = 0
+        Y.test[is.na(Y.test)] = 0
+        xscore = c(xscore, X.test %*% result$loadings$X[, 1])
+        yscore = c(yscore, Y.test %*% result$loadings$Y[, 1])
     }
     
     cv.score = cor(xscore, yscore, use = "pairwise")
