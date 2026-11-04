@@ -86,3 +86,18 @@ test_that("circosPlot works with comp = 1 when a block has a single selected var
     expect_identical(rownames(cp_res), expected.names)
     expect_identical(colnames(cp_res), expected.names)
 })
+
+test_that("circosPlot keeps the links of every block listed in blocks.link", code = {
+    # three blocks of two features each, all pairs similar
+    chr <- data.frame(chrom = rep(c("chra", "chrb", "chrc"), each = 2),
+                      chromStart = rep(c(0, 1), 3), chromEnd = rep(c(1, 2), 3),
+                      name = paste0("f", 1:6), color = "black")
+    simMat <- matrix(0.9, 6, 6, dimnames = list(chr$name, chr$name))
+    
+    all.links <- genLinks(chr, simMat, threshold = 0.5)
+    abc.links <- genLinks(chr, simMat, threshold = 0.5, blocks.link = c("a", "b", "c"))
+    expect_equal(nrow(abc.links), nrow(all.links))
+    
+    ab.links <- genLinks(chr, simMat, threshold = 0.5, blocks.link = c("a", "b"))
+    expect_setequal(as.character(ab.links$feat2), paste0("f", 1:4))
+})
