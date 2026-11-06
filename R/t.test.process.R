@@ -7,6 +7,9 @@
 # last modified: 2019
 #
 # Copyright (C) 2019
+#
+# This file is part of mixOmics, licensed under AGPL (>= 3).
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #############################################################################################################
 
 #' Test whether adding a component improves the results

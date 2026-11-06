@@ -9,6 +9,8 @@
 #
 # Copyright (C) 2015
 #
+# This file is part of mixOmics, licensed under AGPL (>= 3).
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #############################################################################################################
 
 

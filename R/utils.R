@@ -331,6 +331,7 @@ mat.rank = function (mat, tol)
 }
 
 ## ----------------------------- nearZeroVar ------------------------------ ##
+## Adapted from the caret package (GPL (>= 2)).
 #' Identification of zero- or near-zero variance predictors
 #' 
 #' Borrowed from the \pkg{caret} package. It is used as an internal function in

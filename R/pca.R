@@ -256,7 +256,7 @@ pca <- function(X,
     } else {
         if (logratio %in% c('CLR', 'none')) {
             #-- if data is complete use singular value decomposition
-            #-- borrowed from 'prcomp' function
+            #-- borrowed from 'prcomp' function (R stats package, GPL-2 | GPL-3)
             res = svd(X, nu = 0)
             sdev <- res$d
             loadings <- res$v
