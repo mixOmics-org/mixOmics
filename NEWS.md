@@ -1,3 +1,138 @@
+## version 6.38.0
+
+Bioconductor 3.24.
+
+### new features / enhancements / changes
+
+* mixOmics is now licensed under AGPL (>= 3) instead of GPL (>= 2) (#421)
+* `circosPlot` is drawn by new code (#419)
+* `predict` on multi-block models is 3 to 67 times faster, and `perf` and `tune.block.plsda` about 2 times faster, with identical results (#369, #383)
+* `perf` and `perf.assess` on DIABLO models accept `folds` as a list (#400)
+* `mint.block.pls`, `mint.block.spls`, `mint.block.plsda` and `mint.block.splsda` return model objects with the same structure as the `block.*` models, so `predict` works on them (#386)
+* `?plot.perf.pls` now has examples (#414)
+* `citation("mixOmics")` gives the full author names and the DOI (#416)
+* the GitHub repository moved from `mixOmicsTeam/mixOmics` to `mixOmics-org/mixOmics`
+* expanded test coverage for model utilities and internal helpers (#381)
+
+### bug fixes
+
+* `circosPlot` no longer fails when a block, including the Y block, has a single selected variable (#402, #324)
+* `circosPlot` showed block names containing "chr" truncated and failed with `line = TRUE` (#419)
+* `circosPlot` with several blocks in `blocks.link` kept only about half of the links (#419)
+* `plotVar` no longer places points outside the correlation circle when the plotted components are not orthogonal (#405)
+* `keepX` and `keepY` of `block.spls` and `mint.block.*` models now give the values used (#386)
+* `plotLoadings` handles a vector `xlim` for contribution plots in the `graphics` style (#377)
+
+## version 6.36.0
+
+Bioconductor 3.23, April 2026.
+
+### new features / enhancements / changes
+
+* plotting functions use `aes(.data[[...]])` instead of `aes_string()`, which is deprecated in ggplot2 (#374)
+* ggplot2 line geoms use `linewidth` instead of the deprecated `size` (#379)
+* gsignal is no longer a dependency
+
+### bug fixes
+
+* `plotIndiv` on MINT models now plots a single study selected with `study` (#364)
+
+## version 6.34.0
+
+Bioconductor 3.22, October 2025. No changes from 6.32.0.
+
+## version 6.32.0
+
+Bioconductor 3.21, April 2025.
+
+### new features / enhancements / changes
+
+* new function `perf.assess` to assess the performance of a final model, for the number of components it uses (#343)
+* `tune` can tune the number of components only, by calling `perf`, or the number of components and variables together, for (s)PCA, (s)PLS, (s)PLS-DA, block (s)PLS-DA and MINT (s)PLS-DA (#343)
+* all `tune` functions support parallel processing through `BPPARAM` (#216)
+* `perf` and `tune` functions take a `seed` argument for reproducibility (#334, #335)
+* `plotLoadings` can plot in ggplot2 style with customisable aesthetics (#345)
+* the `scheme` and `init` arguments of the multi-block functions are removed (#336)
+* `perf` gives a clearer error when a class has a single sample (#353)
+* expanded test coverage, including visual tests of the plots with vdiffr (#332, #340)
+
+### bug fixes
+
+* `plotIndiv` ellipses now have the same colours as the points, follow the order of the groups, and can be coloured separately (#307)
+* `plotIndiv` uses `pch` in the right order (#357)
+* broken link to the bookdown vignette (#297) and typo in `?summary.mixo_pls` (#296) fixed
+
+## version 6.30.0
+
+Bioconductor 3.20, October 2024. Dependencies updated and BiocCheck errors fixed; no change for users.
+
+### bug fixes
+
+* `splsda` and `plotLoadings` help page examples fixed (#293)
+
+## version 6.28.0
+
+Bioconductor 3.19, April 2024. No changes from 6.26.0.
+
+## version 6.26.0
+
+Bioconductor 3.18, October 2023. Fixed the vignette build on Bioconductor; no change to the package code.
+
+## version 6.24.0
+
+Bioconductor 3.17, April 2023.
+
+### new features / enhancements / changes
+
+* `auroc` takes a list of (s)PLS-DA models and draws their ROC curves in one plot (#242)
+* `auroc` works on `mint.block.(s)plsda` models (#246)
+* `circosPlot` works on `block.pls` and `block.plsda` models (#248)
+* `cim` works on `block.spls` models (#187)
+* `pca` output now includes `x` and `rotation`, as `prcomp` does, so `cim` accepts `pca` objects (#171)
+* `network` takes `size.node` and `graph.scale` to set the size of the nodes and of the plot (#233)
+* `plotIndiv` on MINT models can show the prediction areas from `background.predict` (#24)
+* `tune.spls` supports parallel processing (#214)
+* main functions take `verbose.call` to return the call with all argument values (#30, #34)
+* clearer errors when Y has missing values in DA methods (#111), when a class has a single sample in `perf` (#122), and in `tune.spca` (#275)
+
+### bug fixes
+
+* `perf.mint.splsda` and `tune.mint.splsda` give consistent error rates (#43)
+* `perf` on `plsda` no longer returns `NA` for `choice.ncomp` (#172)
+* `perf.pls` error "non-conformable matrices" fixed (#286)
+* `plotArrow` error "Aesthetics must be either length 1 or the same as the data" fixed (#150)
+* online vignette updated (#230)
+
+## version 6.22.0
+
+Bioconductor 3.16, November 2022.
+
+### new features / enhancements / changes
+
+* `network` takes `plot.graph` to return the network without plotting it (#145)
+* `circosPlot` takes `legend.title` (#260)
+* `plotLoadings` returns the loadings of all blocks (#120)
+
+### bug fixes
+
+* `circosPlot` works on `block.spls` models fitted with `indY` (#178)
+* `predict` on DIABLO models handles test data whose variables are in a different order (#192)
+* `predict` no longer returns `NaN` for a whole block (#266) and handles near-zero-variance features (#268)
+* `perf` on `pls` handles near-zero-variance features (#196)
+* `tune.block.splsda` with leave-one-out validation fixed (#213)
+* `plotVar` works on multi-block (s)PLS1 models (#237)
+* documentation of `perf.pls` (#130) and `plot.tune` (#189) fixed
+
+## version 6.20.0
+
+Bioconductor 3.15, April 2022.
+
+### bug fixes
+
+* `tune.spls` selected the wrong `keepX` and `keepY` because of an incorrect t-test alternative hypothesis (#164)
+* `plot` on `tune.mint.splsda` objects fixed, and the `sd` argument of `plot.tune` restored (#167)
+* compatibility with R 4.2 (#162, #208)
+
 ## version 6.18.0
 
 ### new features / enhancements / changes

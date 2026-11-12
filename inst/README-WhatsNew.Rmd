@@ -17,6 +17,31 @@ opts_chunk$set( echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 
 ## What's New
 
+#### November 2026
+
+* mixOmics is now licensed under AGPL (>= 3) instead of GPL (>= 2) ([#421](https://github.com/mixOmics-org/mixOmics/pull/421))
+* `circosPlot()` is drawn by new code ([#419](https://github.com/mixOmics-org/mixOmics/pull/419))
+* bug fix implemented in [#419](https://github.com/mixOmics-org/mixOmics/pull/419): `circosPlot()` showed block names containing "chr" truncated (e.g. "chromatin" as "omatin") and failed with `line = TRUE`
+* bug fix implemented in [#419](https://github.com/mixOmics-org/mixOmics/pull/419): `circosPlot()` with several blocks in `blocks.link` kept only about half of the links
+
+#### October 2026
+
+* bug fix implemented for [#405](https://github.com/mixOmics-org/mixOmics/issues/405): `plotVar()` no longer places points outside the correlation circle when the plotted components are not orthogonal (Y block of `block.pls()` and `block.spls()`, `rcc()` with ridge regularisation, blocks with missing values)
+* bug fix implemented for [#400](https://github.com/mixOmics-org/mixOmics/issues/400): `perf()` and `perf.assess()` on DIABLO models now accept `folds` as a list
+* enhancement request [#369](https://github.com/mixOmics-org/mixOmics/issues/369) and [#383](https://github.com/mixOmics-org/mixOmics/issues/383): `predict()` on multi-block models is 3 to 67 times faster, and `perf()` and `tune.block.plsda()` about 2 times faster, with identical results
+* `?plot.perf.pls` now has examples ([#414](https://github.com/mixOmics-org/mixOmics/pull/414))
+* `citation("mixOmics")` now gives the full author names and the DOI ([#416](https://github.com/mixOmics-org/mixOmics/pull/416))
+
+#### September 2026
+
+* bug fix implemented for [#402](https://github.com/mixOmics-org/mixOmics/issues/402) and [#324](https://github.com/mixOmics-org/mixOmics/issues/324): `circosPlot()` no longer fails with `subscript out of bounds` when a block, including the Y block, has a single selected variable
+
+#### August 2026
+
+* the GitHub repository moved from `mixOmicsTeam/mixOmics` to [`mixOmics-org/mixOmics`](https://github.com/mixOmics-org/mixOmics)
+* bug fix implemented in [#386](https://github.com/mixOmics-org/mixOmics/pull/386), building on [#368](https://github.com/mixOmics-org/mixOmics/pull/368) by David Hirst: `mint.block.pls()`, `mint.block.spls()`, `mint.block.plsda()` and `mint.block.splsda()` now return model objects with the same structure as the `block.*` models, so `predict()` works on them; `keepX` and `keepY` now return the values used (also fixed in `block.spls()`)
+* maintenance: GitHub Actions updated and pinned, Travis CI removed, `README.md` now rendered in pull requests, and Dependabot set up for monthly updates
+
 #### May 2026
 
 * bug fix implemented for [#377](https://github.com/mixOmicsTeam/mixOmics/issues/377) fixed vector `xlim` handling in the `graphics` branch of `plotLoadings()` contribution plots
