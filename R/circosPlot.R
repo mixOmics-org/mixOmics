@@ -111,23 +111,12 @@ circosPlot <- function(object, ...) UseMethod('circosPlot')
         }
         
         # to satisfy R CMD check that doesn't recognise x, y and group (in aes)
-        Features = Exp = Dataset = Mean = linkColors = chrom = po = NULL
+        Features = Exp = Dataset = Mean = NULL
         
         
         figSize = 800
         segmentWidth = 25
         linePlotWidth = 90
-        
-        ##############################
-        ###   networkDiagram_core.R
-        ###
-        ###   Authors: Michael Vacher (minor changes by Amrit :)
-        ###
-        ###   Parts of this code has been modified from the original OmicCircos
-        ###     package obtained from:
-        ###   Ying Hu Chunhua Yan <yanch@mail.nih.gov> (2015). OmicCircos:
-        ###     High-quality circular visualization of omics data. v1.6.0.
-        ##############################
         
         # check input object
         if (!(inherits(object, c("block.plsda", "block.splsda", "block.pls", "block.spls"))))
@@ -319,9 +308,6 @@ circosPlot <- function(object, ...) UseMethod('circosPlot')
         chr$block <- NULL
         
         chr.names = unique(chr$chrom) # paste("chr", 1:seg.num, sep="") 
-        # Calculate angles and band positions
-        db = segAnglePo(chr, seg=chr.names)
-        db = data.frame(db)
         
         # 2) Generate Links
         blocks.link <- list(...)$blocks.link
@@ -342,56 +328,34 @@ circosPlot <- function(object, ...) UseMethod('circosPlot')
         ind.match = match(chr$name, unlist(sapply(object$loadings,rownames)))
         chr$name.user = unlist(var.names.list)[ind.match]
         
+        # Calculate the angles of the blocks and bands
+        layout = .circos_layout(chr, blocks = chr.names, centre = figSize / 2)
+        
         opar1=par("mar")
         par(mar=c(2, 2, 2, 2))
         
         plot(c(1,figSize), c(1,figSize), type="n", axes=FALSE, xlab="",
              ylab="", main="")
         
-        #save(list=ls(),file="temp.Rdata")
-        # Plot ideogram
-        drawIdeogram(R=circleR, cir=db, W=segmentWidth,  show.band.labels=TRUE,
-                     show.chr.labels=TRUE, chr.labels.R= chrLabelsR, chrData=chr,
-                     size.variables = size.variables, size.labels=size.labels,
-                     color.blocks = color.blocks, line = line, ...)
+        # Plot blocks, bands and their labels
+        .circos_draw_blocks(layout, r = circleR, width = segmentWidth,
+                            label.r = chrLabelsR, size.variables = size.variables,
+                            size.labels = size.labels, line = line, ...)
         # Plot links
         if(nrow(links)>0)
-            drawLinks(R=linksR, cir=db,   mapping=links,   col=linkColors, lineWidth = linkWidth,
-                      drawIntraChr=showIntraLinks, color.cor = color.cor)
+            .circos_draw_links(layout, links, r = linksR, linkWidth = linkWidth,
+                               showIntraLinks = showIntraLinks, color.cor = color.cor)
         
         # Plot expression values
-        cTypes = levels(Y)
-        #unique(featExp[,1]) #Get the different disease/cancer types (lines)
-        #lineCols = rainbow(nrow(cTypes), alpha=0.5)
         lineCols = color.Y
-        #color.mixo(1:nlevels(Y))#color.mixo(match(levels(Y), levels(Y)))
-        
-        # Fixme: remove this loop and send the whole expr dframe to drawLinePlot
         if(line==TRUE)
         {
-            for (i in 1:length(chr.names)){
-                seg.name = gsub("chr","",chr.names[i])
-                #Get data for each segment
-                expr = subset(featExp,featExp$Dataset==seg.name)
-                
-                expr = dcast(expr, formula = Features ~ Y, value.var="Mean")
-                ## changed PAM50 to Y
-                expr = merge(expr, chr, by.x="Features", by.y="name")
-                expr$po = (as.numeric(expr$chromStart) +
-                               as.numeric(expr$chromEnd)) / 2.0
-                #' @importFrom dplyr rename
-                expr = rename(expr, seg.name = chrom, seg.po = po)
-                
-                # Reorder columns
-                cOrder = c(c(grep("seg.name", colnames(expr)),
-                             grep("seg.po", colnames(expr))),c(1:length(cTypes)+1))
-                expr = expr[, cOrder]
-                
-                # Plot data on each sub segment
-                subChr = subset(db, db$seg.name == chr.names[i] )
-                drawLinePlot(R=linePlotR, cir=subChr,   W=linePlotWidth,
-                             lineWidth=1, mapping=expr, col=lineCols, scale=FALSE)
-            }
+            ## mean expression of each feature (rows) in each level of Y (columns)
+            expr = dcast(as.data.frame(featExp), formula = Features ~ Y,
+                         value.var = "Mean")
+            .circos_draw_expression(layout, expr, r = linePlotR,
+                                    width = linePlotWidth, col = lineCols,
+                                    levels = levels(Y))
         }
         opar=par("xpd")
         par(xpd=TRUE) # to authorise the legend to be written outside the margin,
@@ -434,12 +398,12 @@ circosPlot <- function(object, ...) UseMethod('circosPlot')
         }
         return(invisible(simMat))
     }
-
+        
 #' @method circosPlot block.splsda
 #' @rdname circosPlot
 #' @export
 circosPlot.block.splsda <- .circosPlot
-
+        
 #' @method circosPlot block.plsda
 #' @rdname circosPlot
 #' @export
@@ -481,245 +445,174 @@ circosPlot.block.spls <- function(object, ..., group = NULL, Y.name = 'Y')
 circosPlot.block.pls <- circosPlot.block.spls
 
 ## ------------- circosPlot utils
-drawIdeogram = function(R, xc=400, yc=400, cir, W,
-                        show.band.labels = FALSE,
-                        show.chr.labels = FALSE, chr.labels.R = 0,
-                        chrData,
-                        size.variables,
-                        size.labels,
-                        color.blocks,
-                        line,
-                        var.adj = -0.33, ## radial adjustment of feature names
-                        block.labels.adj = 0, ## radial adjustment of block label names
-                        ...)
+## Positions around the circle are given as angles in degrees which, like on a
+## clock, increase clockwise: 0 points to 3 o'clock and 270 to 12 o'clock.
+
+## x and y coordinates of the points at the given angles and distances (r)
+## from the centre of the plot
+.circos_xy <- function(angle, r, centre)
 {
-    # Draw the main circular plot: segments, bands and labels
-    chr.po    = cir 
-    chr.po[,1]  = gsub("chr","",chr.po[,1]) 
-    chr.num     = nrow(chr.po) 
-    dat.c     = chrData 
-    dat.c[,1] = gsub("chr", "", dat.c[,1]) 
-    
-    for (chr.i in c(1:chr.num)){
-        chr.s  = chr.po[chr.i,1] 
-        
-        v1 = as.numeric(chr.po[chr.i,2]) 
-        v2 = as.numeric(chr.po[chr.i,3]) 
-        v3 = as.numeric(chr.po[chr.i,6]) 
-        v4 = as.numeric(chr.po[chr.i,7]) 
-        
-        dat.v = subset(dat.c, dat.c[,1]==chr.s) 
-        dat.v = dat.v[order(as.numeric(dat.v[,2])),] 
-        for (i in 1:nrow(dat.v)){
-            
-            #col.v = which(colors()==dat.v[i,5])  #get color index
-            #col = colors()[col.v]
-            dark.clear = color.blocks#brewer.pal(n = 12, name = 'Paired')
-            col.v = which(dark.clear==dat.v[i,5])  #get color index
-            col = dark.clear[col.v]
-            
-            w1 = scale.v(as.numeric(dat.v[i,2]), v1, v2, v3, v4) 
-            w2 = scale.v(as.numeric(dat.v[i,3]), v1, v2, v3, v4) 
-            
-            draw.arc.s(xc, yc, R, w1, w2, col=col, lwd=W) 
-            
-            if (show.band.labels){
-                band.text = as.character(dat.v[i,"name.user"]) 
-                
-                band.po = ((w1+w2)/2)# - ((w2-w1)/3) #position around the circle
-                # print(c(band.po, w1, w2, (w2-w1)/3))
-                band.po.in = R + W*var.adj #position on the band (middle)
-                draw.text.rt(xc, yc,band.po.in  , band.po , band.text ,
-                             cex = size.variables, segmentWidth = W, side="in" )
-            }
-        } #End for row
-        if (show.chr.labels){
-            w.m = (v1+v2)/2 
-            chr.t = gsub("chr", "", chr.s)
-            if(line == TRUE)
-            {
-                draw.text.rt(xc, yc, chr.labels.R, w.m, chr.t, cex=size.labels,
-                             segmentWidth = W, parallel=TRUE)
-            } else {
-                #put the labels closer to the circle
-                draw.text.rt(xc, xc, chr.labels.R, w.m, chr.t, cex=size.labels,
-                             segmentWidth = 55 + ceiling(block.labels.adj*55), parallel=TRUE)
-            }
-        }
-    } #End for
+    rad <- angle * pi / 180
+    list(x = centre + r * cos(rad), y = centre - r * sin(rad))
 }
 
-drawLinks = function(R, xc=400, yc=400, cir, W,
-                     mapping=mapping,
-                     lineWidth=1, col=rainbow(10, alpha=0.8)[7],  drawIntraChr=FALSE,
-                     color.cor = color.cor)
+## Angular layout of the plot. Blocks are placed clockwise from 12 o'clock in
+## the order of 'blocks', each followed by a gap of 'gap' degrees, and the rest
+## of the circle is shared equally between the bands (features) of all blocks.
+## Returns the bands of 'chr' (output of genChr) with their start, end and mid
+## angles, ordered by block and position, and the start and end angles of
+## each block.
+.circos_layout <- function(chr, blocks, centre, gap = 2)
 {
-    # Draw the links (computed correlation) between features
-    chr.po    = cir 
-    chr.po[,1]  = gsub("chr","",chr.po[,1]) 
-    chr.num     = nrow(chr.po) 
+    band.start <- as.numeric(chr$chromStart)
+    band.end <- as.numeric(chr$chromEnd)
+    block.size <- vapply(blocks, function(b) max(band.end[chr$chrom == b]),
+                         numeric(1), USE.NAMES = FALSE)
+    deg.per.unit <- (360 - gap * length(blocks)) / sum(block.size)
+    block.start <- 270 + deg.per.unit * (cumsum(block.size) - block.size) +
+        gap * (seq_along(blocks) - 1)
     
-    chr.po[,4] = gsub("chr", "", chr.po[,4]) 
-    dat.in = mapping 
-    dat.in[,1] = gsub("chr", "", dat.in[,1]) 
-    dat.in[,4] = gsub("chr", "", dat.in[,4]) 
+    block.id <- match(chr$chrom, blocks)
+    bands <- chr
+    bands$angle.start <- block.start[block.id] + deg.per.unit * band.start
+    bands$angle.end <- block.start[block.id] + deg.per.unit * band.end
+    bands$angle.mid <- (bands$angle.start + bands$angle.end) / 2
     
-    dat    = dat.in 
-    ## line width based on on abs(cor) 
-    lineWidth.range = lineWidth
-    lineWidths = abs(dat$value)
-    ## normlaised so that (cutoff, 1) would map to lineWidth.range
-    lineWidths = (lineWidths - min(lineWidths)) / (1 - min(lineWidths))
-    lineWidths = lineWidths*(lineWidth.range[2] - lineWidth.range[1]) + lineWidth.range[1]
-    for (i in 1:nrow(dat)){
-        chr1.s   = dat[i,1] 
-        chr2.s   = dat[i,4] 
-        po1      = dat[i,2] 
-        po2      = dat[i,5] 
-        lineWidth = lineWidths[i]
-        
-        chr1     = which(chr.po[,1]==chr1.s) 
-        chr2     = which(chr.po[,1]==chr2.s) 
-        
-        v1 = as.numeric(chr.po[chr1,2]) 
-        v2 = as.numeric(chr.po[chr1,3]) 
-        v3 = as.numeric(chr.po[chr1,6]) 
-        v4 = as.numeric(chr.po[chr1,7]) 
-        
-        w1 = scale.v(as.numeric(po1), v1, v2, v3, v4) 
-        
-        v1 = as.numeric(chr.po[chr2,2]) 
-        v2 = as.numeric(chr.po[chr2,3]) 
-        v3 = as.numeric(chr.po[chr2,6]) 
-        v4 = as.numeric(chr.po[chr2,7]) 
-        
-        w2 = scale.v(as.numeric(po2), v1, v2, v3, v4) 
-        # Set the link width depending on the correlation coefficient
-        lwd = abs(as.numeric(dat[i,7])) 
-        
-        # Set link color
-        if (as.numeric(dat[i,7]) < 0.0){
-            linkCol = color.cor[2]#colors()[128]  #pale red
-        } else {
-            linkCol = color.cor[1]#colors()[134]  # blue
-        }
-        linkCol = add.alpha(linkCol, alpha=0.4) 
-        
-        if (chr1 == chr2){
-            if (drawIntraChr == TRUE){
-                draw.link(xc, yc, R, w1, w2, col=linkCol, lwd=lineWidth) 
-            }
-        } else {
-            draw.link(xc, yc, R, w1, w2, col=linkCol, lwd=lineWidth) 
-        }
-    } ### End for
+    list(centre = centre,
+         blocks = data.frame(block = blocks,
+                             angle.start = block.start,
+                             angle.end = block.start + deg.per.unit * block.size),
+         bands = bands[order(block.id, band.start), ])
 }
 
-drawLinePlot = function(mapping=mapping, xc=400, yc=400, col.v=3,
-                        R, cir,   W, col='black', scale=FALSE, lineWidth=1,
-                        background.lines=FALSE,axis.width=1)
+## Draw a band as a thick arc of the circle
+.circos_arc <- function(angle.start, angle.end, r, centre, col, lwd)
 {
-    # Generate a linear plot around the main ideogram.
-    #
-    # fixme: the function writes the same line multiple times
-    # it needs to be called only once and process the data/segment
-    # separately
-    chr.po    = cir 
-    chr.po[,1]  = gsub("chr","",chr.po[,1]) 
-    chr.num     = nrow(chr.po) 
+    ## about 5 vertices per degree give a smooth arc
+    n <- max(2, ceiling(5 * abs(angle.end - angle.start)))
+    p <- .circos_xy(seq(angle.end, angle.start, length.out = n), r, centre)
+    lines(p$x, p$y, col = col, lwd = lwd, lend = "butt")
+}
+
+## Write a label at the given angle and distance (r) from the centre. The label
+## follows the radius (or the circle if tangent = TRUE) and is flipped on the
+## left half of the plot so that it never reads upside down. The anchor point
+## is first moved horizontally by 'shift' towards the centre, and the text is
+## then written away from it.
+.circos_label <- function(angle, r, centre, label, cex, shift, tangent = FALSE)
+{
+    ## direction of the radius, counter-clockwise from 3 o'clock, in (0, 360]
+    direction <- 360 - angle %% 360
+    right <- direction <= 90 || direction > 270
+    if (tangent)
+        srt <- if (direction <= 180) direction - 90 else direction - 270
+    else
+        srt <- if (right) direction else direction - 180
     
-    dat.in   = mapping 
-    dat.in[,1] = gsub("chr", "", dat.in[,1]) 
+    p <- .circos_xy(angle, r, centre)
+    text(p$x + if (right) -shift else shift, p$y, labels = label, srt = srt,
+         pos = if (right) 4 else 2, offset = 1, cex = cex, col = "black")
+}
+
+## Draw the bands of each block with the feature names, then the block name
+.circos_draw_blocks <- function(layout, r, width, label.r,
+                                size.variables, size.labels, line,
+                                var.adj = -0.33, ## radial adjustment of feature names
+                                block.labels.adj = 0, ## adjustment of block label names
+                                ...)
+{
+    bands <- layout$bands
+    ## block names are written closer to the circle when there are no lines
+    block.shift <- if (line) width else 55 + ceiling(block.labels.adj * 55)
     
-    # data set for the chromosome
-    for (chr.i in 1:chr.num){
-        chr.s = chr.po[chr.i,1] 
-        chr.s = gsub("chr","",chr.s) 
-        dat   = subset(dat.in, dat.in[,1]==chr.s) 
-        dat   = dat[order(as.numeric(dat[,2])),] 
-        v1 = as.numeric(chr.po[chr.i,2]) ## angle.start
-        v2 = as.numeric(chr.po[chr.i,3]) ## angle.end
-        v3 = as.numeric(chr.po[chr.i,6]) ## seg.start
-        v4 = as.numeric(chr.po[chr.i,7]) ## seg.end
-        
-        # background line
-        if (background.lines){
-            draw.arc.pg(xc, yc, v1, v2, R, R+W-5, col=colors()[245]) 
-        } else {
-            # draw.arc.s(xc, yc, R, v1, v2, col=colors()[245], lwd=axis.width) 
+    for (b in seq_len(nrow(layout$blocks)))
+    {
+        block <- layout$blocks[b, ]
+        for (i in which(bands$chrom == block$block))
+        {
+            .circos_arc(bands$angle.start[i], bands$angle.end[i], r = r,
+                        centre = layout$centre, col = bands$color[i], lwd = width)
+            .circos_label(bands$angle.mid[i], r = r + width * var.adj,
+                          centre = layout$centre,
+                          label = as.character(bands$name.user[i]),
+                          cex = size.variables, shift = width)
         }
+        .circos_label((block$angle.start + block$angle.end) / 2, r = label.r,
+                      centre = layout$centre, label = sub("^chr", "", block$block),
+                      cex = size.labels, shift = block.shift, tangent = TRUE)
     }
+}
+
+## Draw the links between correlated features (output of genLinks). Each link
+## is a cubic Bezier curve whose two control points are the centre of the
+## circle. Its width grows linearly with the absolute similarity, from
+## linkWidth[1] for the weakest link to linkWidth[2] for a similarity of 1.
+.circos_draw_links <- function(layout, links, r, linkWidth, showIntraLinks,
+                               color.cor)
+{
+    centre <- layout$centre
+    bands <- layout$bands
+    from <- .circos_xy(bands$angle.mid[match(links$feat1, bands$name)], r, centre)
+    to <- .circos_xy(bands$angle.mid[match(links$feat2, bands$name)], r, centre)
     
-    my.R1 = R + W/5 
-    my.R2 = R + W - W/5 
-    
-    ## for the matrix colors
-    num.col = ncol(dat[,col.v:ncol(dat)]) 
-    num.row = nrow(dat.in) 
-    
-    if (length(col) == num.col){
-        colors = col 
+    strength <- abs(links$value)
+    weakest <- min(strength)
+    if (weakest < 1) {
+        lwd <- linkWidth[1] +
+            (strength - weakest) / (1 - weakest) * (linkWidth[2] - linkWidth[1])
     } else {
-        colors = rainbow(num.col, alpha=0.5) 
+        lwd <- rep(linkWidth[2], length(strength))
     }
+    ## first colour for positive, second for negative similarities
+    col <- add.alpha(ifelse(links$value < 0, color.cor[2], color.cor[1]),
+                     alpha = 0.4)
     
-    for (chr.i in 1:chr.num){
-        chr.s = chr.po[chr.i,1] 
-        chr.s = gsub("chr","",chr.s) 
-        
-        dat   = subset(dat.in, dat.in[,1]==chr.s) 
-        dat   = dat[order(as.numeric(dat[,2])),] 
-        #print(head(dat))
-        dat.i   = c(col.v:ncol(dat)) 
-        dat.m   = dat.in[,dat.i] 
-        dat.m   = as.matrix(dat.m) 
-        dat.min = min(as.numeric(dat.m), na.rm=TRUE)
-        dat.max = max(as.numeric(dat.m), na.rm=TRUE) 
-        
-        v1 = as.numeric(chr.po[chr.i,2]) 
-        v2 = as.numeric(chr.po[chr.i,3]) 
-        v3 = as.numeric(chr.po[chr.i,6]) 
-        v4 = as.numeric(chr.po[chr.i,7]) 
-        
-        col.i = 0 
-        
-        for (j in col.v:ncol(dat)){
-            col.i = col.i + 1 
-            col   = colors[col.i] 
-            
-            my.v      = as.numeric(dat[1,j]) 
-            dat.i.old = my.v 
-            v.old   = scale.v(my.v, my.R1, my.R2, dat.min, dat.max) 
-            
-            po      = as.numeric(dat[1,2]) 
-            w.from  = scale.v(po, v1, v2, v3, v4) 
-            
-            
-            for (k in 1:nrow(dat)){
-                
-                dat.i = as.numeric(dat[k,j]) 
-                
-                if (is.na(dat.i)){
-                    next 
-                }
-                
-                v    = scale.v(dat.i, my.R1, my.R2, dat.min, dat.max) 
-                w.to = scale.v(as.numeric(dat[k,2]), v1, v2, v3, v4) 
-                
-                if (w.from > 0){
-                    draw.line3(xc, yc, w.from, w.to, v.old, v, col=col,
-                               lwd=lineWidth)
-                }
-                
-                dat.i.old = dat.i 
-                w.from    = w.to 
-                v.old     = v 
-            } # end the row
-        }   # end the col
-        if (scale){
-            do.scale(xc, yc, dat.min, dat.max, R+W/5, W-2*(W/5)) 
+    t <- seq(0, 1, length.out = 60)
+    for (i in seq_len(nrow(links)))
+    {
+        if (!showIntraLinks && links$chr1[i] == links$chr2[i])
+            next
+        ## B(t) = (1-t)^3 from + 3t(1-t) centre + t^3 to
+        x <- (1 - t)^3 * from$x[i] + 3 * t * (1 - t) * centre + t^3 * to$x[i]
+        y <- (1 - t)^3 * from$y[i] + 3 * t * (1 - t) * centre + t^3 * to$y[i]
+        lines(x, y, col = col[i], lwd = lwd[i], lend = "butt")
+    }
+}
+
+## Draw around the circle the mean expression of the features of each block,
+## with one line per level of Y. 'expr' has a 'Features' column and one column
+## of means per level. Each block is drawn on its own scale.
+.circos_draw_expression <- function(layout, expr, r, width, col, levels)
+{
+    bands <- layout$bands
+    lvls <- setdiff(colnames(expr), "Features")
+    ## leave a fifth of the track empty on each side
+    r.range <- c(r + width / 5, r + width - width / 5)
+    
+    for (block in layout$blocks$block)
+    {
+        b <- bands[bands$chrom == block, ]
+        means <- as.matrix(expr[match(b$name, expr$Features), lvls, drop = FALSE])
+        if (all(is.na(means)))
+            next
+        m.range <- range(means, na.rm = TRUE)
+        for (j in seq_along(lvls))
+        {
+            keep <- !is.na(means[, j])
+            if (sum(keep) < 2)
+                next
+            if (diff(m.range) > 0) {
+                radius <- r.range[1] + (means[keep, j] - m.range[1]) /
+                    diff(m.range) * diff(r.range)
+            } else {
+                radius <- rep(mean(r.range), sum(keep))
+            }
+            p <- .circos_xy(b$angle.mid[keep], radius, layout$centre)
+            n <- length(p$x)
+            segments(p$x[-n], p$y[-n], p$x[-1], p$y[-1],
+                     col = col[match(lvls[j], levels)], lwd = 1, lend = "butt")
         }
-    }     # end the chr/segment
+    }
 }
 
 genChr =function (expr, bandWidth = 1.0, color.blocks)
@@ -734,7 +627,7 @@ genChr =function (expr, bandWidth = 1.0, color.blocks)
     #   bandWidth: thickness of each band
     #
     # Return:
-    #   a data.frame that can be used with segAnglePo
+    #   a data.frame that can be used with .circos_layout
     
     # expr can contains expression data for multiple diseases
     # here, we only use the Chrom and Dataset column and remove duplicates
@@ -776,9 +669,8 @@ genChr =function (expr, bandWidth = 1.0, color.blocks)
         }
         seg.out = rbind(seg.out, c(chrName, pStart, pStop,  fName, chrCol)) 
     }
-    
-    # Use the same names than in omicCircos
-    colnames(seg.out) = c("chrom", "chromStart", "chromEnd", "name", "color") 
+
+    colnames(seg.out) = c("chrom", "chromStart", "chromEnd", "name", "color")
     seg.out = as.data.frame(seg.out) 
     
     return(seg.out) 
@@ -800,7 +692,8 @@ genLinks = function(chr, simMat, threshold, blocks.link = NULL)
     #   threshold: minimum correlation value
     #
     # Return:
-    #   the links data (see omicsCircos doc)
+    #   a data.frame with one row per link: chr1, po1, feat1, chr2, po2,
+    #   feat2 and value (the similarity)
     #
     linkList = c() 
     # Remove matrix diagonal and the the mat in a list
@@ -811,7 +704,7 @@ genLinks = function(chr, simMat, threshold, blocks.link = NULL)
     ## Al: if we want links only to certain block
     if (!is.null(blocks.link)) {
         only.chr <- paste0('chr', blocks.link)
-        only.names <- chr[chr$chrom == only.chr,]$name
+        only.names <- chr[chr$chrom %in% only.chr,]$name
         linkList <- linkList[linkList$Var2 %in% only.names,]
     }
     
@@ -839,409 +732,6 @@ genLinks = function(chr, simMat, threshold, blocks.link = NULL)
     
     return(linkList) 
 }
-
-bezierCurve = function(x, y, n=10)  {  
-    outx = NULL  
-    outy = NULL   
-    i = 1	
-    for (t in seq(0, 1, length.out=n))		{		
-        b = bez(x, y, t)		
-        outx[i] = b$x		
-        outy[i] = b$y 		
-        i = i+1		
-    } 	
-    return (list(x=outx, y=outy))	
-} 
-
-##
-bez = function(x, y, t)	{	
-    outx = 0	
-    outy = 0	
-    n = length(x)-1	
-    for (i in 0:n)		{		
-        outx = outx + choose(n, i)*((1-t)^(n-i))*t^i*x[i+1]		
-        outy = outy + choose(n, i)*((1-t)^(n-i))*t^i*y[i+1]		
-    } 	
-    return (list(x=outx, y=outy))	
-}
-
-###########################################
-# one value : from a to b
-scale.v = function(v, a, b, min.v, max.v) {
-    v = v-min.v 
-    v = v/(max.v-min.v) 
-    v = v*(b-a) 
-    v+a
-}
-
-### draw.link
-draw.link = function(xc, yc, r, w1, w2, col=col, lwd=lwd) {
-    # for translocation
-    w3  = (w1+w2)/2 
-    w1  = w1/360*2*pi 
-    w2  = w2/360*2*pi 
-    w3  = w3/360*2*pi 
-    x0  = xc+r*cos(w1) 
-    y0  = yc-r*sin(w1) 
-    x1  = xc+r*cos(w2) 
-    y1  = yc-r*sin(w2) 
-    x = c(x0,xc,xc,x1) 
-    y = c(y0,yc,yc,y1) 
-    points(bezierCurve(x,y,60), type="l", col=col, lwd=lwd, lend="butt")
-}
-
-### draw.link2
-draw.link2 = function(xc, yc, r, w1, w2, col=col, lwd=lwd) {
-    # for translocation
-    w3  = (w1+w2)/2 
-    w1  = w1/360*2*pi 
-    w2  = w2/360*2*pi 
-    w3  = w3/360*2*pi 
-    x2  = xc+r/2*cos(w3) 
-    y2  = yc-r/2*sin(w3) 
-    x0  = xc+r*cos(w1) 
-    y0  = yc-r*sin(w1) 
-    x1  = xc+r*cos(w2) 
-    y1  = yc-r*sin(w2) 
-    x = c(x0, x2, x2, x1) 
-    y = c(y0, y2, y2, y1) 
-    points(bezierCurve(x,y,60), type="l", col=col, lwd=lwd, lend="butt")
-}
-###
-
-###
-draw.link.pg = function(xc, yc, r, w1.1, w1.2, w2.1, w2.2, col=col, lwd=lwd) {
-    w1 = w1.1 
-    w2 = w2.2 
-    w3  = (w1+w2)/2 
-    w1  = w1/360*2*pi 
-    w2  = w2/360*2*pi 
-    w3  = w3/360*2*pi 
-    x0  = xc+r*cos(w1) 
-    y0  = yc-r*sin(w1) 
-    x1  = xc+r*cos(w2) 
-    y1  = yc-r*sin(w2) 
-    x = c(x0,xc,xc,x1) 
-    y = c(y0,yc,yc,y1) 
-    bc1 = bezierCurve(x,y,60) 
-    
-    ang.d = abs(w1.1-w1.2) 
-    pix.n = ang.d * 10 
-    if (pix.n < 10){
-        pix.n = 10 
-    }
-    
-    ang.seq = rev(seq(w1.1,w1.2,length.out=pix.n)) 
-    ang.seq = ang.seq/360*2*pi 
-    
-    fan.1.x = xc + cos(ang.seq) * r 
-    fan.1.y = yc - sin(ang.seq) * r 
-    
-    ######################################################
-    w1 = w1.2 
-    w2 = w2.1 
-    w3  = (w1+w2)/2 
-    w1  = w1/360*2*pi 
-    w2  = w2/360*2*pi 
-    w3  = w3/360*2*pi 
-    x0  = xc+r*cos(w1) 
-    y0  = yc-r*sin(w1) 
-    x1  = xc+r*cos(w2) 
-    y1  = yc-r*sin(w2) 
-    x = c(x0,xc,xc,x1) 
-    y = c(y0,yc,yc,y1) 
-    bc2 = bezierCurve(x,y,60) 
-    
-    ang.d = abs(w2.1-w2.2) 
-    pix.n = ang.d * 10 
-    if (pix.n < 10){
-        pix.n = 10 
-    }
-    
-    ang.seq = rev(seq(w2.1,w2.2,length.out=pix.n)) 
-    ang.seq = ang.seq/360*2*pi 
-    
-    fan.2.x = xc + cos(ang.seq) * r 
-    fan.2.y = yc - sin(ang.seq) * r 
-    
-    polygon(c(bc1$x, fan.2.x, rev(bc2$x), rev(fan.1.x)),
-            c(bc1$y, fan.2.y, rev(bc2$y), rev(fan.1.y)),
-            fillOddEven=TRUE, border=col, col=col, lwd=lwd) 
-}
-
-###
-draw.point.w = function(xc, yc, r, w, col=col, cex=cex){
-    w = w/360*2*pi 
-    x = xc+r*cos(w) 
-    y = yc-r*sin(w) 
-    points(x, y, pch=20, col=col, cex=cex) 
-}
-
-###
-draw.text.w = function(xc, yc, r, w, n, col="black", cex=1){
-    w = w%%360 
-    w = w/360*2*pi 
-    x = xc+r*cos(w) 
-    y = yc-r*sin(w) 
-    text(x,y,labels=n, col=col, cex=cex) 
-}
-
-###
-draw.text.rt = function(xc, yc, r, w, n, col="black", cex=1, side="out",
-                        segmentWidth=20, parallel=FALSE){
-    w     = w%%360 
-    the.o = w 
-    
-    the.w = 360-w 
-    w     = w/360*2*pi 
-    x     = xc+r*cos(w) 
-    y     = yc-r*sin(w) 
-    
-    
-    num2  = (segmentWidth*2)/2.0 
-    b = the.w
-    if (side=="out"){
-        if (the.w <= 90 ){
-            the.pos = 4 
-            if (parallel == TRUE){
-                the.w = the.w -90 # 180 
-            }
-        } else if (the.w > 90 & the.w <= 180) {
-            if (parallel == TRUE){
-                the.w = the.w -90 # 180 
-            }
-            else {
-                the.w = the.w + 180 
-            }
-            the.pos = 2 
-        } else if (the.w > 180 & the.w <= 270){
-            the.w = the.w%%180 
-            if (parallel == TRUE){
-                the.w = the.w -90 # 180 
-            }
-            the.pos = 2 
-        } else if (the.w > 270 & the.w <= 360){
-            the.pos = 4 
-            if (parallel == TRUE){
-                the.w = the.w + 90 
-            }
-        }
-        
-        if (the.pos==2){
-            x = x+num2 
-        }
-        if (the.pos==4){
-            x = x-num2 
-        }
-    }
-    
-    if (side=="in"){
-        if (the.w <= 90 ){
-            the.pos = 4 
-        } else if (the.w > 90 & the.w <= 180) {
-            the.w = the.w + 180 
-            the.pos = 2 
-        } else if (the.w > 180 & the.w <= 270){
-            the.w = the.w%%180 
-            the.pos = 2 
-        } else if (the.w > 270 & the.w <= 360){
-            the.pos = 4 
-        }
-        
-        if (the.pos==2){
-            x = x+segmentWidth 
-        }
-        if (the.pos==4){
-            x = x-segmentWidth 
-        }
-    }
-    
-    
-    text(x, y, adj=0, offset=1, labels=n, srt=the.w,
-         pos=the.pos, col=col, cex=cex) 
-}
-
-###strokeLine2
-draw.line = function (xc, yc, w, l1, l2, col=col, lwd=lwd, lend=1) {
-    w  = (w/360)*2*pi 
-    x1 = xc+l1*cos(w) 
-    y1 = yc-l1*sin(w) 
-    x2 = xc+l2*cos(w) 
-    y2 = yc-l2*sin(w) 
-    segments(x1, y1, x2, y2, col=col, lwd=lwd, lend=lend) 
-}
-
-###strokeLine3
-draw.line2 = function (xc, yc, w, r, l, col=col, lwd=lwd){
-    line_w   = l 
-    theangle = w 
-    l1       = r 
-    theangle = (theangle/360)*2*pi 
-    x0       = xc+l1*cos(theangle) 
-    y0       = yc+l1*sin(theangle) 
-    w1       = 45/360*2*pi 
-    x1 = xc + sin(w1) * (x0) 
-    y1 = yc + cos(w1) * (y0) 
-    x2 = xc - sin(w1) * (x0) 
-    y2 = yc - cos(w1) * (y0) 
-    segments(x1, y1, x2, y2, col=col, lwd=lwd, lend="butt") 
-}
-
-###strokeLine by two angles
-draw.line3 = function (xc, yc, w1, w2, r1, r2, col=col, lwd=lwd){
-    theangle1 = w1 
-    theangle2 = w2 
-    l1        = r1 
-    l2        = r2 
-    
-    theangle1 = (theangle1/360)*2*pi 
-    x1        = xc+l1*cos(theangle1) 
-    y1        = yc-l1*sin(theangle1) 
-    
-    theangle2 = (theangle2/360)*2*pi 
-    x2        = xc+l2*cos(theangle2) 
-    y2        = yc-l2*sin(theangle2) 
-    
-    segments(x1, y1, x2, y2, col=col, lwd=lwd, lend="butt") 
-}
-
-### plot fan or sector that likes a piece of doughnut (plotFan)
-draw.arc.pg = function (xc, yc,
-                        w1, w2, r1, r2, col="lightblue", border="lightblue", lwd=0.01
-){
-    
-    ang.d = abs(w1-w2) 
-    pix.n = ang.d * 10 
-    if (pix.n < 10){
-        pix.n = 10 
-    }
-    
-    ang.seq = rev(seq(w1,w2,length.out=pix.n)) 
-    ang.seq = ang.seq/360*2*pi 
-    
-    fan.i.x = xc + cos(ang.seq) * r1 
-    fan.i.y = yc - sin(ang.seq) * r1 
-    
-    
-    fan.o.x = xc + cos(ang.seq) * r2 
-    fan.o.y = yc - sin(ang.seq) * r2 
-    
-    polygon(c(rev(fan.i.x), fan.o.x ), c(rev(fan.i.y), fan.o.y),
-            fillOddEven=TRUE, border=border, col=col, lwd=lwd, lend=1)
-    
-}
-
-draw.arc.s = function (xc, yc, r, w1, w2, col="lightblue", lwd=1, lend=1){
-    # Draw circular arcs for the main ideogram)
-    # s = simple
-    # r = radius
-    ang.d = abs(w1-w2) 
-    pix.n = ang.d * 5 
-    if (pix.n < 2){
-        pix.n = 2 
-    }
-    
-    ang.seq = rev(seq(w1,w2,length.out=pix.n)) 
-    ang.seq = ang.seq/360*2*pi 
-    
-    fan.i.x = xc + cos(ang.seq) * r 
-    fan.i.y = yc - sin(ang.seq) * r 
-    ## lend=0(round)  #lend=1(butt)  lend=2(square)
-    lines(fan.i.x, fan.i.y, col=col, lwd=lwd, type="l", lend=lend) 
-    #points(fan.i.x, fan.i.y, col=col, lwd=lwd, type="l", lend=lend) 
-}
-
-#########################################
-## segment to angle and position
-## segAnglePo
-#########################################
-
-# get angle if given seg and position
-# seg should be ordered by user
-segAnglePo = function (seg.dat=seg.dat, seg=seg, angle.start=angle.start,
-                       angle.end=angle.end){
-    
-    if (missing(angle.start)){
-        angle.start = 0 
-    }
-    if (missing(angle.end)){
-        angle.end = 360 
-    }
-    ## check data.frame?
-    colnames(seg.dat) = c("seg.name","seg.Start","seg.End","name","gieStain") 
-    
-    ## get length of the segomosomes
-    seg.l   = c() 
-    seg.min = c() 
-    seg.sum = c() 
-    seg.s   = 0 
-    seg.num   = length(seg) 
-    seg.names = seg 
-    
-    ########################################################
-    ########################################################
-    for (i in 1:seg.num){
-        seg.n = seg.names[[i]] 
-        
-        dat.m = subset(seg.dat, seg.dat[,1]==seg.n) 
-        seg.full.l = max(as.numeric(dat.m[,"seg.End"])) 
-        seg.full.m = min(as.numeric(dat.m[,"seg.Start"])) 
-        seg.l      = cbind(seg.l, seg.full.l) 
-        seg.min    = cbind(seg.min, seg.full.m) 
-        seg.s      = seg.s + seg.full.l 
-        seg.sum    = cbind(seg.sum, seg.s) 
-    }
-    
-    ## initial parameters
-    gap.angle.size = 2 
-    seg.angle.from = angle.start + 270 
-    
-    seg.full.l  = sum(as.numeric(seg.l)) 
-    angle.range = angle.end - angle.start 
-    cir.angle.r = (angle.range - seg.num * gap.angle.size)/seg.full.l 
-    
-    out.s     = c() 
-    l.old     = 0 
-    gap.angle = 0 
-    for (i in 1:seg.num){
-        seg.n = seg.names[[i]] 
-        dat.m = subset(seg.dat, seg.dat[,1]==seg.n) 
-        len   = seg.sum[i] 
-        w1    = cir.angle.r*l.old + gap.angle 
-        w2    = cir.angle.r*len   + gap.angle 
-        out.s     = rbind(out.s, c(seg.n, w1+seg.angle.from, w2+seg.angle.from,
-                                   l.old, len, seg.min[i], seg.l[i]))
-        gap.angle = gap.angle + gap.angle.size 
-        l.old     = len 
-    }
-    
-    colnames(out.s) = c("seg.name","angle.start", "angle.end", "seg.sum.start",
-                        "seg.sum.end","seg.start", "seg.end")
-    return(out.s) 
-}
-
-
-### start do.scale
-do.scale = function(xc=xc, yc=yc, dat.min=dat.min, dat.max=dat.max,
-                    R=R, W=W, s.n=1, col="blue"){
-    dat.m   = round((dat.min+dat.max)/2, s.n) 
-    dat.min = round(dat.min, s.n) 
-    dat.max = round(dat.max, s.n) 
-    y1      = yc + R  
-    y2      = yc + R + W/2 
-    y3      = yc + R + W 
-    x1      = xc - W/20 
-    x2      = x1 - (W/20)*1.2 
-    x3      = x1 - (W/20)*3 
-    segments(x1, y1, x1, y3, lwd=0.01, col=col) 
-    segments(x1, y1, x2, y1, lwd=0.01, col=col) 
-    segments(x1, y2, x2, y2, lwd=0.01, col=col) 
-    segments(x1, y3, x2, y3, lwd=0.01, col=col) 
-    text(x3, y1, dat.min, cex=0.2, col=col) 
-    text(x3, y2, dat.m,   cex=0.2, col=col) 
-    text(x3, y3, dat.max, cex=0.2, col=col)
-}
-### end do.scale
 
 ## Add an alpha value to a colour
 add.alpha = function(col, alpha=1){
