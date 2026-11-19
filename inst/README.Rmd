@@ -29,15 +29,13 @@ opts_knit$set(cache.path = "whatsnew-files/")
 # if (!requireNamespace('badger', quietly = TRUE))
 #   install.packages("badger")
 library(badger)
-pkg_license <- read.dcf("../DESCRIPTION")[, "License"]
-pkg_license_badge <- sprintf("https://img.shields.io/badge/license-%s-lightgrey.svg", pkg_license)
 ```
 
 `r badge_bioc_download_rank('mixOmics')`
 `r badge_github_actions(re = "mixOmics-org/mixOmics", action = "R-CMD-check.yml")`
 `r badge_last_commit("mixOmics-org/mixOmics", branch='master')`
 `r badge_codecov("mixOmics-org/mixOmics", branch='master')`
-[![license](`r pkg_license_badge`)](https://choosealicense.com/)
+`r badge_license(color = "lightgrey")`
 [![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
 ![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
