@@ -6,7 +6,8 @@
 status](https://github.com/mixOmics-org/mixOmics/workflows/R-CMD-check.yml/badge.svg)](https://github.com/mixOmics-org/mixOmics/actions)
 [![](https://img.shields.io/github/last-commit/mixOmics-org/mixOmics.svg)](https://github.com/mixOmics-org/mixOmics/commits/master)
 [![](https://codecov.io/gh/mixOmics-org/mixOmics/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mixOmics-org/mixOmics)
-[![license](https://img.shields.io/badge/license-GPL%20(%3E=%202)-lightgrey.svg)](https://choosealicense.com/)
+[![License:
+AGPL-3](https://img.shields.io/badge/license-AGPL--3-lightgrey.svg)](https://cran.r-project.org/web/licenses/AGPL-3)
 [![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
 ![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
@@ -218,7 +219,7 @@ Thank you!
 
 #### November 2026
 
-- mixOmics is now licensed under AGPL (\>= 3) instead of GPL (\>= 2)
+- mixOmics is now licensed under AGPL-3 instead of GPL (\>= 2)
   ([\#421](https://github.com/mixOmics-org/mixOmics/pull/421))
 - `circosPlot()` is drawn by new code
   ([\#419](https://github.com/mixOmics-org/mixOmics/pull/419))
