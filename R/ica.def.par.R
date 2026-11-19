@@ -1,28 +1,33 @@
 ################################################################################
-# Authors:
-#   The function ica.par and ica.def are borrowed from the fastICA package
-#   (see references in help file).
-#
 # created: 2011
 # last modified: 2011
 #
-# Copyright (C) 2011
+# This file is part of mixOmics.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - ica.def() and ica.par(): adapted from ica.R.def() and ica.R.par()
+#     of the fastICA package (version 1.1-13) by J L Marchini, C Heaton
+#     and B D Ripley, GPL-2 | GPL-3.
 ###############################################################################
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: J L Marchini, C Heaton, B D Ripley (fastICA)
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
 ica.def <-
     function (X, ncomp, tol, fun, alpha, max.iter, verbose, w.init)
     {
@@ -149,3 +154,4 @@ ica.par <- function (X, ncomp, tol, fun, alpha, max.iter, verbose, w.init)
     }
     return(W)
 }
+# SPDX-SnippetEnd

@@ -1,3 +1,24 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - summary.pca(): adapted from summary.prcomp() of the R stats package
+#     by the R Core Team, GPL (>= 2).
+
 #--------------------------------------------------------#
 #-- Includes summary.pls, summary.spls and summary.rcc --#
 #--------------------------------------------------------#
@@ -325,10 +346,12 @@ summary.rcc <-
     }
 
 ## --------------------------------- PCA ---------------------------------- ##
-# from summary.prcomp, adapted for mixOmics
 #' @rdname summary
 #' @method summary pca
 #' @export
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: The R Core Team (R stats package)
+# SPDX-License-Identifier: GPL-2.0-or-later
 summary.pca <-
     function (object, ...)
     {
@@ -343,4 +366,5 @@ summary.pca <-
         class(object) <- "summary.prcomp"
         object
     }
+# SPDX-SnippetEnd
 

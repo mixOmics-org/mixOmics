@@ -1,3 +1,25 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - nearZeroVar() and its documentation: adapted from nearZeroVar()
+#     of the caret package by Max Kuhn and Allan Engelhardt, GPL (>= 2)
+#     since caret 6.0-41.
+
 ## ------------------------ .plotLoadings_barplot ------------------------- ##
 #' plotLoadings helper
 #'
@@ -330,6 +352,9 @@ mat.rank = function (mat, tol)
     return(list(rank = r, tol = tol))
 }
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Max Kuhn, Allan Engelhardt (caret)
+# SPDX-License-Identifier: GPL-2.0-or-later
 ## ----------------------------- nearZeroVar ------------------------------ ##
 #' Identification of zero- or near-zero variance predictors
 #' 
@@ -415,6 +440,7 @@ nearZeroVar = function (x, freqCut = 95/5, uniqueCut = 10)
     out$Metrics = out$Metrics[out$Position, ]
     return(out)
 }
+# SPDX-SnippetEnd
 
 
 ## ----------------------------- %=% ----------------------------- ##

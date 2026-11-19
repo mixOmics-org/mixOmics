@@ -6,26 +6,31 @@
 #  Leigh Coonan, Queensland Faculty for Advanced Bioinformatics, Australia
 #  Fangzhou Yao, Queensland Faculty for Advanced Bioinformatics, Australia
 #  Sebastien Dejean, Institut de Mathematiques, Universite de Toulouse et CNRS (UMR 5219), France
-# Part of this script was borrowed from the prcomp function from the Stats package
 #
 # created: 2009
 # last modified:
 #
-# Copyright (C) 2009
+# This file is part of mixOmics.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - The centring, scaling, SVD and standard deviation steps of
+#     pcasvd(): adapted from prcomp() of the R stats package by the
+#     R Core Team, GPL (>= 2).
 #############################################################################################################
 
 
@@ -37,22 +42,28 @@ pcasvd <- function(X,
 {
     X = as.matrix(X)
     
-    # Borrowed from PRCOMP
+    # SPDX-SnippetBegin
+    # SPDX-SnippetCopyrightText: The R Core Team (R stats package)
+    # SPDX-License-Identifier: GPL-2.0-or-later
     result = svd(get("scale", envir = .GlobalEnv)(X, center = center, scale = scale), nu = 0)
     cen = attr(X, "scaled:center")
     sc = attr(X, "scaled:scale")
     if (any(sc == 0))
         stop("cannot rescale a constant/zero column to unit variance.")
+    # SPDX-SnippetEnd
     
     # If ncomp is not defined by user at the beginning then this algorithm will calculate an ncomp to be used
     if (is.null(ncomp))
         ncomp = min(nrow(X), ncol(X))
     
-    # Borrowed from PRCOMP
+    # SPDX-SnippetBegin
+    # SPDX-SnippetCopyrightText: The R Core Team (R stats package)
+    # SPDX-License-Identifier: GPL-2.0-or-later
     if (ncomp < ncol(X))
         result$v = result$v[, 1:ncomp, drop = FALSE]
     
     result$d = result$d/sqrt(max(1, nrow(X) - 1))
+    # SPDX-SnippetEnd
     
     if(retx)
     {

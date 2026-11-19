@@ -1,3 +1,19 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # ========================================================================================================
 # mint.block.pls: perform a horizontal and vertical PLS on a combination of datasets, input as a list in X
 # this function is a particular setting of internal_mint.block,
