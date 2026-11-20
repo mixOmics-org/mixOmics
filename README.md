@@ -167,7 +167,7 @@ software consistency if you wish to contribute to `mixOmics` R codes.
 ### Bug reports and pull requests
 
 To report a bug (or offer a solution for a bug!) visit:
-<https://github.com/mixOmicsTeam/mixOmics/issues>. We fully welcome and
+<https://github.com/mixOmics-org/mixOmics/issues>. We fully welcome and
 appreciate well-formatted and detailed pull requests. Preferably with
 tests on our datasets.
 
