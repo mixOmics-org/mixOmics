@@ -13,6 +13,8 @@ Bioconductor 3.24.
 * `citation("mixOmics")` gives the full author names and the DOI (#416)
 * the GitHub repository moved from `mixOmicsTeam/mixOmics` to `mixOmics-org/mixOmics`
 * expanded test coverage for model utilities and internal helpers (#381)
+* Kim-Anh Lê Cao, creator of mixOmics, is now correctly set as the official Bioconductor maintainer for the package
+* new title and description, reflecting the package as it is today
 
 ### bug fixes
 
