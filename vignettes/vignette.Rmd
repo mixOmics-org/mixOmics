@@ -2,7 +2,7 @@
 title: 'mixOmics vignette'
 author:
 - name: Kim-Anh Le Cao
-  email: kimanh.lecao@unimelb.edu.au
+  email: kimanh@mixomics.org
   affiliation: Melbourne Integrative Genomics & School of Mathematics and Statistics, The University of Melbourne, Australia
 
 package: mixOmics
