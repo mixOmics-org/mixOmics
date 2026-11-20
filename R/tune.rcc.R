@@ -48,7 +48,7 @@
 #' @param folds positive integer. Number of folds to use if
 #' \code{validation="Mfold"}. Defaults to \code{folds=10}.
 #' @param BPPARAM a BiocParallel parameter object; see \code{BiocParallel::bpparam} 
-#' for details. Default is \code{MulticoreParam()} for parallel processing.
+#' for details. Default is \code{SerialParam()}, which runs on one core.
 #' @param seed set a number here if you want the function to give reproducible outputs. 
 #' Not recommended during exploratory analysis. Note if RNGseed is set in 'BPPARAM', this will be overwritten by 'seed'. 
 #' @return The returned value is a list with components: \item{opt.lambda1,}{}
