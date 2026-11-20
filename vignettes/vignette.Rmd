@@ -89,7 +89,7 @@ readr::write_lines(htmlhead, path = "header.html")
 
 # Preamble {-}
 
-If you are following our [online course](https://study.unimelb.edu.au/find/short-courses/mixomics-r-essentials-for-biological-data-integration/#course-specifics), the following vignette will be useful as a complementary learning tool. This vignette also covers the essential use cases of various methods in this package for the general `mixOmcis` user. The below methods will be covered:
+If you are following our [online course](https://study.unimelb.edu.au/find/short-courses/mixomics-r-essentials-for-biological-data-integration/#course-specifics), the following vignette will be useful as a complementary learning tool. This vignette also covers the essential use cases of various methods in this package for the general `mixOmics` user. The below methods will be covered:
 
 - (s)PCA, 
 - PLS1 and PLS2, 
