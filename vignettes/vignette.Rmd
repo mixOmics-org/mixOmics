@@ -2,7 +2,7 @@
 title: 'mixOmics vignette'
 author:
 - name: Kim-Anh Le Cao
-  email: kimanh.lecao@unimelb.edu.au
+  email: kimanh@mixomics.org
   affiliation: Melbourne Integrative Genomics & School of Mathematics and Statistics, The University of Melbourne, Australia
 
 package: mixOmics
@@ -16,7 +16,7 @@ documentclass: book
 bibliography: ["bibliography.bib"]
 biblio-style: apalike
 link-citations: true
-github-repo: mixOmicsTeam/mixOmics
+github-repo: mixOmics-org/mixOmics
 description: "Vignette for the R package mixOmics"
 
 vignette: >
@@ -89,7 +89,7 @@ readr::write_lines(htmlhead, path = "header.html")
 
 # Preamble {-}
 
-If you are following our [online course](https://study.unimelb.edu.au/find/short-courses/mixomics-r-essentials-for-biological-data-integration/#course-specifics), the following vignette will be useful as a complementary learning tool. This vignette also covers the essential use cases of various methods in this package for the general `mixOmcis` user. The below methods will be covered:
+If you are following our [online course](https://study.unimelb.edu.au/find/short-courses/mixomics-r-essentials-for-biological-data-integration/#course-specifics), the following vignette will be useful as a complementary learning tool. This vignette also covers the essential use cases of various methods in this package for the general `mixOmics` user. The below methods will be covered:
 
 - (s)PCA, 
 - PLS1 and PLS2, 
@@ -97,7 +97,7 @@ If you are following our [online course](https://study.unimelb.edu.au/find/short
 - N-integration (multi-block sPLS-DA, aka. "DIABLO"), and 
 - P-integration (multi-group sPLS-DA, aka "MINT").
 
-As outlined in [1.3](#01:outline), this is not an exhaustive list of all the methods found within `mixOmics`. More information can be found at [our website](http://mixomics.org/) and you can ask questions via our [discourse forum](https://mixomics-users.discourse.group/).
+As outlined in [1.3](#01:outline), this is not an exhaustive list of all the methods found within `mixOmics`. More information can be found at [our website](https://mixomics.org/) and you can ask questions via our [discourse forum](https://mixomics-users.discourse.group/).
 
 
 ```{r 00-analyses-diagram, eval=TRUE, echo=FALSE,fig.cap='**Different types of analyses with mixOmics** [@mixomics].The biological questions, the number of data sets to integrate, and the type of response variable, whether qualitative (classification), quantitative (regression), one (PLS1) or several (PLS) responses, all drive the choice of analytical method. All methods featured in this diagram include variable selection except rCCA. In N-integration, rCCA and PLS enable the integration of two quantitative data sets, whilst the block PLS methods (that derive from the methods from @Ten11) can integrate more than two data sets. In P-integration, our method MINT is based on multi-group PLS [@Esl14b].The following activities cover some of these methods.'}
@@ -169,11 +169,11 @@ We list here the main methodological or theoretical concepts you need to know to
 
 - **Correlation circle plot**: representation of the variables in a space spanned by the components. Each variable coordinate is defined as the correlation between the original variable value and each component. A correlation circle plot enables to visualise the correlation between variables - negative or positive correlation, defined by the cosine angle between the centre of the circle and each variable point) and the contribution of each variable to each component - defined by the absolute value of the coordinate on each component. For this interpretation, data need to be centred and scaled (by default in most of our methods except PCA). For more details on this insightful graphic, see Figure 1 in [@Gon12]. 
 
-- **Unsupervised analysis**: the method does not take into account any known sample groups and the analysis is exploratory. Examples of unsupervised methods covered in this vignette are Principal Component Analysis (PCA, Chapter [3](#03)), Projection to Latent Structures (PLS, Chapter [4](#04)), and also Canonical Correlation Analysis (CCA, not covered here but see [the website page](http://mixomics.org/methods/rcca/)).
+- **Unsupervised analysis**: the method does not take into account any known sample groups and the analysis is exploratory. Examples of unsupervised methods covered in this vignette are Principal Component Analysis (PCA, Chapter [3](#03)), Projection to Latent Structures (PLS, Chapter [4](#04)), and also Canonical Correlation Analysis (CCA, not covered here but see [the website page](https://mixomics.org/methods/rcca/)).
 
 - **Supervised analysis**: the method includes a vector indicating the class membership of each sample. The aim is to discriminate sample groups and perform sample class prediction.  Examples of supervised methods covered in this vignette are PLS Discriminant Analysis (PLS-DA, Chapter [5](#05)), DIABLO (Chapter [6](#06)) and also MINT (Chapter [7](#07)).
 
-If the above descriptions were not comprehensive enough and you have some more questions, feel free to explore the [glossary](http://mixomics.org/faq/glossary/) on our website.
+If the above descriptions were not comprehensive enough and you have some more questions, feel free to explore the [glossary](https://mixomics.org/faq/glossary/) on our website.
 
 
 ### Overview {#01:overview}
@@ -181,7 +181,7 @@ If the above descriptions were not comprehensive enough and you have some more q
 Here is an overview of the most widely used methods in `mixOmics` that will be further detailed in this vignette, with the exception of rCCA. We depict them along with the type of data set they can handle. 
 
 
-<img src="http://mixomics.org/wp-content/uploads/2021/12/Key-Concepts-Selecting_Your_Method.png" alt="newplot" style="max-width: 70%; display: block; margin: auto;"/>
+<img src="https://mixomics.org/wp-content/uploads/2021/12/Key-Concepts-Selecting_Your_Method.png" alt="newplot" style="max-width: 70%; display: block; margin: auto;"/>
 <p style="text-align: center">FIGURE 1: An overview of what quantity and type of dataset each method within mixOmics requires. Thin columns represent a single variable, while the larger blocks represent datasets of multiple samples and variables.</p>
 
 
@@ -198,21 +198,21 @@ knitr::include_graphics("InputFigures/cheatsheet.png")
 
 ### Key publications {#01:pubs}
 
-The methods implemented in `mixOmics` are described in detail in the following publications. A more extensive list can be found at this [link](http://mixomics.org/a-propos/publications/).
+The methods implemented in `mixOmics` are described in detail in the following publications. A more extensive list can be found at this [link](https://mixomics.org/about/publications/).
 
-- **Overview and recent integrative methods**: Rohart F.,  Gautier, B, Singh, A, Le Cao, K. A. mixOmics: an [R package for 'omics feature selection and multiple data integration](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005752). *PLoS Comput Biol* 13(11): e1005752.
+- **Overview and recent integrative methods**: Rohart F.,  Gautier, B, Singh, A, Le Cao, K. A. mixOmics: an [R package for 'omics feature selection and multiple data integration](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005752). *PLoS Comput Biol* 13(11): e1005752.
 
 - **Graphical outputs for integrative methods**: [@Gon12] Gonzalez I., Le Cao K.-A., Davis, M.D. and Dejean S. (2012) [Insightful graphical outputs to explore relationships between two omics data sets](https://biodatamining.biomedcentral.com/articles/10.1186/1756-0381-5-19). *BioData Mining* 5:19.
 
 - **DIABLO**: Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, K-A. Le Cao. [DIABLO - multi-omics data integration for biomarker discovery](https://www.biorxiv.org/content/early/2018/03/20/067611).
 
-- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](http://www.biomedcentral.com/1471-2105/10/34/). *BMC Bioinformatics*, 10:34.
+- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](https://www.biomedcentral.com/1471-2105/10/34/). *BMC Bioinformatics*, 10:34.
 
 - **sparse PLS-DA**: Le Cao K.-A., Boitard S. and Besse P. (2011) [Sparse PLS Discriminant Analysis: biologically relevant feature selection and graphical displays for multiclass problems]( https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-253). *BMC Bioinformatics*, 22:253.
 
 - **Multilevel approach for repeated measurements**: Liquet B, Le Cao K-A, Hocini H, Thiebaut R (2012). [A novel approach for biomarker selection and the integration of repeated measures experiments from two assays](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-13-325). *BMC Bioinformatics*, 13:325
 
-- **sPLS-DA for microbiome data**: Le Cao K-A$^*$, Costello ME $^*$, Lakis VA , Bartolo F, Chua XY, Brazeilles R and Rondeau P. (2016) [MixMC: Multivariate insights into Microbial Communities](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0160169).PLoS ONE 11(8): e0160169
+- **sPLS-DA for microbiome data**: Le Cao K-A$^*$, Costello ME $^*$, Lakis VA , Bartolo F, Chua XY, Brazeilles R and Rondeau P. (2016) [MixMC: Multivariate insights into Microbial Communities](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0160169).PLoS ONE 11(8): e0160169
 
 
 ## Outline of this Vignette {#01:outline}
@@ -237,9 +237,9 @@ Each methods chapter has the following outline:
 
 Other methods not covered in this document are described on our website and the following references:
 
-- [regularised Canonical Correlation Analysis](http://www.mixOmics.org), see the **Methods** and **Case study** tabs, and [@Gon08] that describes CCA for large data sets.
+- [regularised Canonical Correlation Analysis](https://mixomics.org/), see the **Methods** and **Case study** tabs, and [@Gon08] that describes CCA for large data sets.
 
-- [Microbiome (16S, shotgun metagenomics) data analysis](http://www.mixOmics.org/mixmc), see also [@Lec16] and [kernel integration for microbiome data](http://mixomics.org/mixkernel). The latter is in collaboration with Drs J Mariette and Nathalie Villa-Vialaneix (INRA Toulouse, France), an example is provided for the Tara ocean metagenomics and environmental data.
+- [Microbiome (16S, shotgun metagenomics) data analysis](https://mixomics.org/mixmc/), see also [@Lec16] and [kernel integration for microbiome data](https://mixomics.org/mixkernel/). The latter is in collaboration with Drs J Mariette and Nathalie Villa-Vialaneix (INRA Toulouse, France), an example is provided for the Tara ocean metagenomics and environmental data.
 
 
 
@@ -272,7 +272,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 Alternatively, you can install the latest GitHub version of the package:
 
 ```{r 02-install-github, eval = FALSE}
-BiocManager::install("mixOmicsTeam/mixOmics")
+BiocManager::install("mixOmics-org/mixOmics")
 ```
 
 The `mixOmics` package should directly import the following packages:
@@ -346,7 +346,7 @@ Do not stop here! We are not done yet. You can enhance your analyses with the fo
 
 - Run the examples from the help file using the `example` function: `example(pca)`, `example(plotIndiv)`, ...
 
-- Have a look at our [website](http://www.mixomics.org) that features many tutorials and case studies,
+- Have a look at our [website](https://mixomics.org/) that features many tutorials and case studies,
 
 - Keep reading this vignette, this is *just the beginning!*
 
@@ -2149,7 +2149,7 @@ final.mint.plsda.stem <- mint.plsda(X = X, Y = Y, study = study, ncomp = 2)
 #final.mint.plsda.stem # Lists the different functions
 
 plotIndiv(final.mint.plsda.stem, legend = TRUE, title = 'MINT PLS-DA', 
-          subtitle = 'stem cell study', ellipse = T)
+          subtitle = 'stem cell study', ellipse = TRUE)
 ```
 
 (ref:07-plsda-sample-plot1)  **Sample plot from the MINT PLS-DA performed on the `stemcells` gene expression data**. Samples are projected into the space spanned by the first two components. Samples are coloured by their cell types and symbols indicate the study membership. Component 1 discriminates `r colorize("blue", "fibroblast")` vs. the others, while component 2 discriminates some of the `r colorize("grey", "hiPSC")` vs. `r colorize("orange", "hESC")`.  
@@ -2230,7 +2230,7 @@ The samples can be projected on the global components or alternatively using the
 ```{r 07-splsda-sample-plot1, echo = TRUE, results = 'hide', fig.show = 'hide', fig.path = 'Figures/MINT/'}
 plotIndiv(final.mint.splsda.stem, study = 'global', legend = TRUE, 
           title = 'Stem cells, MINT sPLS-DA', 
-          subtitle = 'Global', ellipse = T)
+          subtitle = 'Global', ellipse = TRUE)
 ```
 
 ```{r 07-splsda-sample-plot2, echo = TRUE, results = 'hide', fig.show = 'hide', fig.path = 'Figures/MINT/'}

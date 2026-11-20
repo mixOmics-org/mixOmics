@@ -26,9 +26,9 @@
 #' @importFrom utils packageDescription
 .onAttach <- function(libname, pkgname){ packageStartupMessage( "\nLoaded mixOmics ", as.character(packageDescription("mixOmics")[["Version"]]),
                                                                 "\nThank you for using mixOmics!",
-                                                                "\nTutorials: http://mixomics.org",
-                                                                "\nBookdown vignette: https://mixomicsteam.github.io/Bookdown",
-                                                                "\nQuestions, issues: Follow the prompts at http://mixomics.org/contact-us",
+                                                                "\nTutorials: https://mixomics.org/",
+                                                                "\nVignette: https://guides.mixomics.org/mixomics-guide-vignette/",
+                                                                "\nQuestions, issues: Follow the prompts at https://mixomics.org/contact/",
                                                                 "\nCite us:  citation('mixOmics')\n"
                                                                 
 )}
