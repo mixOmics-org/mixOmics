@@ -24,6 +24,8 @@ Bioconductor 3.24.
 * `plotVar` no longer places points outside the correlation circle when the plotted components are not orthogonal (#405)
 * `keepX` and `keepY` of `block.spls` and `mint.block.*` models now give the values used (#386)
 * `plotLoadings` handles a vector `xlim` for contribution plots in the `graphics` style (#377)
+* the vignette link in the startup message returned 404; it now points to https://guides.mixomics.org/mixomics-guide-vignette/, and the website and contact links use https
+* `?tune.rcc` gave the wrong default for `BPPARAM`; it is `SerialParam()`
 
 ## version 6.36.0
 
