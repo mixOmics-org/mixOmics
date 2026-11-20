@@ -16,7 +16,7 @@ documentclass: book
 bibliography: ["bibliography.bib"]
 biblio-style: apalike
 link-citations: true
-github-repo: mixOmicsTeam/mixOmics
+github-repo: mixOmics-org/mixOmics
 description: "Vignette for the R package mixOmics"
 
 vignette: >
@@ -272,7 +272,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 Alternatively, you can install the latest GitHub version of the package:
 
 ```{r 02-install-github, eval = FALSE}
-BiocManager::install("mixOmicsTeam/mixOmics")
+BiocManager::install("mixOmics-org/mixOmics")
 ```
 
 The `mixOmics` package should directly import the following packages:
