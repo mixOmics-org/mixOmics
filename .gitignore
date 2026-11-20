@@ -14,7 +14,8 @@ Library
 **/*.log
 
 ## intermediate md files
-**/*.md
+*.knit.md
+*.utf8.md
 
 ## github_document render of README.Rmd
 README.html
