@@ -56,23 +56,7 @@ Authors@R:
       person("Eva", "Hamrud", role = "ctb", comment = c(ORCID = "0000-0001-9922-2823")),
       person("Derek", "Lei", role = "ctb", email = "derek.lei@mixomics.org"),
       person("Mike", "Rennie", role = "ctb", email = "mike.rennie@mixomics.org", comment = c(ORCID = "0009-0003-0520-3317")))
-Description: Explore how samples differ, which features vary together within and
-    across omics data sets, and which combinations distinguish groups of
-    samples. Our methods are omics agnostic and can apply in diverse fields of
-    biology. Our multivariate models summarise many measurements in a few
-    components, and our sparse models select small sets of features as candidate
-    molecular signatures. When several types of omics data are measured on the
-    same samples, DIABLO integrates those measurements. When independent studies
-    measure the same variables, MINT combines them while accounting for batch
-    effects between studies. MINT Block (NP-integration, with optional
-    discriminant analysis and variable selection) brings both designs together,
-    letting researchers ask whether a signature spanning molecular layers
-    distinguishes groups across cohorts. Further methods support repeated
-    measurements and compositional data. Sample plots, loadings and networks
-    show how samples group, which features contribute to components and how
-    features are associated. Cross-validation helps tune models and estimate
-    predictive performance, and fitted models can predict outcomes for new
-    samples.
+Description: Explore how samples differ, which features vary together within and across omics data sets, and which combinations distinguish groups of samples. Our methods are omics agnostic and can apply in diverse fields of biology. Our multivariate models summarise many measurements in a few components, and our sparse models select small sets of features as candidate molecular signatures. When several types of omics data are measured on the same samples, DIABLO integrates those measurements. When independent studies measure the same variables, MINT combines them while accounting for batch effects between studies. MINT Block (NP-integration, with optional discriminant analysis and variable selection) brings both designs together, letting researchers ask whether a signature spanning molecular layers distinguishes groups across cohorts. Further methods support repeated measurements and compositional data. Sample plots, loadings and networks show how samples group, which features contribute to components and how features are associated. Cross-validation helps tune models and estimate predictive performance, and fitted models can predict outcomes for new samples.
 License: AGPL-3
 URL: https://mixomics.org
 BugReports: https://github.com/mixOmics-org/mixOmics/issues
