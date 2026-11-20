@@ -2149,7 +2149,7 @@ final.mint.plsda.stem <- mint.plsda(X = X, Y = Y, study = study, ncomp = 2)
 #final.mint.plsda.stem # Lists the different functions
 
 plotIndiv(final.mint.plsda.stem, legend = TRUE, title = 'MINT PLS-DA', 
-          subtitle = 'stem cell study', ellipse = T)
+          subtitle = 'stem cell study', ellipse = TRUE)
 ```
 
 (ref:07-plsda-sample-plot1)  **Sample plot from the MINT PLS-DA performed on the `stemcells` gene expression data**. Samples are projected into the space spanned by the first two components. Samples are coloured by their cell types and symbols indicate the study membership. Component 1 discriminates `r colorize("blue", "fibroblast")` vs. the others, while component 2 discriminates some of the `r colorize("grey", "hiPSC")` vs. `r colorize("orange", "hESC")`.  
@@ -2230,7 +2230,7 @@ The samples can be projected on the global components or alternatively using the
 ```{r 07-splsda-sample-plot1, echo = TRUE, results = 'hide', fig.show = 'hide', fig.path = 'Figures/MINT/'}
 plotIndiv(final.mint.splsda.stem, study = 'global', legend = TRUE, 
           title = 'Stem cells, MINT sPLS-DA', 
-          subtitle = 'Global', ellipse = T)
+          subtitle = 'Global', ellipse = TRUE)
 ```
 
 ```{r 07-splsda-sample-plot2, echo = TRUE, results = 'hide', fig.show = 'hide', fig.path = 'Figures/MINT/'}
