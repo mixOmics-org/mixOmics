@@ -1,3 +1,25 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - The checks of X, ncomp and w.init in sipca(): adapted from fastICA()
+#     of the fastICA package (version 1.1-13) by J L Marchini, C Heaton
+#     and B D Ripley, GPL-2 | GPL-3.
+
 #' Independent Principal Component Analysis
 #' 
 #' Performs sparse independent principal component analysis on the given data
@@ -48,6 +70,9 @@ sipca <-
               w.init = NULL)
     {
         
+        # SPDX-SnippetBegin
+        # SPDX-SnippetCopyrightText: J L Marchini, C Heaton, B D Ripley (fastICA)
+        # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
         dim_x <- dim(X)
         d <- dim_x[dim_x != 1]
         if (length(d) != 2)
@@ -55,6 +80,7 @@ sipca <-
         X <- if (length(d) != length(dim_x))
         {matrix(X, d[1], d[2])}
         else {as.matrix(X)}
+        # SPDX-SnippetEnd
         
         alpha <- 1
         
@@ -75,6 +101,9 @@ sipca <-
         n <- nrow(t(X))
         p <- ncol(t(X))
         
+        # SPDX-SnippetBegin
+        # SPDX-SnippetCopyrightText: J L Marchini, C Heaton, B D Ripley (fastICA)
+        # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
         if (ncomp > min(n, p)) {
             message("'ncomp' is too large: reset to ", min(n, p))
             ncomp <- min(n, p)
@@ -85,6 +114,7 @@ sipca <-
             if(!is.matrix(w.init) || length(w.init) != (ncomp^2))
                 stop("w.init is not a matrix or is the wrong size")
         }
+        # SPDX-SnippetEnd
         
         X1 <- t(right_sing_vect)[1:ncomp,]
         

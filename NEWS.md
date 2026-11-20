@@ -4,7 +4,7 @@ Bioconductor 3.24.
 
 ### new features / enhancements / changes
 
-* mixOmics is now licensed under AGPL (>= 3) instead of GPL (>= 2) (#421)
+* mixOmics is now licensed under AGPL-3 instead of GPL (>= 2) (#421)
 * `circosPlot` is drawn by new code (#419)
 * `predict` on multi-block models is 3 to 67 times faster, and `perf` and `tune.block.plsda` about 2 times faster, with identical results (#369, #383)
 * `perf` and `perf.assess` on DIABLO models accept `folds` as a list (#400)

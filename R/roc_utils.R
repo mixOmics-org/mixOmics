@@ -6,21 +6,31 @@
 # created: 2016
 # last modified: 2016
 #
-# Copyright (C) 2016
+# This file is part of mixOmics.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-3.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - roc.default(), roc.utils.perfs(), sort.roc(), auc_roc(), coords(),
+#     coords.roc(), roc.utils.match.coords.ret.args(),
+#     roc.utils.max.thresholds.idx() and the four
+#     roc.utils.min/max.partial.auc*() functions: adapted from the pROC
+#     package (version 1.8) by Xavier Robin, Natacha Turck, Alexandre
+#     Hainard, Natalia Tiberti, Frédérique Lisacek, Jean-Charles Sanchez
+#     and Markus Müller, GPL (>= 3).
 #############################################################################################################
 
 
@@ -115,6 +125,9 @@ statauc <- function(data = NULL, plot = FALSE, title = NULL, line.col = NULL, le
 
 ###ROC/AUC
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Xavier Robin, Natacha Turck, Alexandre Hainard, Natalia Tiberti, Frédérique Lisacek, Jean-Charles Sanchez, Markus Müller (pROC)
+# SPDX-License-Identifier: GPL-3.0-or-later
 roc.default <- function(response, predictor,
                         
                         auc=TRUE,
@@ -202,8 +215,7 @@ roc.default <- function(response, predictor,
   # return roc
   return(roc)
 }
-
-# returns a vector with two elements, sensitivity and specificity, given the threshold at which to evaluate the performance, the values of controls and cases and the direction of the comparison, a character '>' or '<' as controls CMP cases
+# SPDX-SnippetEnd
 
 # only the same as roc.utils.perfs if thresholds starts low and ends large
 # (added 0 and 1 value)
@@ -222,6 +234,10 @@ roc.utils.perfs.fast.all.threshold <- function(thresholds, controls, cases, dire
 }
 
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Xavier Robin, Natacha Turck, Alexandre Hainard, Natalia Tiberti, Frédérique Lisacek, Jean-Charles Sanchez, Markus Müller (pROC)
+# SPDX-License-Identifier: GPL-3.0-or-later
+# returns a vector with two elements, sensitivity and specificity, given the threshold at which to evaluate the performance, the values of controls and cases and the direction of the comparison, a character '>' or '<' as controls CMP cases
 roc.utils.perfs <- function(threshold, controls, cases, direction) {
   if (direction == '>') {
     tp <- sum(cases <= threshold)
@@ -648,7 +664,6 @@ roc.utils.max.thresholds.idx <- function(thresholds, sp, se) {
 }
 
 
-# from pROC v1.8.0
 # Compute the min/max for partial AUC
 # ... with an auc
 roc.utils.min.partial.auc.auc <- function(auc) {
@@ -680,7 +695,6 @@ roc.utils.max.partial.auc <- function(partial.auc, percent) {
   return(max)
 }
 
-# from pROC v1.8.0
 coords.roc <- function(roc, x, input=c("threshold", "specificity", "sensitivity"), ret=c("threshold", "specificity", "sensitivity"), as.list=FALSE, drop=TRUE, best.method=c("youden", "closest.topleft"), best.weights=c(1, 0.5), ...) {
   # make sure x was provided
   if (missing(x) || length(x) == 0)
@@ -885,4 +899,4 @@ coords.roc <- function(roc, x, input=c("threshold", "specificity", "sensitivity"
     stop("'x' must be a numeric or character vector.")
   }
 }
-
+# SPDX-SnippetEnd

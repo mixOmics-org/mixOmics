@@ -1,3 +1,26 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - ilr.transfo(), clr.backtransfo() and clr.transfo(): adapted from
+#     isomLR(), pcaCoDa() and cenLR() of the robCompositions package by
+#     Matthias Templ, Karel Hron and Peter Filzmoser, GPL (>= 2) since
+#     robCompositions 2.0.6.
+
 #' Log-ratio transformation
 #' 
 #' This function applies a log transformation to the data, either CLR or ILR
@@ -60,8 +83,10 @@ logratio.transfo <- function(X,
 }
 
 
-# 1 - ilr transform of the data, isoLMR function from robCompositions package, with changes
-# https://github.com/matthias-da/robCompositions/blob/master/R/isomLR.R
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Matthias Templ, Karel Hron, Peter Filzmoser (robCompositions)
+# SPDX-License-Identifier: GPL-2.0-or-later
+# 1 - ilr transform of the data
 # -----------------
 
 # KA changed the function to add a min value when many zeroes in data (prob with log and division by 0 otherwise)
@@ -144,4 +169,5 @@ clr.transfo = function(x, offset = 0)
     class(res) = "clr"
     return(res)
 }
+# SPDX-SnippetEnd
 

@@ -7,30 +7,35 @@
 # created: 22-04-2015
 # last modified: 04-10-2017
 #
-# Copyright (C) 2015
+# This file is part of mixOmics.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - soft.threshold(), BinarySearch(), soft(), norm2() and
+#     miscrossprod(): taken from the RGCCA package (version 2.0) by
+#     Arthur Tenenhaus and Vincent Guillemot, GPL (>= 2).
+#   - tau.estimate(), cov2(), deflation(), defl.select() and initsvd():
+#     adapted from the same package.
 ################################################################################
 
 
 # =============================================================================
 # Internal helpers functions to run "mixOmics" and "internal_mint.block"
 # =============================================================================
-
-# Some of these functions have been borrowed from the RGCCA package,
-#   as indicated below
 
 # --------------------------------------
 # get.weights: used in (MCV.)(block.)(s)pls(da).R
@@ -138,6 +143,9 @@ soft_thresholding_L1 <- function(x, nx)
     return(x)
 }
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Arthur Tenenhaus, Vincent Guillemot (RGCCA)
+# SPDX-License-Identifier: GPL-2.0-or-later
 # -----------------------------------------------------------------------------
 # soft.threshold() - soft-thresholds a vector such that
 # the L1-norm constraint is satisfied.
@@ -181,6 +189,7 @@ norm2 <- function(vec)
     
     return(a)
 }
+# SPDX-SnippetEnd
 
 
 # --------------------------------------
@@ -336,6 +345,9 @@ l2.norm <- function(x)
     out = x / drop(sqrt(crossprod(x)))
 }
 
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Arthur Tenenhaus, Vincent Guillemot (RGCCA)
+# SPDX-License-Identifier: GPL-2.0-or-later
 # ---------------------------------------------------
 # tau.estimate() - Estimation of tau accoring to Strimmer formula
 # ---------------------------------------------------
@@ -362,9 +374,6 @@ tau.estimate <- function (x)
 }
 
 
-################################################################################
-# Functions acquired from RGCCA R-library
-################################################################################
 # ------------------------------------------------------------------------------
 # cov2() - Compute biased and unbiased covariance and variance estimates
 # ------------------------------------------------------------------------------
@@ -527,6 +536,7 @@ initsvd <- function (X) {
         
     }
 }
+# SPDX-SnippetEnd
 
 # ------------------------------------------------------------------------------
 # init svd

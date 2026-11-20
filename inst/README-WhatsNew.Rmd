@@ -19,7 +19,7 @@ opts_chunk$set( echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 
 #### November 2026
 
-* mixOmics is now licensed under AGPL (>= 3) instead of GPL (>= 2) ([#421](https://github.com/mixOmics-org/mixOmics/pull/421))
+* mixOmics is now licensed under AGPL-3 instead of GPL (>= 2) ([#421](https://github.com/mixOmics-org/mixOmics/pull/421))
 * `circosPlot()` is drawn by new code ([#419](https://github.com/mixOmics-org/mixOmics/pull/419))
 * bug fix implemented in [#419](https://github.com/mixOmics-org/mixOmics/pull/419): `circosPlot()` showed block names containing "chr" truncated (e.g. "chromatin" as "omatin") and failed with `line = TRUE`
 * bug fix implemented in [#419](https://github.com/mixOmics-org/mixOmics/pull/419): `circosPlot()` with several blocks in `blocks.link` kept only about half of the links

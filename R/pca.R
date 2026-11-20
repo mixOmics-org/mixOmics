@@ -1,3 +1,28 @@
+# This file is part of mixOmics.
+#
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - The SVD of complete data in pca(): adapted from prcomp() of the
+#     R stats package by the R Core Team, GPL (>= 2).
+#   - The ILR branch of pca(), which back-transforms the loadings to
+#     clr space: adapted from pcaCoDa() of the robCompositions package
+#     by Matthias Templ, Karel Hron and Peter Filzmoser, GPL (>= 2)
+#     since robCompositions 2.0.6.
+
 #' Principal Components Analysis
 #' 
 #' Performs a principal components analysis on the given data matrix that can
@@ -256,12 +281,18 @@ pca <- function(X,
     } else {
         if (logratio %in% c('CLR', 'none')) {
             #-- if data is complete use singular value decomposition
-            #-- borrowed from 'prcomp' function
+            # SPDX-SnippetBegin
+            # SPDX-SnippetCopyrightText: The R Core Team (R stats package)
+            # SPDX-License-Identifier: GPL-2.0-or-later
             res = svd(X, nu = 0)
             sdev <- res$d
             loadings <- res$v
+            # SPDX-SnippetEnd
         } else {
-            # if 'ILR', transform data and then back transform in clr space (from RobCompositions package)
+            # SPDX-SnippetBegin
+            # SPDX-SnippetCopyrightText: Matthias Templ, Karel Hron, Peter Filzmoser (robCompositions)
+            # SPDX-License-Identifier: GPL-2.0-or-later
+            # if 'ILR', transform data and then back transform in clr space
             # data have been transformed above
             res = svd(X, nu = max(1, nrow(X) - 1))
             sdev = res$d[1:ncomp] / sqrt(max(1, nrow(X) - 1))  # Note: what differs with RobCompo is that they use: cumsum(eigen(cov(X))$values)/sum(eigen(cov(X))$values)
@@ -270,6 +301,7 @@ pca <- function(X,
             # extract component score from the svd, multiply matrix by vector using diag, NB: this differ from our mixOmics PCA calculations
             # NB: this differ also from Filmoser paper, but ok from their code: scores are unchanged
             variates = res$u[, 1:ncomp, drop = FALSE] %*% diag(res$d[1:ncomp, drop = FALSE])
+            # SPDX-SnippetEnd
         }
         
     }

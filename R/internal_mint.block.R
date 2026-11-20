@@ -8,33 +8,33 @@
 # created: 20-07-2014
 # last modified: 04-10-2017
 #
-# Copyright (C) 2014
+# This file is part of mixOmics.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# mixOmics is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, version 3.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# mixOmics is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with mixOmics. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: AGPL-3.0-only AND GPL-2.0-or-later
+#
+# Code from other packages keeps its own licence. It is listed here and
+# marked in the code with SPDX-SnippetBegin and SPDX-SnippetEnd:
+#   - internal_mint.block(), sparse.mint.block_iteration() and
+#     sparse.rgcca_iteration(): adapted from sgcca(), sgccak() and
+#     rgccak() of the RGCCA package (version 2.0) by Arthur Tenenhaus
+#     and Vincent Guillemot, GPL (>= 2).
 ################################################################################
 
-
-################################################################################
-# Functions modified from RGCCA R-library
-#   sgcca(), sgccak()
-#
-# Functions acquired from RGCCA R-library, see 'internal_mint.block_helpers.R'
-#   cov2(), initsvd(), crossprod(),
-#   defl.select(),
-################################################################################
-
+# SPDX-SnippetBegin
+# SPDX-SnippetCopyrightText: Arthur Tenenhaus, Vincent Guillemot (RGCCA)
+# SPDX-License-Identifier: GPL-2.0-or-later
 internal_mint.block <- 
     function (A, indY = NULL,  design = 1 - diag(length(A)),
               tau=NULL,#rep(1, length(A)),
@@ -513,7 +513,7 @@ internal_mint.block <-
     }
 
 # ------------------------------------------------------------------------------
-# sgccak - Runs sgccak() modified from RGCCA
+# sparse.mint.block_iteration()
 #   inputs: A - list of datasets each with the same number of rows (samples)
 #           design - design matrix
 #           ncomp - vector specifying number of components to keep per datasets
@@ -712,7 +712,7 @@ sparse.mint.block_iteration = function (A, design, study = NULL, loadings.A,
 }
 
 # ------------------------------------------------------------------------------
-# rgccak - Runs sgccak() modified from RGCCA
+# sparse.rgcca_iteration()
 #   inputs: A - list of datasets each with the same number of rows (samples)
 #           design - design matrix
 #           ncomp - vector specifying number of components to keep per datasets
@@ -865,3 +865,4 @@ sparse.rgcca_iteration = function (A, design, tau = "optimal", scheme = "horst",
                   tau = tau, scheme = scheme,iter=iter, keepA = keepA)
     return(result)
 }
+# SPDX-SnippetEnd
