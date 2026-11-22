@@ -323,7 +323,7 @@ pca <- function(X,
     if (names(result) %!=% expected_output_names)
     {
         stop("Unexpected error. Please submit an issue at\n",
-             "https://github.com/mixOmicsTeam/mixOmics/issues/new/choose", call. = FALSE)
+             "https://github.com/mixOmics-org/mixOmics/issues/new/choose", call. = FALSE)
     }
     result <- result[expected_output_names]
     # output multilevel if needed

@@ -115,7 +115,7 @@
             if (n_ind != length(out))
             {
                 stop("Unexpected error. Please submit an issue with reproducible example to\n",
-                     "https://github.com/mixOmicsTeam/mixOmics/issues")
+                     "https://github.com/mixOmics-org/mixOmics/issues")
             }
         }
         else
