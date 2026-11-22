@@ -16,9 +16,9 @@ description of each gene.} }
 }
 \source{
 The Human Breast Tumors dataset is a companion resource for the
-paper of Perou \emph{et al.} (2000), and was downloaded from the Stanford
-Genomics Breast Cancer Consortium Portal
-\url{http://genome-www.stanford.edu/breast_cancer/molecularportraits/download.shtml}
+paper of Perou \emph{et al.} (2000), \url{https://doi.org/10.1038/35021093}.
+It was downloaded from the Stanford Genomics Breast Cancer Consortium
+Portal, which is no longer online.
 }
 \usage{
 data(breast.tumors)

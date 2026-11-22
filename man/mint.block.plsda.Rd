@@ -147,7 +147,7 @@ On multiple integration with PLSDA:
 Singh A., Gautier B., Shannon C., Vacher M., Rohart F., Tebbutt S. and Lê
 Cao K.A. (2016). DIABLO: multi omics integration for biomarker discovery.
 BioRxiv available here:
-\url{http://biorxiv.org/content/early/2016/08/03/067611} Tenenhaus A.,
+\url{https://doi.org/10.1101/067611} Tenenhaus A.,
 Philippe C., Guillemot V, Lê Cao K.A., Grill J, Frouin V. Variable selection
 for generalized canonical correlation analysis. \emph{Biostatistics}. kxu001
 

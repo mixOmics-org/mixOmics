@@ -36,11 +36,11 @@ library(badger)
 `r badge_last_commit("mixOmics-org/mixOmics", branch='master')`
 `r badge_codecov("mixOmics-org/mixOmics", branch='master')`
 `r badge_license(color = "lightgrey")`
-[![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
+[![dependencies](https://bioconductor.org/shields/dependencies/release/mixOmics.svg)](https://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
 ![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
 
-This repository contains the `R` package which is [hosted on Bioconductor](http://bioconductor.org/packages/release/bioc/html/mixOmics.html) and our development `GitHub` versions. Go to https://mixomics.org for information on how to use mixOmics. 
+This repository contains the `R` package which is [hosted on Bioconductor](https://bioconductor.org/packages/release/bioc/html/mixOmics.html) and our development `GitHub` versions. Go to https://mixomics.org for information on how to use mixOmics. 
 
 ## Installation
 
@@ -84,12 +84,11 @@ You can install our latest stable Github version of `mixOmics` via our Docker co
 **Note: this requires root privileges**
 
 
-1) Install Docker following instructions at https://docs.docker.com/docker-for-mac/install/
+1) Install Docker following instructions at https://docs.docker.com/desktop/setup/install/mac-install/
 
 **if your OS is not compatible with the latest version** download an older version of Docker from the following link:
 
-* MacOS: https://docs.docker.com/docker-for-mac/release-notes/
-* Windows: https://docs.docker.com/docker-for-windows/release-notes/
+* MacOS and Windows: https://docs.docker.com/desktop/release-notes/
 
 Then open your system's command line interface (e.g. Terminal for MacOS and Command Promot for Windows) for the following steps.
 

@@ -76,10 +76,11 @@
 #' mechanism of action. \emph{Science} \bold{258}, 447-451.
 #' @source The NCI dataset was downloaded from The Genomics and Bioinformatics
 #' Group Supplemental Table S1 to the paper of Szakacs \emph{et al.} (2004),
-#' \url{http://discover.nci.nih.gov/abc/2004_cancercell_abstract.jsp#supplement}
+#' \url{https://doi.org/10.1016/j.ccr.2004.06.026}
 #' 
 #' The two drug data sets are a companion resource for the paper of Scherf
-#' \emph{et al.} (2000), and was downloaded from
-#' \url{http://discover.nci.nih.gov/datasetsNature2000.jsp}.
+#' \emph{et al.} (2000), \url{https://doi.org/10.1038/73439}. They were
+#' downloaded from the Genomics and Bioinformatics Group's web site, which is
+#' no longer online.
 #' @keywords datasets
 NULL

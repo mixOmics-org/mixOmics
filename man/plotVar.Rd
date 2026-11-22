@@ -296,8 +296,8 @@ plotVar(wrap.result.rgcca, comp = c(1,2), block = c(1,2))
 }
 \references{
 González I., Lê Cao K-A., Davis, M.J. and Déjean, S. (2012).
-Visualising associations between paired 'omics data sets. J. Data Mining
-5:19. \url{http://www.biodatamining.org/content/5/1/19/abstract}
+Visualising associations between paired 'omics data sets. BioData Mining
+5:19. \url{https://doi.org/10.1186/1756-0381-5-19}
 }
 \seealso{
 \code{\link{cim}}, \code{\link{network}}, \code{\link{par}} and

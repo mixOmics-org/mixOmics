@@ -282,8 +282,8 @@ dev.off()
 \references{
 Mathematical definition: González I., Lê Cao K-A., Davis, M.J.
 and Déjean, S. (2012). Visualising associations between paired omics data
-sets. J. Data Mining 5:19.
-\url{http://www.biodatamining.org/content/5/1/19/abstract}
+sets. BioData Mining 5:19.
+\url{https://doi.org/10.1186/1756-0381-5-19}
 
 Examples and illustrations:
 

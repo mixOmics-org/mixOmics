@@ -1,19 +1,19 @@
 
 <!-- PLEASE DO NOT EDIT ./README.md BY HAND, EDIT ./inst/README.Rmd AND THE RENDER README WORKFLOW CREATES ./README.md IN THE PULL REQUEST -->
 
-[![download](http://www.bioconductor.org/shields/downloads/release/mixOmics.svg)](https://bioconductor.org/packages/stats/bioc/mixOmics)
+[![download](https://www.bioconductor.org/shields/downloads/release/mixOmics.svg)](https://bioconductor.org/packages/stats/bioc/mixOmics)
 [![R build
 status](https://github.com/mixOmics-org/mixOmics/workflows/R-CMD-check.yml/badge.svg)](https://github.com/mixOmics-org/mixOmics/actions)
 [![](https://img.shields.io/github/last-commit/mixOmics-org/mixOmics.svg)](https://github.com/mixOmics-org/mixOmics/commits/master)
 [![](https://codecov.io/gh/mixOmics-org/mixOmics/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mixOmics-org/mixOmics)
 [![License:
 AGPL-3](https://img.shields.io/badge/license-AGPL--3-lightgrey.svg)](https://cran.r-project.org/web/licenses/AGPL-3)
-[![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
+[![dependencies](https://bioconductor.org/shields/dependencies/release/mixOmics.svg)](https://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
 ![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
 
 This repository contains the `R` package which is [hosted on
-Bioconductor](http://bioconductor.org/packages/release/bioc/html/mixOmics.html)
+Bioconductor](https://bioconductor.org/packages/release/bioc/html/mixOmics.html)
 and our development `GitHub` versions. Go to <https://mixomics.org> for
 information on how to use mixOmics.
 
@@ -75,13 +75,12 @@ Click to expand
 **Note: this requires root privileges**
 
 1)  Install Docker following instructions at
-    <https://docs.docker.com/docker-for-mac/install/>
+    <https://docs.docker.com/desktop/setup/install/mac-install/>
 
 **if your OS is not compatible with the latest version** download an
 older version of Docker from the following link:
 
-- MacOS: <https://docs.docker.com/docker-for-mac/release-notes/>
-- Windows: <https://docs.docker.com/docker-for-windows/release-notes/>
+- MacOS and Windows: <https://docs.docker.com/desktop/release-notes/>
 
 Then open your system’s command line interface (e.g. Terminal for MacOS
 and Command Promot for Windows) for the following steps.

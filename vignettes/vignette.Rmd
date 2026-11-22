@@ -204,9 +204,9 @@ The methods implemented in `mixOmics` are described in detail in the following p
 
 - **Graphical outputs for integrative methods**: [@Gon12] Gonzalez I., Le Cao K.-A., Davis, M.D. and Dejean S. (2012) [Insightful graphical outputs to explore relationships between two omics data sets](https://biodatamining.biomedcentral.com/articles/10.1186/1756-0381-5-19). *BioData Mining* 5:19.
 
-- **DIABLO**: Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, K-A. Le Cao. [DIABLO - multi-omics data integration for biomarker discovery](https://www.biorxiv.org/content/early/2018/03/20/067611).
+- **DIABLO**: Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, K-A. Le Cao. [DIABLO - multi-omics data integration for biomarker discovery](https://doi.org/10.1101/067611).
 
-- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](https://www.biomedcentral.com/1471-2105/10/34/). *BMC Bioinformatics*, 10:34.
+- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](https://doi.org/10.1186/1471-2105-10-34). *BMC Bioinformatics*, 10:34.
 
 - **sparse PLS-DA**: Le Cao K.-A., Boitard S. and Besse P. (2011) [Sparse PLS Discriminant Analysis: biologically relevant feature selection and graphical displays for multiclass problems]( https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-253). *BMC Bioinformatics*, 22:253.
 

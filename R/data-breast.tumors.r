@@ -49,8 +49,8 @@
 #' Borresen-Dale, A. L., Brown, P. O. and Botstein, D. (2000). Molecular
 #' portraits of human breast tumours. \emph{Nature} \bold{406}, 747-752.
 #' @source The Human Breast Tumors dataset is a companion resource for the
-#' paper of Perou \emph{et al.} (2000), and was downloaded from the Stanford
-#' Genomics Breast Cancer Consortium Portal
-#' \url{http://genome-www.stanford.edu/breast_cancer/molecularportraits/download.shtml}
+#' paper of Perou \emph{et al.} (2000), \url{https://doi.org/10.1038/35021093}.
+#' It was downloaded from the Stanford Genomics Breast Cancer Consortium
+#' Portal, which is no longer online.
 #' @keywords datasets
 NULL

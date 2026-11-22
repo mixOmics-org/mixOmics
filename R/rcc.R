@@ -108,12 +108,12 @@
 #' Opgen-Rhein, R., and K. Strimmer. 2007. Accurate ranking of differentially
 #' expressed genes by a distribution-free shrinkage approach. Statist.
 #' emphAppl. Genet. Mol. Biol. \bold{6}:9.
-#' (http://www.bepress.com/sagmb/vol6/iss1/art9/)
+#' (https://doi.org/10.2202/1544-6115.1252)
 #' 
 #' Sch"afer, J., and K. Strimmer. 2005. A shrinkage approach to large-scale
 #' covariance estimation and implications for functional genomics. Statist.
 #' emphAppl. Genet. Mol. Biol.  \bold{4}:32.
-#' (http://www.bepress.com/sagmb/vol4/iss1/art32/)
+#' (https://doi.org/10.2202/1544-6115.1175)
 #' @keywords multivariate
 #' @export
 #' @examples

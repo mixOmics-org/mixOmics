@@ -23,7 +23,7 @@
 #' (54 unique healthy individuals) measured on 1,674 OTUs.
 #' 
 #' The data were downloaded from the Human Microbiome Project (HMP,
-#' http://hmpdacc.org/HMQCP/all/ for the V1-3 variable region).  The original
+#' https://www.hmpdacc.org/HMQCP/all/ for the V1-3 variable region).  The original
 #' data contained 43,146 OTU counts for 2,911 samples measured from 18
 #' different body sites. We focused on the first visit of each healthy
 #' individual and focused on the three most diverse habitats. The prefiltered
@@ -58,7 +58,7 @@
 #' Brazeilles R, Rondeau P. MixMC: Multivariate insights into Microbial
 #' Communities. PLoS ONE, 11(8): e0160169 (2016).
 #' @source The raw data were downloaded from
-#' \url{http://hmpdacc.org/HMQCP/all/}. Filtering and normalisation described
+#' \url{https://www.hmpdacc.org/HMQCP/all/}. Filtering and normalisation described
 #' in our website \url{https://mixomics.org/mixmc/}
 #' @keywords datasets
 NULL

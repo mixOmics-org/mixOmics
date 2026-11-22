@@ -214,7 +214,7 @@ circosPlot(TCGA.block.spls, group = breast.TCGA$data.train$subtype, cutoff = 0.7
 Singh A., Gautier B., Shannon C., Vacher M., Rohart F., Tebbutt
 S. and Lê Cao K.A. (2016). DIABLO: multi omics integration for biomarker
 discovery. BioRxiv available here:
-\url{http://biorxiv.org/content/early/2016/08/03/067611}
+\url{https://doi.org/10.1101/067611}
 
 mixOmics article:
 

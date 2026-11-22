@@ -123,8 +123,8 @@
 #' @seealso \code{\link{cim}}, \code{\link{network}}, \code{\link{par}} and
 #' https://mixomics.org/ for more details.
 #' @references González I., Lê Cao K-A., Davis, M.J. and Déjean, S. (2012).
-#' Visualising associations between paired 'omics data sets. J. Data Mining
-#' 5:19. \url{http://www.biodatamining.org/content/5/1/19/abstract}
+#' Visualising associations between paired 'omics data sets. BioData Mining
+#' 5:19. \url{https://doi.org/10.1186/1756-0381-5-19}
 #' @keywords multivariate hplot dplot
 #' @export
 #' @importFrom ellipse ellipse
@@ -673,7 +673,7 @@ plotVar <-
         {
             Block = NULL# R check
             # visible variable issues for x, y and Circle
-            # according to http://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+            # according to https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
             # one hack is to set to NULL first.
             x = y = Circle = NULL
             
