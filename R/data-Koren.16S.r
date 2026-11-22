@@ -30,7 +30,7 @@
 #' multilevel analysis for that experimental design. After prefiltering, the
 #' data included 973 OTU for 43 samples. We strongly recommend to use log ratio
 #' transformations on the \code{data.TSS} normalisd data, as implemented in the
-#' PLS and PCA methods, see details on \url{ www.mixOmics.org/mixMC}.
+#' PLS and PCA methods, see details on \url{https://mixomics.org/mixmc/}.
 #' 
 #' The \code{data.raw} include a 1 offset in order to be log ratios transformed
 #' after TSS normalisation. Consequently, the \code{data.TSS} are TSS
@@ -61,6 +61,6 @@
 #' atherosclerosis. Proceedings of the National Academy of Sciences
 #' 108(Supplement 1), 4592-4598 (2011)
 #' @source The raw data were downloaded from the QIITA database. Filtering and
-#' normalisation described in our website \url{ www.mixOmics.org/mixMC}
+#' normalisation described in our website \url{https://mixomics.org/mixmc/}
 #' @keywords datasets
 NULL

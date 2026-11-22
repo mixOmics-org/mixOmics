@@ -143,7 +143,7 @@ of repeated measures experiments from two assays. BMC bioinformatics 13(1),
 \code{\link{splsda}}, \code{\link{summary}},
 \code{\link{plotIndiv}}, \code{\link{plotVar}}, \code{\link{predict}},
 \code{\link{perf}}, \code{\link{mint.block.plsda}},
-\code{\link{block.plsda}} and http://mixOmics.org for more details.
+\code{\link{block.plsda}} and https://mixomics.org/ for more details.
 }
 \author{
 Ignacio González, Kim-Anh Lê Cao, Florian Rohart, Al J Abadi

@@ -68,7 +68,7 @@
 #' @seealso \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 #' \code{\link{plotVar}}, \code{\link{cim}}, \code{\link{network}},
 #' \code{\link{predict}}, \code{\link{perf}}, \code{\link{mint.block.splsda}},
-#' \code{\link{block.splsda}} and http://www.mixOmics.org for more details.
+#' \code{\link{block.splsda}} and https://mixomics.org/ for more details.
 #' @references On sPLS-DA: Lê Cao, K.-A., Boitard, S. and Besse, P. (2011).
 #' Sparse PLS Discriminant Analysis: biologically relevant feature selection
 #' and graphical displays for multiclass problems. \emph{BMC Bioinformatics}

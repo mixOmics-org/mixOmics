@@ -89,7 +89,7 @@
 #' @seealso \code{\link{plotIndiv}}, \code{\link{plotArrow}},
 #' \code{\link{plotLoadings}}, \code{\link{plotVar}}, \code{\link{predict}},
 #' \code{\link{perf}}, \code{\link{selectVar}}, \code{\link{block.spls}},
-#' \code{\link{block.plsda}} and http://www.mixOmics.org for more details.
+#' \code{\link{block.plsda}} and https://mixomics.org/ for more details.
 #' @references Tenenhaus, M. (1998). \emph{La regression PLS: theorie et
 #' pratique}. Paris: Editions Technic.
 #' 

@@ -101,7 +101,7 @@
 #' returned for each prediction framework.}
 #' 
 #' @author Florian Rohart, Amrit Singh, Kim-Anh Lê Cao, AL J Abadi
-#' @seealso \code{\link{block.splsda}} and http://www.mixOmics.org for more
+#' @seealso \code{\link{block.splsda}} and https://mixomics.org/ for more
 #' details.
 #' @references Method:
 #' 

@@ -140,7 +140,7 @@ for multi-group PLS. J. Chemometrics, 28(3), 192-201.
 \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{predict}}, \code{\link{perf}},
 \code{\link{mint.spls}}, \code{\link{mint.plsda}}, \code{\link{mint.splsda}}
-and http://www.mixOmics.org/mixMINT for more details.
+and https://mixomics.org/mixMINT/ for more details.
 }
 \author{
 Florian Rohart, Kim-Anh Lê Cao, Al J Abadi

@@ -128,7 +128,7 @@
 #' @author Kim-Anh Lê Cao, Benoit Gautier, Francois Bartolo, Florian Rohart,
 #' Al J Abadi
 #' @seealso \code{\link{splsda}}, \code{\link{predict.splsda}} and
-#' http://www.mixOmics.org for more details.
+#' https://mixomics.org/ for more details.
 #' @references mixOmics article:
 #' 
 #' Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics

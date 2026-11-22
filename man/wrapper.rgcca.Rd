@@ -117,7 +117,7 @@ Statist. Appl. Genet. Mol. Biol. 4:32.
 \seealso{
 \code{\link{wrapper.rgcca}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{wrapper.sgcca}} and
-\url{http://www.mixOmics.org} for more details.
+\url{https://mixomics.org/} for more details.
 }
 \author{
 Arthur Tenenhaus, Vincent Guillemot, Kim-Anh Lê Cao, 

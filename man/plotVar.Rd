@@ -301,7 +301,7 @@ Visualising associations between paired 'omics data sets. J. Data Mining
 }
 \seealso{
 \code{\link{cim}}, \code{\link{network}}, \code{\link{par}} and
-http://www.mixOmics.org for more details.
+https://mixomics.org/ for more details.
 }
 \author{
 Ignacio González, Benoit Gautier, Francois Bartolo, Florian Rohart,

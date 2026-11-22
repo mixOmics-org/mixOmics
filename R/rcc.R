@@ -87,7 +87,7 @@
 #' Florian Rohart, Al J Abadi
 #' @seealso \code{\link{summary}}, \code{\link{tune.rcc}},
 #' \code{\link{plot.rcc}}, \code{\link{plotIndiv}}, \code{\link{plotVar}},
-#' \code{\link{cim}}, \code{\link{network}} and http://www.mixOmics.org for
+#' \code{\link{cim}}, \code{\link{network}} and https://mixomics.org/ for
 #' more details.
 #' @references González, I., Déjean, S., Martin, P. G., and Baccini, A. (2008).
 #' CCA: An R package to extend canonical correlation analysis. Journal of

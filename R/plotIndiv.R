@@ -145,7 +145,7 @@
 #' @author Ignacio González, Benoit Gautier, Francois Bartolo, Florian Rohart,
 #' Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{text}}, \code{\link{background.predict}},
-#' \code{\link{points}} and http://mixOmics.org/graphics for more details.
+#' \code{\link{points}} and https://mixomics.org/graphics/ for more details.
 #' @keywords multivariate hplot dplot
 #' @export
 #' @example ./examples/plotIndiv-examples.R 

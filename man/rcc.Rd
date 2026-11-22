@@ -144,7 +144,7 @@ emphAppl. Genet. Mol. Biol.  \bold{4}:32.
 \seealso{
 \code{\link{summary}}, \code{\link{tune.rcc}},
 \code{\link{plot.rcc}}, \code{\link{plotIndiv}}, \code{\link{plotVar}},
-\code{\link{cim}}, \code{\link{network}} and http://www.mixOmics.org for
+\code{\link{cim}}, \code{\link{network}} and https://mixomics.org/ for
 more details.
 }
 \author{

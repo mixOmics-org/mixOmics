@@ -73,7 +73,7 @@
 #' @seealso \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 #' \code{\link{plotVar}}, \code{\link{predict}}, \code{\link{perf}},
 #' \code{\link{mint.block.pls}}, \code{\link{mint.block.plsda}},
-#' \code{\link{mint.block.splsda}} and http://www.mixOmics.org/mixMINT for more
+#' \code{\link{mint.block.splsda}} and https://mixomics.org/mixMINT/ for more
 #' details.
 #' @references Rohart F, Eslami A, Matigian, N, Bougeard S, Lê Cao K-A (2017).
 #' MINT: A multivariate integrative approach to identify a reproducible

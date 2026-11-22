@@ -75,7 +75,7 @@
 #' @seealso \code{\link{plotIndiv}}, \code{\link{plotArrow}},
 #' \code{\link{plotLoadings}}, \code{\link{plotVar}}, \code{\link{predict}},
 #' \code{\link{perf}}, \code{\link{selectVar}}, \code{\link{block.pls}},
-#' \code{\link{block.splsda}} and http://www.mixOmics.org for more details.
+#' \code{\link{block.splsda}} and https://mixomics.org/ for more details.
 #' @references On PLSDA:
 #' 
 #' Barker M and Rayens W (2003). Partial least squares for discrimination.

@@ -63,7 +63,7 @@
 #' @author Ignacio González, Leigh Coonan, Kim-Anh Le Cao, Fangzhou Yao, 
 #' Florian Rohart, Al J Abadi
 #' @seealso \code{\link{nipals}}, \code{\link{biplot}},
-#' \code{\link{plotIndiv}}, \code{\link{plotVar}} and http://www.mixOmics.org
+#' \code{\link{plotIndiv}}, \code{\link{plotVar}} and https://mixomics.org/
 #' for more details.
 #' @keywords algebra
 #' @export

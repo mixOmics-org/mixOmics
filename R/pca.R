@@ -118,7 +118,7 @@
 #' \item{design}{If multilevel, the provided design.}
 #' @author Florian Rohart, Kim-Anh Lê Cao, Ignacio González, Al J Abadi
 #' @seealso \code{\link{nipals}}, \code{\link{prcomp}}, \code{\link{biplot}},
-#' \code{\link{plotIndiv}}, \code{\link{plotVar}} and http://www.mixOmics.org
+#' \code{\link{plotIndiv}}, \code{\link{plotVar}} and https://mixomics.org/
 #' for more details.
 #' @references On log ratio transformations: Filzmoser, P., Hron, K., Reimann,
 #' C.: Principal component analysis for compositional data with outliers.

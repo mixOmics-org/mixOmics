@@ -74,7 +74,7 @@
 #' @seealso \code{\link{splsda}}, \code{\link{summary}},
 #' \code{\link{plotIndiv}}, \code{\link{plotVar}}, \code{\link{predict}},
 #' \code{\link{perf}}, \code{\link{mint.block.plsda}},
-#' \code{\link{block.plsda}} and http://mixOmics.org for more details.
+#' \code{\link{block.plsda}} and https://mixomics.org/ for more details.
 #' @references On PLSDA: Barker M and Rayens W (2003). Partial least squares
 #' for discrimination. \emph{Journal of Chemometrics} \bold{17}(3), 166-173.
 #' Perez-Enciso, M. and Tenenhaus, M. (2003). Prediction of clinical outcome

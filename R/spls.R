@@ -68,7 +68,7 @@
 #' Al J abadi
 #' @seealso \code{\link{pls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 #' \code{\link{plotVar}}, \code{\link{cim}}, \code{\link{network}},
-#' \code{\link{predict}}, \code{\link{perf}} and http://www.mixOmics.org for
+#' \code{\link{predict}}, \code{\link{perf}} and https://mixomics.org/ for
 #' more details.
 #' @references Sparse PLS: canonical and regression modes:
 #' 

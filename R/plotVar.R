@@ -121,7 +121,7 @@
 #' @author Ignacio González, Benoit Gautier, Francois Bartolo, Florian Rohart,
 #' Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{cim}}, \code{\link{network}}, \code{\link{par}} and
-#' http://www.mixOmics.org for more details.
+#' https://mixomics.org/ for more details.
 #' @references González I., Lê Cao K-A., Davis, M.J. and Déjean, S. (2012).
 #' Visualising associations between paired 'omics data sets. J. Data Mining
 #' 5:19. \url{http://www.biodatamining.org/content/5/1/19/abstract}

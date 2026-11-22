@@ -228,7 +228,7 @@ associations between paired 'omics' data sets. \emph{BioData Mining};
 }
 \seealso{
 \code{\link{block.splsda}}, references and
-http://www.mixOmics.org/mixDIABLO for more details.
+https://mixomics.org/mixDIABLO/ for more details.
 }
 \author{
 Michael Vacher, Amrit Singh, Florian Rohart, Kim-Anh Lê Cao, Al J Abadi

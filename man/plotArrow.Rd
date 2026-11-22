@@ -163,7 +163,7 @@ application to a cross-platform study. \emph{BMC Bioinformatics}
 }
 \seealso{
 \code{\link{arrows}}, \code{\link{text}}, \code{\link{points}} and
-http://mixOmics.org/graphics for more details.
+https://mixomics.org/graphics/ for more details.
 }
 \author{
 Al J Abadi

@@ -648,7 +648,7 @@ plotIndiv(mint.obj, study = c("1", "2"), rep.space = "XY-variate")
 }
 \seealso{
 \code{\link{text}}, \code{\link{background.predict}},
-\code{\link{points}} and http://mixOmics.org/graphics for more details.
+\code{\link{points}} and https://mixomics.org/graphics/ for more details.
 }
 \author{
 Ignacio González, Benoit Gautier, Francois Bartolo, Florian Rohart,

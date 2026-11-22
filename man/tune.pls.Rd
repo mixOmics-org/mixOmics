@@ -236,7 +236,7 @@ Patel J, Atkinson K, Khosrotehrani K, Fisk NM, Lê Cao K-A&, Wells CA&
 4:e1845.
 }
 \seealso{
-\code{\link{splsda}}, \code{\link{predict.splsda}}, and http://www.mixOmics.org for more details.
+\code{\link{splsda}}, \code{\link{predict.splsda}}, and https://mixomics.org/ for more details.
 }
 \author{
 Kim-Anh Lê Cao, Al J Abadi, Benoit Gautier, Francois Bartolo and Florian Rohart.

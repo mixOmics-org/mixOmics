@@ -186,7 +186,7 @@ e1005752
 }
 \seealso{
 \code{\link{splsda}}, \code{\link{predict.splsda}} and
-http://www.mixOmics.org for more details.
+https://mixomics.org/ for more details.
 }
 \author{
 Kim-Anh Lê Cao, Benoit Gautier, Francois Bartolo, Florian Rohart,

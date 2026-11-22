@@ -189,7 +189,7 @@ Reviews: Computational Statistics}, 2(1), 97-106.
 \seealso{
 \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{predict}}, \code{\link{perf}} and
-http://www.mixOmics.org for more details.
+https://mixomics.org/ for more details.
 }
 \author{
 Sébastien Déjean, Ignacio González, Florian Rohart, Kim-Anh Lê Cao,

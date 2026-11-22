@@ -170,7 +170,7 @@
 #' @author Ignacio González, Kim-Anh Lê Cao, AL J Abadi
 #' @seealso \code{\link{plotVar}}, \code{\link{cim}},
 #' \code{\link{color.GreenRed}}, \code{\link{color.jet}},
-#' \code{\link{color.spectral}} and http: //www.mixOmics.org for more details.
+#' \code{\link{color.spectral}} and https://mixomics.org/ for more details.
 #' @references Mathematical definition: González I., Lê Cao K-A., Davis, M.J.
 #' and Déjean, S. (2012). Visualising associations between paired omics data
 #' sets. J. Data Mining 5:19.

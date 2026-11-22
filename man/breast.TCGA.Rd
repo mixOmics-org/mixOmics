@@ -18,7 +18,7 @@ subtypes in the training (length of 150) and test (length of 70) sets. } }
 \source{
 The raw data were downloaded from
 \url{http://cancergenome.nih.gov/}. The normalised and filtered data we
-analysed with DIABLO are available on \url{www.mixOmics.org/mixDIABLO}
+analysed with DIABLO are available on \url{https://mixomics.org/mixDIABLO/}
 }
 \usage{
 data(breast.TCGA)

@@ -51,6 +51,6 @@
 #' Volume 35, Issue 17, 1 September 2019, Pages 3055–3062.
 #' @source The raw data were downloaded from
 #' \url{http://cancergenome.nih.gov/}. The normalised and filtered data we
-#' analysed with DIABLO are available on \url{www.mixOmics.org/mixDIABLO}
+#' analysed with DIABLO are available on \url{https://mixomics.org/mixDIABLO/}
 #' @keywords datasets
 NULL

@@ -167,7 +167,7 @@
 #' \code{\link{mint.block.pls}}, \code{\link{mint.block.spls}},
 #' \code{\link{mint.block.plsda}}, \code{\link{mint.block.splsda}} and
 #' visualisation with \code{\link{background.predict}} and
-#' http://www.mixOmics.org for more details.
+#' https://mixomics.org/ for more details.
 #' @references
 #' 
 #' Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics

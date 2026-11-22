@@ -223,7 +223,7 @@ e1005752
 \code{\link{plotIndiv}}, \code{\link{plotArrow}},
 \code{\link{plotLoadings}}, \code{\link{plotVar}}, \code{\link{predict}},
 \code{\link{perf}}, \code{\link{selectVar}}, \code{\link{block.plsda}},
-\code{\link{block.spls}} and http://www.mixOmics.org/mixDIABLO for more
+\code{\link{block.spls}} and https://mixomics.org/mixDIABLO/ for more
 details and examples.
 }
 \author{

@@ -62,7 +62,7 @@ Press, N.Y., 307-357.
 \seealso{
 \code{\link{impute.nipals}}, \code{\link{svd}},
   \code{\link{princomp}}, \code{\link{prcomp}}, \code{\link{eigen}} and
-  http://www.mixOmics.org for more details.
+  https://mixomics.org/ for more details.
 }
 \author{
 Sébastien Déjean, Ignacio González, Kim-Anh Le Cao, Al J Abadi

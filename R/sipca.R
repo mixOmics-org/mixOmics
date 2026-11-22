@@ -45,7 +45,7 @@
 #' components, after setting possible missing values to zero.}
 #' @author Fangzhou Yao, Jeff Coquery, Francois Bartolo, Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{ipca}}, \code{\link{pca}}, \code{\link{plotIndiv}},
-#' \code{\link{plotVar}} and http://www.mixOmics.org for more details.
+#' \code{\link{plotVar}} and https://mixomics.org/ for more details.
 #' @references Yao, F., Coquery, J. and Lê Cao, K.-A. (2011) Principal
 #' component analysis with independent loadings: a combination of PCA and ICA.
 #' (in preparation)

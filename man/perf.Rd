@@ -529,7 +529,7 @@ Patel J, Atkinson K, Khosrotehrani K, Fisk NM, Lê Cao K-A&, Wells CA&
 }
 \seealso{
 \code{\link{predict}}, \code{\link{nipals}},
-\code{\link{plot.perf}}, \code{\link{auroc}} and \url{www.mixOmics.org} for
+\code{\link{plot.perf}}, \code{\link{auroc}} and \url{https://mixomics.org/} for
 more details.
 }
 \author{

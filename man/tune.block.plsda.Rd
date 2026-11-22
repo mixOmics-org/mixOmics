@@ -233,7 +233,7 @@ feature selection and multiple data integration. PLoS Comput Biol 13(11):
 e1005752
 }
 \seealso{
-\code{\link{block.splsda}} and http://www.mixOmics.org for more
+\code{\link{block.splsda}} and https://mixomics.org/ for more
 details.
 }
 \author{

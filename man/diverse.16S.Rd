@@ -23,7 +23,7 @@ measured on each individual.} }
 \source{
 The raw data were downloaded from
 \url{http://hmpdacc.org/HMQCP/all/}. Filtering and normalisation described
-in our website \url{ www.mixOmics.org/mixMC}
+in our website \url{https://mixomics.org/mixmc/}
 }
 \usage{
 data(diverse.16S)
@@ -46,7 +46,7 @@ different body sites. We focused on the first visit of each healthy
 individual and focused on the three most diverse habitats. The prefiltered
 dataset included 1,674 OTU counts. We strongly recommend to use log ratio
 transformations on the \code{data.TSS} normalised data, as implemented in
-the PLS and PCA methods, see details on \url{ www.mixOmics.org/mixMC}.
+the PLS and PCA methods, see details on \url{https://mixomics.org/mixmc/}.
 
 The \code{data.raw} include a 1 offset in order to be log ratios transformed
 after TSS normalisation. Consequently, the \code{data.TSS} are TSS

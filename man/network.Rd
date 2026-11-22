@@ -306,7 +306,7 @@ Network between Chemosensitivity and Transcriptome in Human Hepatoma Cells.
 \seealso{
 \code{\link{plotVar}}, \code{\link{cim}},
 \code{\link{color.GreenRed}}, \code{\link{color.jet}},
-\code{\link{color.spectral}} and http: //www.mixOmics.org for more details.
+\code{\link{color.spectral}} and https://mixomics.org/ for more details.
 }
 \author{
 Ignacio González, Kim-Anh Lê Cao, AL J Abadi

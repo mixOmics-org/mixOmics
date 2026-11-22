@@ -33,7 +33,7 @@ away from 0, as commonly done with counts data.
 
 data(diverse.16S)
 CLR = logratio.transfo(X = diverse.16S$data.TSS, logratio = 'CLR')
-# no offset needed here as we have put it prior to the TSS, see www.mixOmics.org/mixMC
+# no offset needed here as we have put it prior to the TSS, see https://mixomics.org/mixmc/
 }
 \references{
 Kim-Anh Lê Cao, Mary-Ellen Costello, Vanessa Anne Lakis,

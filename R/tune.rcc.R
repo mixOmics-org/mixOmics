@@ -58,7 +58,7 @@
 #' vectors \code{grid1} and \code{grid2}.} \item{mat}{matrix containing the
 #' cross-validation score computed on the grid.}
 #' @author Sébastien Déjean, Ignacio González, Kim-Anh Lê Cao, Al J Abadi
-#' @seealso \code{\link{image.tune.rcc}} and http://www.mixOmics.org for more
+#' @seealso \code{\link{image.tune.rcc}} and https://mixomics.org/ for more
 #' details.
 #' @keywords multivariate dplot
 #' @importFrom BiocParallel SerialParam bplapply
