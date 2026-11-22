@@ -73,9 +73,9 @@ library(kableExtra)
 ```{r 00-header-generation, echo=FALSE, eval=FALSE}
 ## run this only to re-make the logo in header.html
 ## Create the external file
-img <- htmltools::img(src = knitr::image_uri("InputFigures/logo-mixomics.jpg"),
+img <- htmltools::img(src = knitr::image_uri("InputFigures/mixomics-logo.svg"),
                alt = 'logo',
-               style = 'position:absolute; top:25px; right:1%; padding:10px;z-index:200;')
+               style = 'position:absolute; top:25px; right:1%; padding:10px;z-index:200;width:clamp(120px,17vw,208px);')
 
 htmlhead <- paste0('
 <script>
