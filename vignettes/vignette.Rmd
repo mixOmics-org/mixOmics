@@ -540,7 +540,7 @@ boxplot(ABCC2.scale ~
 
 ## Example: sparse PCA {#03:spca}
 
-In the `ABC.trans` data, there is only one missing value. Missing values can be handled by sPCA via the NIPALS algorithm . However, if the number of missing values is large, we recommend imputing them with NIPALS, as we describe in our website in www.mixOmics.org.
+In the `ABC.trans` data, there is only one missing value. Missing values can be handled by sPCA via the NIPALS algorithm . However, if the number of missing values is large, we recommend imputing them with NIPALS, as we describe in our website, https://mixomics.org/.
 
 ### Choose the number of variables to select {#03:spca-vars}
 
