@@ -19,6 +19,7 @@ README*
 ^DCO$
 ^CONTRIBUTING\.md$
 ^SUPPORT\.md$
+^CITATION\.cff$
 
 ^NEWS*$
 ^MD5$
