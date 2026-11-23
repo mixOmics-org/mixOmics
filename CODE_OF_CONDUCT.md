@@ -90,7 +90,8 @@ mixOmics is a Bioconductor package, so [Bioconductor's Code of Conduct](https://
 - Maintainers are not required to monitor exchanges between other people. Anyone may report a possible violation, and reports are handled as described in Reporting an Issue.
 - The project's own community spaces include this repository, its issues, pull requests and discussions, and the mixOmics discussion forum. Spaces run by others, such as Bioconductor's support site, also follow their own rules.
 - Content written before this code was adopted is not treated as a violation of it.
-- Reports to <conduct@mixomics.org> are read by more than one person. Anyone named in a report, or with a conflict of interest, takes no part in handling it.
+- Community Moderators are the people who read reports sent to <conduct@mixomics.org>.
+- Reports to <conduct@mixomics.org> are read by more than one person. Anyone named in a report, or with a conflict of interest, takes no part in handling it. If your report is about someone who reads this address, send it to Bioconductor's Code of Conduct Committee instead.
 
 
 ## Attribution
