@@ -21,6 +21,7 @@ README*
 ^SUPPORT\.md$
 ^CITATION\.cff$
 ^AGENTS\.md$
+^CLAUDE\.md$
 
 ^NEWS*$
 ^MD5$
