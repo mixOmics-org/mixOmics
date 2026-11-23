@@ -1,9 +1,9 @@
 --- 
 title: 'mixOmics vignette'
 author:
-- name: Kim-Anh Le Cao
+- name: Kim-Anh Lê Cao
   email: kimanh@mixomics.org
-  affiliation: Melbourne Integrative Genomics & School of Mathematics and Statistics, The University of Melbourne, Australia
+  affiliation: '<a href="https://github.com/lecaolab">Lê Cao Lab</a>, currently based at Melbourne Integrative Genomics (MIG), The University of Melbourne, Australia'
 
 package: mixOmics
 site: bookdown::bookdown_site
