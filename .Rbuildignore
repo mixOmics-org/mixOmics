@@ -16,6 +16,7 @@ README*
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
 ^SECURITY\.md$
+^DCO$
 
 ^NEWS*$
 ^MD5$
