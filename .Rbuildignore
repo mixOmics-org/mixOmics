@@ -17,6 +17,7 @@ README*
 ^LICENSE\.md$
 ^SECURITY\.md$
 ^DCO$
+^CONTRIBUTING\.md$
 
 ^NEWS*$
 ^MD5$
