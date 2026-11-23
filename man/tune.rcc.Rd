@@ -81,7 +81,7 @@ tune_res <- tune.rcc(X, Y, validation = "Mfold")
 plot(tune_res)
 }
 \seealso{
-\code{\link{image.tune.rcc}} and http://www.mixOmics.org for more
+\code{\link{image.tune.rcc}} and https://mixomics.org/ for more
 details.
 }
 \author{

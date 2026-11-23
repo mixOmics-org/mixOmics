@@ -17,8 +17,8 @@ subtypes in the training (length of 150) and test (length of 70) sets. } }
 }
 \source{
 The raw data were downloaded from
-\url{http://cancergenome.nih.gov/}. The normalised and filtered data we
-analysed with DIABLO are available on \url{www.mixOmics.org/mixDIABLO}
+\url{https://www.cancer.gov/about-nci/organization/dcb/research-programs/past-programs/tcga}. The normalised and filtered data we
+analysed with DIABLO are available on \url{https://mixomics.org/mixDIABLO/}
 }
 \usage{
 data(breast.TCGA)
@@ -36,7 +36,7 @@ proteomics data set.
 }
 \details{
 The data come from The Cancer Genome Atlas (TCGA,
-http://cancergenome.nih.gov/). We divided the data into a training
+https://www.cancer.gov/about-nci/organization/dcb/research-programs/past-programs/tcga). We divided the data into a training
 (discovery) and test (validation) set. The protein dataset which had a
 limited number of subjects available was used to allocate subjects into the
 training set only, while the tes set included all remaining subject. Each

@@ -260,7 +260,7 @@ auc.block.splsda.nutri = auroc(block.splsda.nutri, roc.block = 1)
 }
 }
 \seealso{
-\code{\link{tune}}, \code{\link{perf}}, and http://www.mixOmics.org
+\code{\link{tune}}, \code{\link{perf}}, and https://mixomics.org/
 for more details.
 }
 \author{

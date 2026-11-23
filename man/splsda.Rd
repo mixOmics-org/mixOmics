@@ -205,7 +205,7 @@ bioinformatics 13(1), 325 (2012)
 \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{cim}}, \code{\link{network}},
 \code{\link{predict}}, \code{\link{perf}}, \code{\link{mint.block.splsda}},
-\code{\link{block.splsda}} and http://www.mixOmics.org for more details.
+\code{\link{block.splsda}} and https://mixomics.org/ for more details.
 }
 \author{
 Florian Rohart, Ignacio González, Kim-Anh Lê Cao, Al J abadi

@@ -1,6 +1,6 @@
 ## version 6.38.0
 
-Bioconductor 3.24.
+Bioconductor 3.24, November 2026.
 
 ### new features / enhancements / changes
 
@@ -13,8 +13,10 @@ Bioconductor 3.24.
 * `citation("mixOmics")` gives the full author names and the DOI (#416)
 * the GitHub repository moved from `mixOmicsTeam/mixOmics` to `mixOmics-org/mixOmics`
 * expanded test coverage for model utilities and internal helpers (#381)
-* Kim-Anh Lê Cao, creator of mixOmics, is now correctly set as the official Bioconductor maintainer for the package
+* the official Bioconductor package maintainer is now correctly set as Professor Kim-Anh Lê Cao, founding author and project lead of mixOmics
 * new title and description, reflecting the package as it is today
+* mixOmics logo updated in the vignette
+* ORCID iDs added for authors and contributors where known
 
 ### bug fixes
 
@@ -26,6 +28,9 @@ Bioconductor 3.24.
 * `plotLoadings` handles a vector `xlim` for contribution plots in the `graphics` style (#377)
 * the vignette link in the startup message returned 404; it now points to https://guides.mixomics.org/mixomics-guide-vignette/, and the website and contact links use https
 * `?tune.rcc` gave the wrong default for `BPPARAM`; it is `SerialParam()`
+* error messages now link to the mixOmics-org issue page instead of the old `mixOmicsTeam` address
+* help pages now link to https://mixomics.org, and references and data sources whose pages have moved or gone link to the paper's DOI
+* citations of González et al. (2012) corrected to match the published paper
 
 ## version 6.36.0
 

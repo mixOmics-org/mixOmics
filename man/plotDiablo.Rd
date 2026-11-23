@@ -74,7 +74,7 @@ molecular drivers from multi-omics assays, Bioinformatics,
 Volume 35, Issue 17, 1 September 2019, Pages 3055–3062.
 }
 \seealso{
-\code{\link{block.splsda}} and http://www.mixOmics.org/mixDIABLO
+\code{\link{block.splsda}} and https://mixomics.org/mixDIABLO/
 for more details.
 }
 \author{

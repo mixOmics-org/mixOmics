@@ -84,7 +84,7 @@
 #' \item{x}{the matrix containing the principal components.}
 #' }
 #' @author Kim-Anh Lê Cao, Fangzhou Yao, Leigh Coonan, Ignacio Gonzalez, Al J Abadi
-#' @seealso \code{\link{pca}} and http://www.mixOmics.org for more details.
+#' @seealso \code{\link{pca}} and https://mixomics.org/ for more details.
 #' @references Shen, H. and Huang, J. Z. (2008). Sparse principal component
 #' analysis via regularized low rank matrix approximation. \emph{Journal of
 #' Multivariate Analysis} \bold{99}, 1015-1034.

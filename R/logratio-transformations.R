@@ -43,7 +43,7 @@
 #' @references Kim-Anh Lê Cao, Mary-Ellen Costello, Vanessa Anne Lakis,
 #' Francois Bartolo, Xin-Yi Chua, Remi Brazeilles, Pascale Rondeau mixMC: a
 #' multivariate statistical framework to gain insight into Microbial
-#' Communities bioRxiv 044206; doi: http://dx.doi.org/10.1101/044206
+#' Communities bioRxiv 044206; doi: https://doi.org/10.1101/044206
 #' 
 #' John Aitchison. The statistical analysis of compositional data. Journal of
 #' the Royal Statistical Society. Series B (Methodological), pages 139-177,
@@ -56,7 +56,7 @@
 #' 
 #' data(diverse.16S)
 #' CLR = logratio.transfo(X = diverse.16S$data.TSS, logratio = 'CLR')
-#' # no offset needed here as we have put it prior to the TSS, see www.mixOmics.org/mixMC
+#' # no offset needed here as we have put it prior to the TSS, see https://mixomics.org/mixmc/
 #' @name logratio-transformations
 NULL
 #' @rdname logratio-transformations

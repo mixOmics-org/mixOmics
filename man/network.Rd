@@ -281,9 +281,9 @@ dev.off()
 }
 \references{
 Mathematical definition: González I., Lê Cao K-A., Davis, M.J.
-and Déjean, S. (2012). Visualising associations between paired omics data
-sets. J. Data Mining 5:19.
-\url{http://www.biodatamining.org/content/5/1/19/abstract}
+and Déjean, S. (2012). Visualising associations between paired 'omics' data
+sets. BioData Mining 5:19.
+\url{https://doi.org/10.1186/1756-0381-5-19}
 
 Examples and illustrations:
 
@@ -306,7 +306,7 @@ Network between Chemosensitivity and Transcriptome in Human Hepatoma Cells.
 \seealso{
 \code{\link{plotVar}}, \code{\link{cim}},
 \code{\link{color.GreenRed}}, \code{\link{color.jet}},
-\code{\link{color.spectral}} and http: //www.mixOmics.org for more details.
+\code{\link{color.spectral}} and https://mixomics.org/ for more details.
 }
 \author{
 Ignacio González, Kim-Anh Lê Cao, AL J Abadi

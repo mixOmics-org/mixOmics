@@ -8,12 +8,12 @@ status](https://github.com/mixOmics-org/mixOmics/workflows/R-CMD-check.yml/badge
 [![](https://codecov.io/gh/mixOmics-org/mixOmics/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mixOmics-org/mixOmics)
 [![License:
 AGPL-3](https://img.shields.io/badge/license-AGPL--3-lightgrey.svg)](https://cran.r-project.org/web/licenses/AGPL-3)
-[![dependencies](http://bioconductor.org/shields/dependencies/release/mixOmics.svg)](http://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
+[![dependencies](https://bioconductor.org/shields/dependencies/release/mixOmics.svg)](https://bioconductor.org/packages/release/bioc/html/mixOmics.html#since)
 
 ![](https://raw.githubusercontent.com/mixOmics-org/.github/main/profile/assets/mixomics-logo.svg)
 
 This repository contains the `R` package which is [hosted on
-Bioconductor](http://bioconductor.org/packages/release/bioc/html/mixOmics.html)
+Bioconductor](https://bioconductor.org/packages/release/bioc/html/mixOmics.html)
 and our development `GitHub` versions. Go to <https://mixomics.org> for
 information on how to use mixOmics.
 
@@ -75,13 +75,12 @@ Click to expand
 **Note: this requires root privileges**
 
 1)  Install Docker following instructions at
-    <https://docs.docker.com/docker-for-mac/install/>
+    <https://docs.docker.com/desktop/setup/install/mac-install/>
 
 **if your OS is not compatible with the latest version** download an
 older version of Docker from the following link:
 
-- MacOS: <https://docs.docker.com/docker-for-mac/release-notes/>
-- Windows: <https://docs.docker.com/docker-for-windows/release-notes/>
+- MacOS and Windows: <https://docs.docker.com/desktop/release-notes/>
 
 Then open your system’s command line interface (e.g. Terminal for MacOS
 and Command Promot for Windows) for the following steps.
@@ -231,6 +230,28 @@ Thank you!
   [\#419](https://github.com/mixOmics-org/mixOmics/pull/419):
   `circosPlot()` with several blocks in `blocks.link` kept only about
   half of the links
+- the official Bioconductor package maintainer is now correctly set as
+  Professor Kim-Anh Lê Cao, founding author and project lead of mixOmics
+  ([\#424](https://github.com/mixOmics-org/mixOmics/pull/424))
+- new package title and description
+  ([\#424](https://github.com/mixOmics-org/mixOmics/pull/424))
+- startup message: the vignette link now points to the [mixOmics
+  vignette guide](https://guides.mixomics.org/mixomics-guide-vignette/),
+  and all links use https
+  ([\#425](https://github.com/mixOmics-org/mixOmics/pull/425))
+- `?tune.rcc` now gives the correct default for `BPPARAM`
+  ([\#425](https://github.com/mixOmics-org/mixOmics/pull/425))
+- error messages, help pages and the vignette now link to mixOmics-org
+  and <https://mixomics.org>
+- references and data sources whose pages have moved or gone now link to
+  the paper’s DOI
+- citations of González et al. (2012) corrected to match the published
+  paper
+- mixOmics logo updated in the vignette
+- ORCID iDs added for authors and contributors where known
+- new community files: Code of Conduct (Contributor Covenant 3.0),
+  contributing guide, security policy, support page, `CITATION.cff` and
+  issue forms
 
 #### October 2026
 
@@ -281,11 +302,11 @@ Thank you!
 #### May 2026
 
 - bug fix implemented for
-  [\#377](https://github.com/mixOmicsTeam/mixOmics/issues/377) fixed
+  [\#377](https://github.com/mixOmics-org/mixOmics/issues/377) fixed
   vector `xlim` handling in the `graphics` branch of `plotLoadings()`
   contribution plots
 - enhancement request
-  [\#381](https://github.com/mixOmicsTeam/mixOmics/issues/381) expanded
+  [\#381](https://github.com/mixOmics-org/mixOmics/issues/381) expanded
   test coverage for model utilities and internal helper paths, with
   small fixes made for issues exposed by the new tests
 
@@ -301,11 +322,11 @@ released 29th April 2026 mixOmics can now be downloaded using
 compatible with R 4.6.0
 
 - bug fix implemented for
-  [\#374](https://github.com/mixOmicsTeam/mixOmics/issues/374) replaced
+  [\#374](https://github.com/mixOmics-org/mixOmics/issues/374) replaced
   deprecated `aes_string()` with `aes(.data[[...]])` in plotting
   functions
 - bug fix implemented for
-  [\#379](https://github.com/mixOmicsTeam/mixOmics/issues/379) replaced
+  [\#379](https://github.com/mixOmics-org/mixOmics/issues/379) replaced
   deprecated `size` aesthetic with `linewidth` in ggplot2 line geoms
 
 #### April 2025
@@ -320,14 +341,14 @@ released 17th April 2025 mixOmics can now be downloaded using
 compatible with R 4.5.0
 
 - feature request
-  [\#345](https://github.com/mixOmicsTeam/mixOmics/issues/345) updated
+  [\#345](https://github.com/mixOmics-org/mixOmics/issues/345) updated
   functionality for `plotLoadings()` so can plot in ggplot2 style and
   customise aesthetics
 - bug fix implemented for
-  [\#357](https://github.com/mixOmicsTeam/mixOmics/issues/357)
+  [\#357](https://github.com/mixOmics-org/mixOmics/issues/357)
   `plotIndiv()` not handing `pch` ordering correctly
 - enhancement request
-  [\#332](https://github.com/mixOmicsTeam/mixOmics/issues/332) increased
+  [\#332](https://github.com/mixOmics-org/mixOmics/issues/332) increased
   test coverage for `plotIndiv()`
 - implemented a new unit testing framework for plotting functions using
   `vdiffr` package
@@ -335,58 +356,58 @@ compatible with R 4.5.0
 #### March 2025
 
 - enhancement request
-  [\#353](https://github.com/mixOmicsTeam/mixOmics/issues/353) better
+  [\#353](https://github.com/mixOmics-org/mixOmics/issues/353) better
   error message in `perf()` when one sample in a class
 - enhancement request
-  [\#340](https://github.com/mixOmicsTeam/mixOmics/issues/340) expand
+  [\#340](https://github.com/mixOmics-org/mixOmics/issues/340) expand
   test coverage for main functions
 - enhancement request
-  [\#336](https://github.com/mixOmicsTeam/mixOmics/issues/336)
+  [\#336](https://github.com/mixOmics-org/mixOmics/issues/336)
   streamline multiblock functions by removing `scheme` and `init` args
 
 Also explored potential unusual behaviour of: \* zero variance handling
 in `block.splsda`
-[\#352](https://github.com/mixOmicsTeam/mixOmics/issues/352) \* `perf()`
+[\#352](https://github.com/mixOmics-org/mixOmics/issues/352) \* `perf()`
 giving non-intuitve per-class error rates
-[\#355](https://github.com/mixOmicsTeam/mixOmics/issues/355)
+[\#355](https://github.com/mixOmics-org/mixOmics/issues/355)
 
 #### November 2024
 
 - enhancement request
-  [\#216](https://github.com/mixOmicsTeam/mixOmics/issues/216)
+  [\#216](https://github.com/mixOmics-org/mixOmics/issues/216)
   implemented parallel processing using `BPPARAM` across all `tune()`
   functions
 - feature request
-  [\#335](https://github.com/mixOmicsTeam/mixOmics/issues/335) added
+  [\#335](https://github.com/mixOmics-org/mixOmics/issues/335) added
   `seed` argument to `perf()` functions for better reproducibility
 - feature request
-  [\#334](https://github.com/mixOmicsTeam/mixOmics/issues/334) added
+  [\#334](https://github.com/mixOmics-org/mixOmics/issues/334) added
   `seed` argument to `tune()` functions for better reproducibility
 - bug fix implemented for
-  [\#303](https://github.com/mixOmicsTeam/mixOmics/issues/303) multiple
+  [\#303](https://github.com/mixOmics-org/mixOmics/issues/303) multiple
   solutions found in `perf()` returns error
 - bug fix implemented for
-  [\#307](https://github.com/mixOmicsTeam/mixOmics/issues/307)
+  [\#307](https://github.com/mixOmics-org/mixOmics/issues/307)
   `plotIndiv()` ellipses colours not matching points, now sample group
   order is respected and colours can be customised for points and
   ellipses
 - updated documentation to fix issue
-  [\#297](https://github.com/mixOmicsTeam/mixOmics/issues/297) broken
+  [\#297](https://github.com/mixOmics-org/mixOmics/issues/297) broken
   link in bookdown vignette
 - updated documentation to fix issue
-  [\#296](https://github.com/mixOmicsTeam/mixOmics/issues/296) typo in
+  [\#296](https://github.com/mixOmics-org/mixOmics/issues/296) typo in
   vignette
 
 The performance assessment and parameter tuning workflow has been
 streamlined as described in issue
-[\#343](https://github.com/mixOmicsTeam/mixOmics/issues/343)
+[\#343](https://github.com/mixOmics-org/mixOmics/issues/343)
 
 - New function: `perf.assess()` This function essentially runs `perf()`
   on final model but only returns performance metrics for the number of
   components used in the final model. Designed to be used in the final
   step of the workflow for quantifying final model performance. Outputs
   a list of values but no plotting functionality avaliable. See [PR
-  \#344](https://github.com/mixOmicsTeam/mixOmics/pull/344) for more
+  \#344](https://github.com/mixOmics-org/mixOmics/pull/344) for more
   details.
 
 - Additional functionality for `tune()` functions and new `tune()`
@@ -395,7 +416,7 @@ streamlined as described in issue
   tune number of components by internally calling `perf()`. Designed to
   be used for tuning both components and variables to keep across
   (s)PCA, (s)PLS, (s)PLSDA, block (s)PLSDA and mint (s)PLSDA models See
-  [PR \#348](https://github.com/mixOmicsTeam/mixOmics/pull/348) for more
+  [PR \#348](https://github.com/mixOmics-org/mixOmics/pull/348) for more
   details.
 
 #### October 2024
@@ -409,66 +430,66 @@ and unit tests, no major code changes and no changes to user experience
 of mixOmics.
 
 - bug fix implemented for
-  [\#293](https://github.com/mixOmicsTeam/mixOmics/issues/293)
+  [\#293](https://github.com/mixOmics-org/mixOmics/issues/293)
   `splsda()` example code error
 
 #### March 2022
 
 - bug fix implemented for [Issue
-  \#196](https://github.com/mixOmicsTeam/mixOmics/issues/196). `perf()`
+  \#196](https://github.com/mixOmics-org/mixOmics/issues/196). `perf()`
   can now handle features with a `(s)pls` which have near zero variance.
 - bug fix implemented for [Issue
-  \#192](https://github.com/mixOmicsTeam/mixOmics/issues/192).
+  \#192](https://github.com/mixOmics-org/mixOmics/issues/192).
   `predict()` can now handle when the testing and training data have
   their columns in different orders.
 - bug fix implemented for [Issue
-  \#178](https://github.com/mixOmicsTeam/mixOmics/issues/178). If the
+  \#178](https://github.com/mixOmics-org/mixOmics/issues/178). If the
   `indY` parameter is used in `block.spls()`, `circosPlot()` can now
   properly identify the $Y$ dataframe.
 - bug fix implemented for [Issue
-  \#172](https://github.com/mixOmicsTeam/mixOmics/issues/172). `perf()`
+  \#172](https://github.com/mixOmics-org/mixOmics/issues/172). `perf()`
   now returns values for the `choice.ncomp` component when `nrepeat`
   $< 3$ whereas before it would just return `NA`s.
 - bug fix implemented for [Issue
-  \#171](https://github.com/mixOmicsTeam/mixOmics/issues/171). `cim()`
+  \#171](https://github.com/mixOmics-org/mixOmics/issues/171). `cim()`
   now can take `pca` objects as input.
 - bug fix implemented for [Issue
-  \#161](https://github.com/mixOmicsTeam/mixOmics/issues/161).
+  \#161](https://github.com/mixOmics-org/mixOmics/issues/161).
   `tune.spca()` can now handle `NA` values appropriately.
 - bug fix implemented for [Issue
-  \#150](https://github.com/mixOmicsTeam/mixOmics/issues/150). Provided
+  \#150](https://github.com/mixOmics-org/mixOmics/issues/150). Provided
   users with a specific error message for when `plotArrow()` is run on a
   `(mint).(s)plsda` object.
 - bug fix implemented for [Issue
-  \#122](https://github.com/mixOmicsTeam/mixOmics/issues/122). Provided
+  \#122](https://github.com/mixOmics-org/mixOmics/issues/122). Provided
   users with a specific error message for when a `splsda` object that
   has only one sample associated with a given class is passed to
   `perf()`.
 - bug fix implemented for [Issue
-  \#120](https://github.com/mixOmicsTeam/mixOmics/issues/120).
+  \#120](https://github.com/mixOmics-org/mixOmics/issues/120).
   `plotLoadings()` now returns the loading values for features from
   **all** dataframes rather than just the last one when operating on a
   `(mint).(block).(s)plsda` object.
 - bug fix implemented for [Issue
-  \#43](https://github.com/mixOmicsTeam/mixOmics/issues/43). Homogenised
+  \#43](https://github.com/mixOmics-org/mixOmics/issues/43). Homogenised
   the way in which `tune.mint.splsda()` and `perf.mint.splsda()`
   calculate balanced error rate (BER) as there was disparity between
   them. Also made the global BER a weighted average of BERs across each
   study.
 - enhancement implemented for [Issue
-  \#30/#34](https://github.com/mixOmicsTeam/mixOmics/issues/34). The
+  \#30/#34](https://github.com/mixOmics-org/mixOmics/issues/34). The
   parameter `verbose.call` was added to most of the methods. This
   parameter allows users to access the specific values input into the
   call of a function from its output.
 - bug fix implemented for [Issue
-  \#24](https://github.com/mixOmicsTeam/mixOmics/issues/24).
+  \#24](https://github.com/mixOmics-org/mixOmics/issues/24).
   `background.predict()` can now operate on `mint.splsda` objects and
   can be used as part of `plotIndiv()`.
 
 #### July 2021
 
 - new function `plotMarkers` to visualise the selected features in block
-  analyses (see <https://github.com/mixOmicsTeam/mixOmics/issues/134>)
+  analyses (see <https://github.com/mixOmics-org/mixOmics/issues/134>)
 - `tune.spls` now able to tune the selected variables on both `X` and
   `Y`. See `?tune.spls`
 - new function `impute.nipals` to impute missing values using the nipals
@@ -491,9 +512,9 @@ of mixOmics.
 
 - `plotIndiv` now supports (weighted) consensus plots for block
   analyses. See the example in [this
-  issue](https://github.com/mixOmicsTeam/mixOmics/issues/57)
+  issue](https://github.com/mixOmics-org/mixOmics/issues/57)
 - `plotIndiv(..., ind.names=FALSE)` [warning
-  issue](https://github.com/mixOmicsTeam/mixOmics/issues/59) now fixed
+  issue](https://github.com/mixOmics-org/mixOmics/issues/59) now fixed
 
 #### January 2020
 

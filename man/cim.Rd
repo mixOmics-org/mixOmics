@@ -440,7 +440,7 @@ e1005752
 \code{\link{heatmap}}, \code{\link{hclust}}, \code{\link{plotVar}},
 \code{\link{network}} and
 
-\url{http://mixomics.org/graphics/} for more details on all options
+\url{https://mixomics.org/graphics/} for more details on all options
 available.
 }
 \author{

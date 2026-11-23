@@ -1,0 +1,124 @@
+name: Bug report
+description: Report an error, a warning or a result in mixOmics that looks wrong
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a problem. You do not need to be a programmer to write a useful report. Work through the boxes below in order: each one says what to write, and grey text inside a box is an example.
+
+        **Before you start**
+
+        1. Questions about which method to use, how to set its parameters or how to read a result belong on the [discussion forum](https://mixomics-users.discourse.group), not here.
+        2. Search the [open and closed issues](https://github.com/mixOmics-org/mixOmics/issues?q=is%3Aissue) in case the problem is already reported.
+        3. Restart R (in RStudio: Session, then Restart R) and run your code again. A fresh session rules out most objects left over from earlier work.
+        4. If mixOmics is installed, run `packageVersion("mixOmics")` to see your version, and look in [NEWS.md](https://github.com/mixOmics-org/mixOmics/blob/master/NEWS.md) to see whether a later version already fixes the problem.
+
+        **Title.** Name the function and say what goes wrong, for example "plotIndiv: the legend does not match the colours of the points".
+
+        **Your data.** Do not attach confidential or patient data. If the problem only shows with data you cannot share, say so in the box about your data, and describe the data there instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: In plain words, what you were trying to do, what you ran and what went wrong.
+      placeholder: |
+        I ran a sPLS-DA on gene expression data (40 samples, 120 genes) to separate five diets, then drew the samples with plotIndiv(). The plot appears, but the legend lists the diets in a different order from the colours of the points.
+    validations:
+      required: true
+  - type: input
+    id: function
+    attributes:
+      label: Function
+      description: The mixOmics function that fails or gives the result in question. If the problem is with installing mixOmics, write "installation". For a mistake in a help page or the vignette, give its name.
+      placeholder: plotIndiv
+    validations:
+      required: true
+  - type: textarea
+    id: reprex
+    attributes:
+      label: Code that reproduces the problem
+      description: |
+        The smallest piece of code that shows the problem, starting with `library(mixOmics)`, so that a maintainer can run it as it is. If you can, use one of the datasets that come with the package (`data(package = "mixOmics")` lists them). If the problem only shows with your own data, paste the code you ran on it and describe the data in the box below instead of attaching it. If the problem is with installing mixOmics, paste the commands you used to install it. For a mistake in the documentation, write "none". The forum explains how to [write a reproducible example](https://mixomics-users.discourse.group/t/reproducible-example-to-clarify-issues/470).
+      placeholder: |
+        library(mixOmics)
+        data(nutrimouse)
+        X <- nutrimouse$gene
+        Y <- nutrimouse$diet
+        result <- splsda(X, Y, ncomp = 2, keepX = c(20, 20))
+        plotIndiv(result, legend = TRUE)
+      render: r
+    validations:
+      required: true
+  - type: textarea
+    id: message
+    attributes:
+      label: Error or warning message
+      description: Copy the full text of any error or warning from the R console and paste it here, rather than a screenshot. If there is no message, for example because a result looks wrong, write "none".
+      placeholder: |
+        Error in ... :
+          ...
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: What should have happened. If a number or a plot looks wrong, say what it should be and where that comes from, for example a paper, another package or an earlier version of mixOmics.
+      placeholder: |
+        The legend should list the diets in the same colours as the points, as it did in an earlier version.
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: About your data (if you used your own)
+      description: Give the number of samples and variables, the number of blocks or studies, the size of each group, whether there are missing values, and how the data were prepared (for example scaling, normalisation or a log-ratio transform). If the result changes from run to run, give the seed and the cross-validation settings you used. A maintainer may ask for simulated data of the same shape.
+      placeholder: |
+        Two blocks (transcripts and metabolites) on the same 60 samples, with 5,000 and 300 variables, and three groups of 20. No missing values. Log-transformed, then scaled. set.seed(42), then perf() with validation = "Mfold", folds = 5, nrepeat = 10.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Output of sessionInfo()
+      description: Run `sessionInfo()` in the same R session, straight after the problem, and paste all of its output. When mixOmics is loaded, it shows the versions of R, mixOmics and the packages it uses.
+      placeholder: |
+        R version ...
+        Platform: ...
+        ...
+        other attached packages:
+        [1] mixOmics_...
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where mixOmics was installed from
+      description: How you installed the version you are using.
+      options:
+        - Bioconductor release
+        - Bioconductor devel
+        - GitHub
+        - Docker image
+        - Other
+        - Not installed (the installation failed)
+    validations:
+      required: true
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: A possible cause or fix, screenshots of plots, or links to related issues.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I agree to follow the [Code of Conduct](https://github.com/mixOmics-org/mixOmics/blob/master/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I searched the open and closed issues and did not find this problem
+          required: true
+        - label: I restarted R and the problem still happens in a fresh session
+        - label: I checked NEWS.md, and the problem is not already fixed in a later version
+        - label: I am using the current release or development version of mixOmics, or I say under Anything else why I cannot update

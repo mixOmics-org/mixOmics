@@ -130,7 +130,7 @@ revision)
 \seealso{
 \code{\link{wrapper.sgcca}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{wrapper.rgcca}} and
-\url{http://www.mixOmics.org} for more details.
+\url{https://mixomics.org/} for more details.
 }
 \author{
 Arthur Tenenhaus, Vincent Guillemot, Kim-Anh Lê Cao, 

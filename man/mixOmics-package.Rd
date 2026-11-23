@@ -37,8 +37,8 @@ Partial Least Squares.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://www.mixOmics.org}
-  \item Report bugs at \url{https://github.com/mixOmicsTeam/mixOmics/issues/}
+  \item \url{https://mixomics.org}
+  \item Report bugs at \url{https://github.com/mixOmics-org/mixOmics/issues}
 }
 
 }

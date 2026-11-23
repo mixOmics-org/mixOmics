@@ -131,7 +131,7 @@
 #' @author Florian Rohart, Francois Bartolo, Kim-Anh Lê Cao, Al J Abadi
 #' @seealso \code{\link{tune.rcc}}, \code{\link{tune.mint.splsda}},
 #' \code{\link{tune.pca}}, \code{\link{tune.splsda}},
-#' \code{\link{tune.splslevel}} and http://www.mixOmics.org for more details.
+#' \code{\link{tune.splslevel}} and https://mixomics.org/ for more details.
 #' @references 
 #' Singh A., Shannon C., Gautier B., Rohart F., Vacher M., Tebbutt S.
 #' and Lê Cao K.A. (2019), DIABLO: an integrative approach for identifying key 

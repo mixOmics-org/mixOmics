@@ -15,6 +15,13 @@ README*
 
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
+^SECURITY\.md$
+^DCO$
+^CONTRIBUTING\.md$
+^SUPPORT\.md$
+^CITATION\.cff$
+^AGENTS\.md$
+^CLAUDE\.md$
 
 ^NEWS*$
 ^MD5$

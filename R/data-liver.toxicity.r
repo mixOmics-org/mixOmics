@@ -55,8 +55,9 @@
 #' PLS for variable selection when integrating Omics data. \emph{Statistical
 #' Applications in Genetics and Molecular Biology} \bold{7}, article 35.
 #' @source The two liver toxicity data sets are a companion resource for the
-#' paper of Bushel \emph{et al.} (2007), and was downloaded from:
+#' paper of Bushel \emph{et al.} (2007), and were downloaded from the
+#' additional files of that paper:
 #' 
-#' \url{http://www.biomedcentral.com/1752-0509/1/15/additional/}
+#' \url{https://doi.org/10.1186/1752-0509-1-15}
 #' @keywords datasets
 NULL

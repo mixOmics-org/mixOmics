@@ -63,7 +63,7 @@
 #' @seealso \code{\link{cim}}, \code{\link{heatmap}}, \code{\link{hclust}},
 #' \code{\link{plotVar}}, \code{\link{network}} and
 #' 
-#' \url{http://mixomics.org/mixDIABLO/} for more details on all options
+#' \url{https://mixomics.org/mixDIABLO/} for more details on all options
 #' available.
 #' @references 
 #' Singh A., Shannon C., Gautier B., Rohart F., Vacher M., Tebbutt S.

@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use mixOmics, please cite the article below."
+title: "mixOmics: Omics Feature Selection and Multiple Data Integration"
+type: software
+authors:
+  - given-names: Kim-Anh
+    family-names: Lê Cao
+    orcid: "https://orcid.org/0000-0003-3923-1116"
+  - given-names: Florian
+    family-names: Rohart
+    orcid: "https://orcid.org/0000-0002-9588-8000"
+  - given-names: Ignacio
+    family-names: González
+  - given-names: Sébastien
+    family-names: Déjean
+    orcid: "https://orcid.org/0000-0001-9610-5306"
+license: AGPL-3.0-only
+repository-code: "https://github.com/mixOmics-org/mixOmics"
+url: "https://mixomics.org"
+preferred-citation:
+  type: article
+  title: "mixOmics: An R package for 'omics feature selection and multiple data integration"
+  authors:
+    - given-names: Florian
+      family-names: Rohart
+    - given-names: Benoît
+      family-names: Gautier
+    - given-names: Amrit
+      family-names: Singh
+    - given-names: Kim-Anh
+      family-names: Lê Cao
+  journal: "PLOS Computational Biology"
+  year: 2017
+  volume: 13
+  issue: 11
+  start: e1005752
+  doi: "10.1371/journal.pcbi.1005752"

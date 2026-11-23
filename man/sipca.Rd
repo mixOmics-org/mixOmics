@@ -104,7 +104,7 @@ perform ICA and Projection Pursuit. R package version 1.1-13.
 }
 \seealso{
 \code{\link{ipca}}, \code{\link{pca}}, \code{\link{plotIndiv}},
-\code{\link{plotVar}} and http://www.mixOmics.org for more details.
+\code{\link{plotVar}} and https://mixomics.org/ for more details.
 }
 \author{
 Fangzhou Yao, Jeff Coquery, Francois Bartolo, Kim-Anh Lê Cao, Al J Abadi

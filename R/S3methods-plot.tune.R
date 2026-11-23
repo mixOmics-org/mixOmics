@@ -64,7 +64,7 @@
 #' @author Kim-Anh Lê Cao, Florian Rohart, Francois Bartolo, Al J Abadi
 #' @seealso \code{\link{tune.mint.splsda}}, \code{\link{tune.splsda}},
 #'   \code{\link{tune.block.splsda}}, \code{\link{tune.spca}} and
-#'   http://www.mixOmics.org for more details.
+#'   https://mixomics.org/ for more details.
 #' @keywords regression multivariate hplot
 #' @name plot.tune
 #' @example ./examples/plot.tune-examples.R
@@ -422,7 +422,7 @@ plot.tune.spca <-
 #' @return none
 #' @author Kim-Anh Lê Cao, Florian Rohart, Francois Bartolo, AL J Abadi
 #' @seealso \code{\link{tune.mint.splsda}}, \code{\link{tune.splsda}}
-#' \code{\link{tune.block.splsda}} and http://www.mixOmics.org for more
+#' \code{\link{tune.block.splsda}} and https://mixomics.org/ for more
 #' details.
 #' @keywords regression multivariate hplot
 #' @name plot.tune

@@ -213,10 +213,10 @@ plot(tune.spls.cor.XY, size.range = c(6,12))
 \seealso{
 \code{\link{tune.mint.splsda}}, \code{\link{tune.splsda}},
   \code{\link{tune.block.splsda}}, \code{\link{tune.spca}} and
-  http://www.mixOmics.org for more details.
+  https://mixomics.org/ for more details.
 
 \code{\link{tune.mint.splsda}}, \code{\link{tune.splsda}}
-\code{\link{tune.block.splsda}} and http://www.mixOmics.org for more
+\code{\link{tune.block.splsda}} and https://mixomics.org/ for more
 details.
 }
 \author{

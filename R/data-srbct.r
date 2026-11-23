@@ -33,6 +33,6 @@
 #' @references Khan et al. (2001). Classification and diagnostic prediction of
 #' cancers using gene expression profiling and artificial neural networks.
 #' \emph{Nature Medicine} \bold{7}, Number 6, June.
-#' @source \url{https://www.research.nhgri.nih.gov/projects/Microarray/Supplement/index.html}
+#' @source \url{https://doi.org/10.1038/89044}
 #' @keywords datasets
 NULL

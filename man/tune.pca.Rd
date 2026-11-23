@@ -107,7 +107,7 @@ plot(tune)
 }
 \seealso{
 \code{\link{nipals}}, \code{\link{biplot}},
-\code{\link{plotIndiv}}, \code{\link{plotVar}} and http://www.mixOmics.org
+\code{\link{plotIndiv}}, \code{\link{plotVar}} and https://mixomics.org/
 for more details.
 }
 \author{

@@ -237,7 +237,7 @@
 #' @author Ignacio González, Amrit Singh, Kim-Anh Lê Cao, Benoit Gautier,
 #' Florian Rohart, Al J Abadi
 #' @seealso \code{\link{predict}}, \code{\link{nipals}},
-#' \code{\link{plot.perf}}, \code{\link{auroc}} and \url{www.mixOmics.org} for
+#' \code{\link{plot.perf}}, \code{\link{auroc}} and \url{https://mixomics.org/} for
 #' more details.
 #' @references 
 #' Singh A., Shannon C., Gautier B., Rohart F., Vacher M., Tebbutt S.

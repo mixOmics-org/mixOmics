@@ -115,7 +115,7 @@
 #' 
 #' Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, Lê Cao K-A.
 #' DIABLO: an integrative, multi-omics, multivariate method for multi-group
-#' classification. \url{http://biorxiv.org/content/early/2016/08/03/067611}
+#' classification. \url{https://doi.org/10.1101/067611}
 #' 
 #' Lê Cao, K.-A., Martin, P.G.P., Robert-Granie, C. and Besse, P. (2009).
 #' Sparse canonical methods for biological data integration: application to a
@@ -166,8 +166,8 @@
 #' 
 #' Visualisations:
 #' 
-#' González I., Lê Cao K.-A., Davis, M.D. and Déjean S. (2013) Insightful
-#' graphical outputs to explore relationships between two omics data sets.
+#' González I., Lê Cao K.-A., Davis, M.J. and Déjean S. (2012) Visualising
+#' associations between paired 'omics' data sets.
 #' BioData Mining 5:19.
 #' @keywords multivariate hplot dplot
 #' @export

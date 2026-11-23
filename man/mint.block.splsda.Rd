@@ -153,7 +153,7 @@ for multi-group PLS. J. Chemometrics, 28(3), 192-201.
 On multiple integration with sparse PLSDA: Singh A., Gautier B., Shannon C.,
 Vacher M., Rohart F., Tebbutt S. and Lê Cao K.A. (2016). DIABLO: multi omics
 integration for biomarker discovery. BioRxiv available here:
-\url{http://biorxiv.org/content/early/2016/08/03/067611}
+\url{https://doi.org/10.1101/067611}
 
 Tenenhaus A., Philippe C., Guillemot V, Lê Cao K.A., Grill J, Frouin V.
 Variable selection for generalized canonical correlation analysis.
@@ -175,7 +175,7 @@ e1005752
 \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 \code{\link{plotVar}}, \code{\link{predict}}, \code{\link{perf}},
 \code{\link{mint.block.spls}}, \code{\link{mint.block.plsda}},
-\code{\link{mint.block.pls}} and http://www.mixOmics.org/mixMINT for more
+\code{\link{mint.block.pls}} and https://mixomics.org/mixMINT/ for more
 details.
 }
 \author{

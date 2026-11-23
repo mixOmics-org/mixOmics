@@ -129,7 +129,7 @@
 #' Al J Abadi
 #' @seealso \code{\link{spls}}, \code{\link{summary}}, \code{\link{plotIndiv}},
 #' \code{\link{plotVar}}, \code{\link{predict}}, \code{\link{perf}} and
-#' http://www.mixOmics.org for more details.
+#' https://mixomics.org/ for more details.
 #' @references Tenenhaus, M. (1998). \emph{La regression PLS: theorie et
 #' pratique}. Paris: Editions Technic.
 #' 

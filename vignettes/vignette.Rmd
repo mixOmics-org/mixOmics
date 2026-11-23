@@ -1,9 +1,9 @@
 --- 
 title: 'mixOmics vignette'
 author:
-- name: Kim-Anh Le Cao
+- name: Kim-Anh Lê Cao
   email: kimanh@mixomics.org
-  affiliation: Melbourne Integrative Genomics & School of Mathematics and Statistics, The University of Melbourne, Australia
+  affiliation: '<a href="https://github.com/lecaolab">Lê Cao Lab</a>, currently based at Melbourne Integrative Genomics (MIG), The University of Melbourne, Australia'
 
 package: mixOmics
 site: bookdown::bookdown_site
@@ -73,9 +73,9 @@ library(kableExtra)
 ```{r 00-header-generation, echo=FALSE, eval=FALSE}
 ## run this only to re-make the logo in header.html
 ## Create the external file
-img <- htmltools::img(src = knitr::image_uri("InputFigures/logo-mixomics.jpg"),
+img <- htmltools::img(src = knitr::image_uri("InputFigures/mixomics-logo.svg"),
                alt = 'logo',
-               style = 'position:absolute; top:25px; right:1%; padding:10px;z-index:200;')
+               style = 'position:absolute; top:25px; right:1%; padding:10px;z-index:200;width:clamp(120px,17vw,208px);')
 
 htmlhead <- paste0('
 <script>
@@ -202,11 +202,11 @@ The methods implemented in `mixOmics` are described in detail in the following p
 
 - **Overview and recent integrative methods**: Rohart F.,  Gautier, B, Singh, A, Le Cao, K. A. mixOmics: an [R package for 'omics feature selection and multiple data integration](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005752). *PLoS Comput Biol* 13(11): e1005752.
 
-- **Graphical outputs for integrative methods**: [@Gon12] Gonzalez I., Le Cao K.-A., Davis, M.D. and Dejean S. (2012) [Insightful graphical outputs to explore relationships between two omics data sets](https://biodatamining.biomedcentral.com/articles/10.1186/1756-0381-5-19). *BioData Mining* 5:19.
+- **Graphical outputs for integrative methods**: [@Gon12] Gonzalez I., Le Cao K.-A., Davis, M.J. and Dejean S. (2012) [Visualising associations between paired 'omics' data sets](https://biodatamining.biomedcentral.com/articles/10.1186/1756-0381-5-19). *BioData Mining* 5:19.
 
-- **DIABLO**: Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, K-A. Le Cao. [DIABLO - multi-omics data integration for biomarker discovery](https://www.biorxiv.org/content/early/2018/03/20/067611).
+- **DIABLO**: Singh A, Gautier B, Shannon C, Vacher M, Rohart F, Tebbutt S, K-A. Le Cao. [DIABLO - multi-omics data integration for biomarker discovery](https://doi.org/10.1101/067611).
 
-- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](https://www.biomedcentral.com/1471-2105/10/34/). *BMC Bioinformatics*, 10:34.
+- **sparse PLS**: Le Cao K.-A., Martin P.G.P, Robert-Granie C. and Besse, P. (2009) [Sparse Canonical Methods for Biological Data Integration: application to a cross-platform study](https://doi.org/10.1186/1471-2105-10-34). *BMC Bioinformatics*, 10:34.
 
 - **sparse PLS-DA**: Le Cao K.-A., Boitard S. and Besse P. (2011) [Sparse PLS Discriminant Analysis: biologically relevant feature selection and graphical displays for multiclass problems]( https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-253). *BMC Bioinformatics*, 22:253.
 
@@ -540,7 +540,7 @@ boxplot(ABCC2.scale ~
 
 ## Example: sparse PCA {#03:spca}
 
-In the `ABC.trans` data, there is only one missing value. Missing values can be handled by sPCA via the NIPALS algorithm . However, if the number of missing values is large, we recommend imputing them with NIPALS, as we describe in our website in www.mixOmics.org.
+In the `ABC.trans` data, there is only one missing value. Missing values can be handled by sPCA via the NIPALS algorithm . However, if the number of missing values is large, we recommend imputing them with NIPALS, as we describe in our website, https://mixomics.org/.
 
 ### Choose the number of variables to select {#03:spca-vars}
 

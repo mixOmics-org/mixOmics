@@ -323,7 +323,7 @@ Editions Technic.
 \code{\link{mint.block.pls}}, \code{\link{mint.block.spls}},
 \code{\link{mint.block.plsda}}, \code{\link{mint.block.splsda}} and
 visualisation with \code{\link{background.predict}} and
-http://www.mixOmics.org for more details.
+https://mixomics.org/ for more details.
 }
 \author{
 Florian Rohart, Sébastien Déjean, Ignacio González, Kim-Anh Lê Cao,

@@ -38,7 +38,7 @@
 #' @author Sébastien Déjean, Ignacio González, Kim-Anh Le Cao, Al J Abadi
 #' @seealso \code{\link{impute.nipals}}, \code{\link{svd}},
 #'   \code{\link{princomp}}, \code{\link{prcomp}}, \code{\link{eigen}} and
-#'   http://www.mixOmics.org for more details.
+#'   https://mixomics.org/ for more details.
 #' @references Tenenhaus, M. (1998). \emph{La regression PLS: theorie et
 #' pratique}. Paris: Editions Technic.
 #' 

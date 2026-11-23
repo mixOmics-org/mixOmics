@@ -101,7 +101,7 @@
 #' predicted and actual components for X (t) and Y (u)} 
 #' 
 #' @author Kim-Anh Lê Cao, Al J Abadi, Benoit Gautier, Francois Bartolo and Florian Rohart.
-#' @seealso \code{\link{splsda}}, \code{\link{predict.splsda}}, and http://www.mixOmics.org for more details.
+#' @seealso \code{\link{splsda}}, \code{\link{predict.splsda}}, and https://mixomics.org/ for more details.
 #' @references mixOmics article:
 #' 
 #' Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics

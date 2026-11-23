@@ -45,7 +45,7 @@
 #' @param \dots not used
 #' @return none
 #' @author Amrit Singh, Florian Rohart, Kim-Anh Lê Cao, Al J Abadi
-#' @seealso \code{\link{block.splsda}} and http://www.mixOmics.org/mixDIABLO
+#' @seealso \code{\link{block.splsda}} and https://mixomics.org/mixDIABLO/
 #' for more details.
 #' @references 
 #' Singh A., Shannon C., Gautier B., Rohart F., Vacher M., Tebbutt S.

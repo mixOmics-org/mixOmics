@@ -52,7 +52,7 @@
 #' @return A ggplot object
 #' @author Al J Abadi
 #' @seealso \code{\link{arrows}}, \code{\link{text}}, \code{\link{points}} and
-#' http://mixOmics.org/graphics for more details.
+#' https://mixomics.org/graphics/ for more details.
 #' @references Lê Cao, K.-A., Martin, P.G.P., Robert-Granie, C. and Besse, P.
 #' (2009). Sparse canonical methods for biological data integration:
 #' application to a cross-platform study. \emph{BMC Bioinformatics}

@@ -90,7 +90,7 @@
 #' performed, either per component (splsda, plsda, mint.plsda, mint.splsda), or
 #' per block and per component (wrapper.sgccda, block.plsda, blocksplsda).
 #' @author Benoit Gautier, Francois Bartolo, Florian Rohart, Al J Abadi
-#' @seealso \code{\link{tune}}, \code{\link{perf}}, and http://www.mixOmics.org
+#' @seealso \code{\link{tune}}, \code{\link{perf}}, and https://mixomics.org/
 #' for more details.
 #' @keywords regression multivariate
 #' @example ./examples/auroc-examples.R

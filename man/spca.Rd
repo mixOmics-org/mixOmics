@@ -150,7 +150,7 @@ analysis via regularized low rank matrix approximation. \emph{Journal of
 Multivariate Analysis} \bold{99}, 1015-1034.
 }
 \seealso{
-\code{\link{pca}} and http://www.mixOmics.org for more details.
+\code{\link{pca}} and https://mixomics.org/ for more details.
 }
 \author{
 Kim-Anh Lê Cao, Fangzhou Yao, Leigh Coonan, Ignacio Gonzalez, Al J Abadi

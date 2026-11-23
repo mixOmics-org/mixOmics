@@ -199,7 +199,7 @@ of repeated measures experiments from two assays. BMC bioinformatics 13(1),
 }
 \seealso{
 \code{\link{nipals}}, \code{\link{prcomp}}, \code{\link{biplot}},
-\code{\link{plotIndiv}}, \code{\link{plotVar}} and http://www.mixOmics.org
+\code{\link{plotIndiv}}, \code{\link{plotVar}} and https://mixomics.org/
 for more details.
 }
 \author{

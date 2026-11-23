@@ -73,7 +73,7 @@
 #' Florian Rohart, Benoit Gautier
 #' @seealso \code{\link{wrapper.rgcca}}, \code{\link{plotIndiv}},
 #' \code{\link{plotVar}}, \code{\link{wrapper.sgcca}} and
-#' \url{http://www.mixOmics.org} for more details.
+#' \url{https://mixomics.org/} for more details.
 #' @references
 #' Tenenhaus A. and Tenenhaus M., (2011), Regularized Generalized Canonical
 #' Correlation Analysis, Psychometrika, Vol. 76, Nr 2, pp 257-284.

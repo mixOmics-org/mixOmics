@@ -108,7 +108,7 @@
 #' models}.
 #' 
 #' @author Florian Rohart, Al J Abadi
-#' @seealso \code{\link{mint.splsda}} and http://www.mixOmics.org for more
+#' @seealso \code{\link{mint.splsda}} and https://mixomics.org/ for more
 #' details.
 #' @references Rohart F, Eslami A, Matigian, N, Bougeard S, Lê Cao K-A (2017).
 #' MINT: A multivariate integrative approach to identify a reproducible
