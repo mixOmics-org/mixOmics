@@ -243,8 +243,8 @@ Westerhuis, J. A., van Velzen, E. J., Hoefsloot, H. C., and Smilde, A. K.
 
 Visualisations:
 
-González I., Lê Cao K.-A., Davis, M.D. and Déjean S. (2013) Insightful
-graphical outputs to explore relationships between two omics data sets.
+González I., Lê Cao K.-A., Davis, M.J. and Déjean S. (2012) Visualising
+associations between paired 'omics data sets.
 BioData Mining 5:19.
 }
 \seealso{
