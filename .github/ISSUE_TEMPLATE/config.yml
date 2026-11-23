@@ -1,4 +1,8 @@
+blank_issues_enabled: false
 contact_links:
-  - name: ❓ Support Question
+  - name: Question about an analysis
     url: https://mixomics-users.discourse.group/
-    about: Ask a question about an analysis
+    about: Ask how to choose a method, set its parameters or read a result
+  - name: Security problem
+    url: https://github.com/mixOmics-org/mixOmics/security
+    about: Report a vulnerability privately; please do not open a public issue

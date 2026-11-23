@@ -1,0 +1,65 @@
+name: Feature request
+description: Suggest a new feature or an improvement to mixOmics
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement. You do not need to know how it would be programmed: a clear description of what you want to do in your analysis is the most useful part. Work through the boxes below in order: each one says what to write, and grey text inside a box is an example.
+
+        **Before you start**
+
+        1. If you are not sure whether mixOmics can already do it, ask on the [discussion forum](https://mixomics-users.discourse.group) first.
+        2. Search the [open and closed issues](https://github.com/mixOmics-org/mixOmics/issues?q=is%3Aissue) in case someone has asked for it already.
+
+        **Title.** Say in one sentence what you would like, and name the function if there is one.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you are trying to do
+      description: Describe the analysis or the question in your own words, and what makes it hard or impossible with mixOmics today.
+      placeholder: |
+        I have metabolite data measured at four time points on the same mice, and I want to find the metabolites that separate the diets over time. The multilevel option takes the repeated measures on each mouse into account, but I could not find a way to see how the selected metabolites change from one time point to the next.
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: What you do today instead
+      description: Any workaround you use now, or another package that does part of the job.
+      placeholder: |
+        I run a separate analysis for each time point and compare the selected metabolites by hand.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: The behaviour you have in mind. If you can, write the call you imagine and describe the output you would expect. It does not need to be working code.
+      placeholder: |
+        An option to give the time point of each sample, and a plot of the selected metabolites over time.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Method and references
+      description: If the request is for a statistical method, give the paper (with its DOI) and any software that already implements it.
+  - type: textarea
+    id: example-data
+    attributes:
+      label: Example data
+      description: A dataset that comes with mixOmics, or a public dataset, on which the feature could be shown.
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Any other context, such as screenshots or example output.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I agree to follow the [Code of Conduct](https://github.com/mixOmics-org/mixOmics/blob/master/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I searched the open and closed issues and did not find this request
+          required: true
+        - label: I checked NEWS.md and the help pages, and mixOmics does not already do this
