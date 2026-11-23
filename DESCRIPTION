@@ -1,7 +1,7 @@
 Package: mixOmics
 Type: Package
 Title: Omics Feature Selection and Multiple Data Integration
-Version: 6.37.4
+Version: 6.38.0
 Depends: R (>= 4.4.0), 
          MASS, 
          lattice, 
