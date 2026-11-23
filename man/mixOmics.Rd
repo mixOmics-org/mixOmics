@@ -244,7 +244,7 @@ Westerhuis, J. A., van Velzen, E. J., Hoefsloot, H. C., and Smilde, A. K.
 Visualisations:
 
 González I., Lê Cao K.-A., Davis, M.J. and Déjean S. (2012) Visualising
-associations between paired 'omics data sets.
+associations between paired 'omics' data sets.
 BioData Mining 5:19.
 }
 \seealso{

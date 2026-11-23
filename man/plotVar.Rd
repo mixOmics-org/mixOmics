@@ -296,7 +296,7 @@ plotVar(wrap.result.rgcca, comp = c(1,2), block = c(1,2))
 }
 \references{
 González I., Lê Cao K-A., Davis, M.J. and Déjean, S. (2012).
-Visualising associations between paired 'omics data sets. BioData Mining
+Visualising associations between paired 'omics' data sets. BioData Mining
 5:19. \url{https://doi.org/10.1186/1756-0381-5-19}
 }
 \seealso{
