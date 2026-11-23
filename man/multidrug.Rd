@@ -22,8 +22,8 @@ Group Supplemental Table S1 to the paper of Szakacs \emph{et al.} (2004),
 
 The two drug data sets are a companion resource for the paper of Scherf
 \emph{et al.} (2000), \url{https://doi.org/10.1038/73439}. They were
-downloaded from the Genomics and Bioinformatics Group's web site, which is
-no longer online.
+downloaded from the Genomics and Bioinformatics Group's web site; that page
+is no longer available.
 }
 \usage{
 data(multidrug)
