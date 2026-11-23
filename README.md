@@ -1,7 +1,7 @@
 
 <!-- PLEASE DO NOT EDIT ./README.md BY HAND, EDIT ./inst/README.Rmd AND THE RENDER README WORKFLOW CREATES ./README.md IN THE PULL REQUEST -->
 
-[![download](https://www.bioconductor.org/shields/downloads/release/mixOmics.svg)](https://bioconductor.org/packages/stats/bioc/mixOmics)
+[![download](http://www.bioconductor.org/shields/downloads/release/mixOmics.svg)](https://bioconductor.org/packages/stats/bioc/mixOmics)
 [![R build
 status](https://github.com/mixOmics-org/mixOmics/workflows/R-CMD-check.yml/badge.svg)](https://github.com/mixOmics-org/mixOmics/actions)
 [![](https://img.shields.io/github/last-commit/mixOmics-org/mixOmics.svg)](https://github.com/mixOmics-org/mixOmics/commits/master)
@@ -230,6 +230,28 @@ Thank you!
   [\#419](https://github.com/mixOmics-org/mixOmics/pull/419):
   `circosPlot()` with several blocks in `blocks.link` kept only about
   half of the links
+- the official Bioconductor package maintainer is now correctly set as
+  Professor Kim-Anh Lê Cao, founding author and project lead of mixOmics
+  ([\#424](https://github.com/mixOmics-org/mixOmics/pull/424))
+- new package title and description
+  ([\#424](https://github.com/mixOmics-org/mixOmics/pull/424))
+- startup message: the vignette link now points to the [mixOmics
+  vignette guide](https://guides.mixomics.org/mixomics-guide-vignette/),
+  and all links use https
+  ([\#425](https://github.com/mixOmics-org/mixOmics/pull/425))
+- `?tune.rcc` now gives the correct default for `BPPARAM`
+  ([\#425](https://github.com/mixOmics-org/mixOmics/pull/425))
+- error messages, help pages and the vignette now link to mixOmics-org
+  and <https://mixomics.org>
+- references and data sources whose pages have moved or gone now link to
+  the paper’s DOI
+- citations of González et al. (2012) corrected to match the published
+  paper
+- mixOmics logo updated in the vignette
+- ORCID iDs added for authors and contributors where known
+- new community files: Code of Conduct (Contributor Covenant 3.0),
+  contributing guide, security policy, support page, `CITATION.cff` and
+  issue forms
 
 #### October 2026
 
