@@ -13,6 +13,7 @@ authors:
     family-names: González
   - given-names: Sébastien
     family-names: Déjean
+    orcid: "https://orcid.org/0000-0001-9610-5306"
 license: AGPL-3.0-only
 repository-code: "https://github.com/mixOmics-org/mixOmics"
 url: "https://mixomics.org"
