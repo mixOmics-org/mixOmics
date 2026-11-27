@@ -71,16 +71,15 @@ jobs:
           BRANCH_NAME="${{ env.GITHUB_REF_SLUG }}"
           ## R and Bioc versions
           Rscript -e "install.packages('BiocManager', Ncpus=2)"
-          r_devel=$(Rscript -e "vm=BiocManager:::.version_map(); cat(as.character(vm[vm\$BiocStatus == 'devel',]\$R))")
+          # use R-devel while Bioc devel needs an R version that is not released yet
+          r_devel=$(Rscript -e "vm=BiocManager:::.version_map(); r=vm[vm\$BiocStatus == 'devel',]\$R; cat(if (r > getRversion()[, 1:2]) 'devel' else as.character(r))")
           r_release=$(Rscript -e "vm=BiocManager:::.version_map(); cat(as.character(vm[vm\$BiocStatus == 'release',]\$R))")
           if [[ $BRANCH_NAME =~ "release_" ]]
           then
             bioc="latest"
             r="$r_release"
           else
-            # bioc="3.23"
-            # r="$r_release"
-            bioc="devel" ## non-release branches track Bioc devel; uncomment the release lines above as a fallback if devel becomes unstable
+            bioc="devel" ## non-release branches track Bioc devel
             r="$r_devel"
           fi
           echo "r=$r" >> $GITHUB_OUTPUT
