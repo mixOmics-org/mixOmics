@@ -109,7 +109,8 @@ jobs:
       matrix:
         config:
           - { os: windows-latest, r: '${{ needs.versions.outputs.r }}', bioc: '${{ needs.versions.outputs.bioc }}'}
-          - { os: macOS-latest, r: '${{ needs.versions.outputs.r }}', bioc: '${{ needs.versions.outputs.bioc }}'}
+          #- { os: macOS-latest, r: '${{ needs.versions.outputs.r }}', bioc: '${{ needs.versions.outputs.bioc }}'}
+          - { os: macOS-latest, r: '4.6', bioc: '3.24'} # pinned to Bioc release until CRAN publishes macOS binaries for R-devel (r-universe-org/help#750)
           - { os: ubuntu-latest, r: '${{ needs.versions.outputs.r }}', bioc: '${{ needs.versions.outputs.bioc }}', image: 'bioconductor/bioconductor_docker:${{ needs.versions.outputs.bioc }}'}
 
     env:
@@ -137,7 +138,7 @@ jobs:
         if: matrix.config.image == null
         run: |
           install.packages('BiocManager', Ncpus=2)
-          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, Ncpus=2)
+          BiocManager::install(version = "${{ matrix.config.bioc }}", update = FALSE, ask = FALSE, Ncpus=2)
         shell: Rscript {0}
 
       - name: Query dependencies ❓
@@ -201,7 +202,7 @@ jobs:
       - name: BiocCheck 🧬 ✅
         if: (!contains(github.event.head_commit.message, 'skip-check'))
         run: |
-          BiocManager::install("BiocCheck", Ncpus=2)
+          BiocManager::install("BiocCheck", update = FALSE, ask = FALSE, Ncpus=2)
           BiocCheck::BiocCheck(".")
         shell: Rscript {0}
 
