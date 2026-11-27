@@ -218,6 +218,15 @@ Thank you!
 
 #### November 2026
 
+\*\* Version 6.38.0 \*\*
+
+[Bioconductor release version
+6.38.0](https://www.bioconductor.org/packages/release/bioc/html/mixOmics.html)
+released 25th November 2026 mixOmics can now be downloaded using
+[Bioconductor version
+3.24](https://bioconductor.org/news/bioc_3_24_release/) and is
+compatible with R 4.6
+
 - mixOmics is now licensed under AGPL-3 instead of GPL (\>= 2)
   ([\#421](https://github.com/mixOmics-org/mixOmics/pull/421))
 - `circosPlot()` is drawn by new code
